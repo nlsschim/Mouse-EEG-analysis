@@ -9,12 +9,11 @@ clear all
 
 %folder= 'C:\Users\MouradLab\Desktop\Rat Experiment (Madison Selby''s)\test_files\' ;%always need "\" at the end of the folder name, copy adn paste so that no errors are made
 %folder = '/Volumes/GoogleDrive/Shared drives/UW Seattle lab/Devon is a Jedi God /Testing files/'
-folder= '/Users/nlsschim/Dropbox/Rat ECOG project/Rat-EEG-Analysis-master/June_23_20/';
+folder= '/Users/nelsschimek/Documents/MATLAB/MouradLab/Data/12:23/';
 
 %Change what is in the string depending on which file/files you want to run
-file_list=dir([folder 'TRIAL*.mat']);
+file_list=dir([folder 'TRIA 1L*.mat']);
 baseline=dir([folder 'BASELINE.mat']);
-
 
 
 set_channels=[1 2 3 4 7];%updated so you do not have to change last number (we added code for searching for light)
