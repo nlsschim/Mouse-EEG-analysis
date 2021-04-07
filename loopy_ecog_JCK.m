@@ -4,11 +4,9 @@ close all
 clear all
 %clears all data so that there are no missasinged values
 
-%Change folder path to match whhere you save the files and data
+%Change folder path to match where you save the files and data
 %always need "\" at the end of the folder name, copy adn paste so that no errors are made
 
-%folder= 'C:\Users\MouradLab\Desktop\Rat Experiment (Madison Selby''s)\test_files\' ;%always need "\" at the end of the folder name, copy adn paste so that no errors are made
-%folder = '/Volumes/GoogleDrive/Shared drives/UW Seattle lab/Devon is a Jedi God /Testing files/'
 folder= '/Users/nelsschimek/Documents/MATLAB/MouradLab/Data/12:23/';
 
 %Change what is in the string depending on which file/files you want to run
