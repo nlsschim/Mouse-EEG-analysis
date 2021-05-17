@@ -7,13 +7,26 @@ clear all
 %Change folder path to match where you save the files and data
 %always need "\" at the end of the folder name, copy adn paste so that no errors are made
 
-folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\'; 
+folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\12-16 Data\'; 
+%work 
+
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\12-23 DATA\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 2\'; 
+
+% dont work 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\12-16 Data\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-25-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 3\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\5-23-20 Mouse Experiment\'; 
 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'baseline2.mat']);
+baseline=dir([folder 'Baseline.mat']); % or baseline1 or baseline2 for 
 
-set_channels=[1 2 3 4 7];%updated so you do not have to change last number (we added code for searching for light)
+set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
@@ -44,8 +57,13 @@ for_stats_analysis=[];
 %for z=1:length(file_list) %go through all the files that are in the folder  
 % counter = 0 ;
 %for z=1:3 
+
 for z=1:4 
-     if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
+     % if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
+     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end 
+     % if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end for 12-23
+     % data trials are 'Trial 2.mat w/ a space. Some are without a space
+     % ex. 'trial1'
 %     counter = counter + 1 ; 
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displayes the name of the file in the terminal
