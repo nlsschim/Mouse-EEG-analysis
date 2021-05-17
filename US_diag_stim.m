@@ -54,8 +54,8 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-%    for j=2:(length(index_stim)-1) 
     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+%     for j=2:(length(index_stim)-1) % for 6/4 mouse experiment 3? 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
@@ -78,7 +78,7 @@ maxidxarray=zeros(length(foranalysis),1);
 RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
 
-for i=1:length(foranalysis)
+% for i=1:length(foranalysis)
     %figure(i+1)
 %     ylabels={'V1L (Hz)';'S1L (Hz)';'S1R (Hz)'; 'V1R (Hz)'};
 %     subplot(4,1,i);
@@ -162,7 +162,7 @@ for i=1:length(foranalysis)
    % disp('stddev');
    % std(temp);
   
-end
+% end
 
 %collect all of the individual points of data
 all_points(1).name=names(1);

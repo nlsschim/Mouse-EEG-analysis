@@ -7,26 +7,47 @@ clear all
 %Change folder path to match where you save the files and data
 %always need "\" at the end of the folder name, copy adn paste so that no errors are made
 
-folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\12-16 Data\'; 
+% note: data formatted as = 'Trial X' and baseline = 'Baseline X' 
+
 %work 
 
-% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\'; 
-% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\12-23 DATA\'; 
+folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\'; 
 % folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 2\'; 
 
 % dont work 
-% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\12-16 Data\'; 
+
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
+% light stim on channel 9 still doesnt work -- index error exceeds 7
+% for datastart(lightstim):dataend(lightstim)
+
 % folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-25-2020 Mouse Experiment 1\'; 
+
 % folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 3\'; 
-% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 1\'; 
+% index issue with all data
+
+% folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 1\';
+%same index error as experiment 3 in US diag stim stas.(char(names(i)) loop
+
 % folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
+% corrupt trial 3.mat file? 
+
 % folder= 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\5-23-20 Mouse Experiment\'; 
+% index error in char(names(i)) in US diag stim
 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline.mat']); % or baseline1 or baseline2 for 
+baseline=dir([folder 'Baseline 2.mat']); % or baseline 1 or baseline 2 depending on trials 
+
+% this doesnt work  
+% if folder = 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
+%     set_channels=[1 2 3 4 9]; % for 12/16 data?
+% else: 
+%     set_channels=[1 2 3 4 7]; % updated so you do not have to change last number 
+% end 
 
 set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+% set_channels=[1 2 3 4 9]; % for 12/16 data?
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
