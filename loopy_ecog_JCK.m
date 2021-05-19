@@ -7,12 +7,24 @@ clear all
 %Change folder path to match where you save the files and data
 %always need "\" at the end of the folder name, copy adn paste so that no errors are made
 
-folder= '/Users/nelsschimek/Documents/MATLAB/MouradLab/Data/12:23/';
+% note: trials have been formatted "trial x"; baselines : "baseline x"; 
+% trials > 1:4 have been placed in separate folders 
+
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\05-29-2020 Mouse Experiment\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\06-23-2020 Mouse Experiment 1\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\06-23-2020 Mouse Experiment 2\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\06-24-2020 Mouse Experiment 1\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\06-24-2020 Mouse Experiment 3\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\06-25-2020 Mouse Experiment 1\';
+folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\06-30-2020 Mouse Experiment 1\6-30 Data\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\12-16 Mouse Experiment\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\12-23 Mouse Experiment\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\12-24 Mouse Experiment\';
+% folder= 'C:\Users\Administrator\Documents\MATLAB\Mourad Lab\Mouse-EEG-analysis\Data\12-27 Mouse Experiment\'; 
 
 %Change what is in the string depending on which file/files you want to run
-file_list=dir([folder 'TRIA 1L*.mat']);
-baseline=dir([folder 'BASELINE.mat']);
-
+file_list=dir([folder 'TRIAL*.mat']);
+baseline=dir([folder 'baseline 2.mat']);
 
 set_channels=[1 2 3 4 7];%updated so you do not have to change last number (we added code for searching for light)
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
@@ -42,40 +54,50 @@ for_stats_analysis=[];
 %create figure for plotting histograms
 %figure;
 % measure each file 
-for z=1:length(file_list) %go through all the files that are in the folder  
+%for z=1:length(file_list) %go through all the files that are in the folder  
+% counter = 0 ;
+%for z=1:3 
+for z=1:4 
+     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
+%      if length(file_list(z).name) > 11, continue, end % for 12:23 data with space between trial and trial name 
+%     counter = counter + 1 ; 
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displayes the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
-    US_diag_stim;   
+    US_diag_stim;      
 end
 
-histo_lines;
-% Histogram overlay
-subplot(1,3,1);
-histogram(for_stats_analysis.Trial_1)
-hold on
-histogram(for_stats_analysis.Trial_2)
-legend('Trial 1','Trial 2')
+% to rename trials and skip 2 
+for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
+for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 
-subplot(1,3,2);
-histogram(for_stats_analysis.Trial_1)
-hold on
-histogram(for_stats_analysis.Trial_3)
-legend('Trial 1','Trial 3')
-
-subplot(1,3,3);
-histogram(for_stats_analysis.Trial_2)
-hold on
-histogram(for_stats_analysis.Trial_3)
-legend('Trial 2','Trial 3')
-
-figure
-histogram(for_stats_analysis.Trial_1)
-hold on
-histogram(for_stats_analysis.Trial_2)
-histogram(for_stats_analysis.Trial_3)
-legend('Trial 1','Trial 2','Trial 3')
-title('Dec 23rd Mouse')
+% %histo_lines;
+% % Histogram overlay
+% subplot(1,3,1);
+% histogram(for_stats_analysis.Trial_1)
+% hold on
+% histogram(for_stats_analysis.Trial_2)
+% legend('Trial 1','Trial 2')
+% 
+% subplot(1,3,2);
+% histogram(for_stats_analysis.Trial_1)
+% hold on
+% histogram(for_stats_analysis.Trial_3)
+% legend('Trial 1','Trial 3')
+% 
+% subplot(1,3,3);
+% histogram(for_stats_analysis.Trial_2)
+% hold on
+% histogram(for_stats_analysis.Trial_3)
+% legend('Trial 2','Trial 3')
+% 
+% figure
+% histogram(for_stats_analysis.Trial_1)
+% hold on
+% histogram(for_stats_analysis.Trial_2)
+% histogram(for_stats_analysis.Trial_3)
+% legend('Trial 1','Trial 2','Trial 3')
+% title('Dec 23rd Mouse')
 
 % Grouping the data together for comparative analysis
 first_second_vector=[for_stats_analysis.Trial_1 for_stats_analysis.Trial_2];
@@ -118,3 +140,4 @@ run_stats_tests(second_third_vector, second_vs_third);
 variance_trial_one=var(for_stats_analysis.Trial_1);
 [h,p]=vartest(for_stats_analysis.Trial_2, variance_trial_one);
 [h1,p1]=vartest(for_stats_analysis.Trial_3, variance_trial_one);
+

@@ -43,8 +43,7 @@ end
 tb=1; %time before stim to start STA
 ta=9; %time after stim to end STA
 
-for i=1:4 
-    
+for i=1:4  
     % prevents errors based on discrepency between V1Ldata and
     % lightstimdata length
     %inner_loop_size = 0;
@@ -55,8 +54,8 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-    for j=2:(length(index_stim)-1)    
-        
+%    for j=2:(length(index_stim)-1) 
+    for j=2:(length(index_stim)-2) 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
@@ -289,5 +288,6 @@ xticks([0,1,2,3,4,5,6,7,8,9]);
     end
      
 end
+
 
 
