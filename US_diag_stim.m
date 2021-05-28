@@ -12,6 +12,7 @@ alldata.S1Ldata=data(datastart(S1L):dataend(S1L));
 alldata.S1Rdata=data(datastart(S1R):dataend(S1R));
 alldata.V1Rdata=data(datastart(V1R):dataend(V1R));
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% alldata.lightstimdata=data(datastart(5):dataend(5));
 
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
@@ -54,8 +55,9 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-%    for j=2:(length(index_stim)-1) 
-    for j=2:(length(index_stim)-2) 
+    for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+%     for j=2:(length(index_stim)-3) % for 6/25 mouse experiment 1
+%     for j=2:(length(index_stim)-5) % 6/24 experiment 3 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
@@ -78,7 +80,7 @@ maxidxarray=zeros(length(foranalysis),1);
 RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
 
-for i=1:length(foranalysis)
+% for i=1:length(foranalysis)
     %figure(i+1)
 %     ylabels={'V1L (Hz)';'S1L (Hz)';'S1R (Hz)'; 'V1R (Hz)'};
 %     subplot(4,1,i);
@@ -162,7 +164,7 @@ for i=1:length(foranalysis)
    % disp('stddev');
    % std(temp);
   
-end
+% end
 
 %collect all of the individual points of data
 all_points(1).name=names(1);
@@ -288,6 +290,3 @@ xticks([0,1,2,3,4,5,6,7,8,9]);
     end
      
 end
-
-
-
