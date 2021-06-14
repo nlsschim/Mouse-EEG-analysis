@@ -11,8 +11,8 @@ alldata.V1Ldata=data(datastart(V1L):dataend(V1L));
 alldata.S1Ldata=data(datastart(S1L):dataend(S1L));
 alldata.S1Rdata=data(datastart(S1R):dataend(S1R));
 alldata.V1Rdata=data(datastart(V1R):dataend(V1R));
-alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-% alldata.lightstimdata=data(datastart(5):dataend(5));
+% alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+alldata.lightstimdata=data(datastart(5):dataend(5)); % works for 5/29 
 
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 

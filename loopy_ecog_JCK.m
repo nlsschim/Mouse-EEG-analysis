@@ -24,29 +24,25 @@ clear all
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 1\';
 % works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim 
 
-% dont work 
-
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
 % light stim on channel 9 still doesnt work -- index error exceeds 7
 
-folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
-% index error in char(names(i)) in US diag stim, same as 12/16 data:
-% eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-% breaks trial 1
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
-% corrupt trial trial 1.mat file? 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\05-29 RECUT\'; 
-% corrupt trial 1
-
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 RECUT\'; 
-%   error in loopy line 99: disp(file_list(z).name)
+%   error in loopy line 99: disp(file_list(z).name)now runs to and breaks
+%   on trial 4
 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
+% eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% works with datastart(5):dataend(5)
+
+% dont work 
+
+folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
+% corrupt trial trial 1.mat file? 
 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'Baseline 3.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 % this doesnt work  
 % if folder = 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
