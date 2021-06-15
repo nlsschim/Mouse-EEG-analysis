@@ -1,5 +1,5 @@
 
-
+% trial 3 may have been used as "trial 2", trial 4 as "3" 
 
 data_1 = for_stats_analysis.Trial_1;
 [n,x] = hist(data_1,[]);
