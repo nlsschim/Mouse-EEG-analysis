@@ -31,25 +31,18 @@ clear all
 %   error in loopy line 99: disp(file_list(z).name)now runs to and breaks
 %   on trial 4
 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
+folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
 % eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % works with datastart(5):dataend(5)
 
 % dont work 
 
-folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
 % corrupt trial trial 1.mat file? 
 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline 3.mat']); % or baseline 1 or baseline 2 depending on trials 
-
-% this doesnt work  
-% if folder = 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
-%     set_channels=[1 2 3 4 9]; % for 12/16 data?
-% else: 
-%     set_channels=[1 2 3 4 7]; % updated so you do not have to change last number 
-% end 
+baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 % set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 set_channels=[1 2 3 4 9]; % for 12/16 data? 
