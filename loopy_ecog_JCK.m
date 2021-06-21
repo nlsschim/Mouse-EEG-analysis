@@ -15,7 +15,7 @@ clear all
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-30-2020 Mouse Experiment 1\'; 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
-folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-25-2020 Mouse Experiment 1\'; 
 % works with US DIAG STIM line changed to  for j=2:(length(index_stim)-3) for datastart(lightstim):dataend(lightstim)
@@ -23,32 +23,29 @@ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mo
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 3\'; 
 % for j=2:(length(index_stim)-5) % 6/24 experiment 3 
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 1 \';
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 1\';
 % works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim 
-
-% dont work 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
-% light stim on channel 9 still doesnt work -- index error exceeds 7
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\05-29-2020 Mouse Experiment\'; 
 % index error in char(names(i)) in US diag stim, same as 12/16 data:
 % eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % breaks trial 1
+% works if lightstim = 5 in US diagstim datastart(5):dataend(5)
+% making sure the skipping refractory names are case sensitive (TRIAL vs.
+% Trial. see line 15 of US-Diag stim 
+
+% dont work 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 1\'; 
 % corrupt trial trial 1.mat file? 
 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\05-29 RECUT\'; 
-% corrupt trial 1
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 RECUT\'; 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
 %   error in loopy line 99: disp(file_list(z).name)
 
 %% 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline 3.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'BASELINE.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 % this doesnt work  
 % if folder = 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
@@ -57,8 +54,8 @@ baseline=dir([folder 'Baseline 3.mat']); % or baseline 1 or baseline 2 depending
 %     set_channels=[1 2 3 4 7]; % updated so you do not have to change last number 
 % end 
 
-set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
-% set_channels=[1 2 3 4 9]; % for 12/16 data? 
+% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+set_channels=[1 2 3 4 9]; % for 12/16 data? 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
@@ -92,8 +89,8 @@ for_stats_analysis=[];
 
 for z=1:4 
      % if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
-     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end 
-     % if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end for 12-23
+%      if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
+     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end %for 12-23
      % data trials are 'Trial 2.mat w/ a space. Some are without a space
      % ex. 'trial1'
 %     counter = counter + 1 ; 

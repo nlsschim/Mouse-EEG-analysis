@@ -12,7 +12,11 @@ alldata.S1Ldata=data(datastart(S1L):dataend(S1L));
 alldata.S1Rdata=data(datastart(S1R):dataend(S1R));
 alldata.V1Rdata=data(datastart(V1R):dataend(V1R));
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-% alldata.lightstimdata=data(datastart(5):dataend(5));
+% alldata.lightstimdata=data(datastart(5):dataend(5)); % for 5/29 Hypothesis:
+% this works if not all channels are imported; channel 7 = channel 5 vs.
+% channel 1... 5, 6, 7 => channel 1-4, channel 7 
+% what changes in experiments is whether channels 5-6 are included in
+% export
 
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
