@@ -14,7 +14,7 @@ clear all
 %work 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-30-2020 Mouse Experiment 1\'; 
-folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-25-2020 Mouse Experiment 1\'; 
@@ -34,6 +34,8 @@ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse E
 % making sure the skipping refractory names are case sensitive (TRIAL vs.
 % Trial. see line 15 of US-Diag stim 
 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
+% works if light stim channel is set to 9 instead of 7
 
 
 % dont work 
@@ -42,23 +44,18 @@ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse E
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\6_23_2020_mouse_1_recut\' ;
 % corrupt trial trial 1.mat file? 
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
-% kinda works and produces figures 
-
-
-%   error in loopy line 99: disp(file_list(z).name)
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-13-2019 Mouse Experiment\' ;
+% needs a trial 1 rechop ; V1L data is not long as other data entries in
+% trial 1? 
+% folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-24 Data\' ;
+% V1L data is short-- maybe rechop
+folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\6-23-2021 Mouse 1 Experiment\';
+% V1L data also short 
 
 %% 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
 baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
-
-% this doesnt work  
-% if folder = 'C:\Users\Charl\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
-%     set_channels=[1 2 3 4 9]; % for 12/16 data?
-% else: 
-%     set_channels=[1 2 3 4 7]; % updated so you do not have to change last number 
-% end 
 
 set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16 data? 
@@ -166,7 +163,7 @@ first_vs_second=[str1 str2];
 first_vs_third=[str1 str3];
 second_vs_third=[str2 str3];
 
-%grouping={my_string};
+% grouping={my_string};
 % [p12,tbl12,stats12]=kruskalwallis(first_second_vector,first_vs_second);
 % [p13,tbl13,stats13]=kruskalwallis(first_third_vector,first_vs_third);
 % [p23,tbl23,stats23]=kruskalwallis(second_third_vector,second_vs_third);

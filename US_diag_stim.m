@@ -59,10 +59,10 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-%     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+    for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
 %     for j=2:(length(index_stim)-3) % for 6/25 mouse experiment 1
-     for j=2:(length(index_stim)-5) % 6/24 experiment 3 
-%     for j=2:(length(index_stim)-3) % 6/24 experiment 1 
+%      for j=2:(length(index_stim)-5) % 6/24 experiment 3 
+%     for j=2:(length(index_stim)-3) % 6/24 experiment 1  
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
@@ -86,91 +86,91 @@ RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
 
 %%
-for i=1:length(foranalysis)
-    figure(i+1)
-    ylabels={'V1L (Hz)';'S1L (Hz)';'S1R (Hz)'; 'V1R (Hz)'};
-    subplot(4,1,i);
-    a=mean(stas.(char(names(i))));
-    a=a-mean(stas.(char(names(i)))(1:fs));
-    a=a/100*1000;
-   
-    [bb,aa]=butter(3,[3,200]/(fs/2)); %trying to get the us noise out, 3 to 200
-    a=filtfilt(bb,aa,a); % used for the butter filter
-    %[minval,minidx]=min(a(fs*(tb):fs*(tb+responseWindowEnd))); %identifying min max within response window 
-    [maxval,maxidx]=max(a(fs*(tb):fs*(tb+responseWindowEnd)));
-    RMSvalb=rms(a(fs*(tb-0.25):fs*(tb)));%RMS before zero
-    RMSvala=rms(a(fs*(tb):fs*(tb+0.25)));%RMS after zero
-    
-    RMSvalbarray(i)=RMSvalb; %declares RMS arrays for print
-    RMSvalaarray(i)=RMSvala;
-    
-    %minvalarray(i)=minval; %declares minmax arrays for print 
-    %minidxarray(i)=minidx;
-    maxvalarray(i)=maxval;
-    maxidxarray(i)=maxidx; %maxtime array 
-    
-%     Plot STA's. IMPORTANT TO KEEP
-    figure;
-    plot(x2,a,'linewidth',1);hold on 
-   plot(x2(maxidx+fs*(tb)),a(maxidx+fs*(tb)),'o');hold on
-    xlim([-0.5 1.5]);% seconds that will be shown in the plot, stim is on at time 0    
-    ylim([-0.05 0.05]);%mV range on the plot, edit to get the entire signal to show
-   ylabel(ylabels(i));
-    
-    
-%     
-%     
-%     arrays of RMS values, one for each second of a 10 sec segment
-%     may want overlap in timeframes eventually
-%     This is gross and needs to be edited to reduce redundancy
-    all_points(i).RMSvalsb=rms(d(:,fs*(tb-0.25):fs*(tb))');
-    all_points(i).RMSvals_1=rms(d(:,fs*(tb):fs*(tb+1.00))');
-    all_points(i).RMSvals_2=rms(d(:,fs*(tb+1.00):fs*(tb+2.00))');
-    all_points(i).RMSvals_3=rms(d(:,fs*(tb+2.00):fs*(tb+3.00))');
-    all_points(i).RMSvals_4=rms(d(:,fs*(tb+3.00):fs*(tb+4.00))');
-    all_points(i).RMSvals_5=rms(d(:,fs*(tb+4.00):fs*(tb+5.00))');
-    all_points(i).RMSvals_6=rms(d(:,fs*(tb+5.00):fs*(tb+6.00))');
-    all_points(i).RMSvals_7=rms(d(:,fs*(tb+6.00):fs*(tb+7.00))');
-    all_points(i).RMSvals_8=rms(d(:,fs*(tb+7.00):fs*(tb+8.00))');
-    all_points(i).RMSvals_9=rms(d(:,fs*(tb+8.00):fs*(tb+9.00))');
-    all_points(i).RMSvals_10=rms(d(:,fs*(tb+9.00):fs*(ta))'); % I think this is redundant
-%     
+% for i=1:length(foranalysis)
+%     figure(i+1)
+%     ylabels={'V1L (Hz)';'S1L (Hz)';'S1R (Hz)'; 'V1R (Hz)'};
+%     subplot(4,1,i);
+%     a=mean(stas.(char(names(i))));
+%     a=a-mean(stas.(char(names(i)))(1:fs));
+%     a=a/100*1000;
 %    
+%     [bb,aa]=butter(3,[3,200]/(fs/2)); %trying to get the us noise out, 3 to 200
+%     a=filtfilt(bb,aa,a); % used for the butter filter
+%     %[minval,minidx]=min(a(fs*(tb):fs*(tb+responseWindowEnd))); %identifying min max within response window 
+%     [maxval,maxidx]=max(a(fs*(tb):fs*(tb+responseWindowEnd)));
+%     RMSvalb=rms(a(fs*(tb-0.25):fs*(tb)));%RMS before zero
+%     RMSvala=rms(a(fs*(tb):fs*(tb+0.25)));%RMS after zero
+%     
+%     RMSvalbarray(i)=RMSvalb; %declares RMS arrays for print
+%     RMSvalaarray(i)=RMSvala;
+%     
+%     %minvalarray(i)=minval; %declares minmax arrays for print 
+%     %minidxarray(i)=minidx;
+%     maxvalarray(i)=maxval;
+%     maxidxarray(i)=maxidx; %maxtime array 
+%     
+% %     Plot STA's. IMPORTANT TO KEEP
+%     figure;
+%     plot(x2,a,'linewidth',1);hold on 
+%    plot(x2(maxidx+fs*(tb)),a(maxidx+fs*(tb)),'o');hold on
+%     xlim([-0.5 1.5]);% seconds that will be shown in the plot, stim is on at time 0    
+%     ylim([-0.05 0.05]);%mV range on the plot, edit to get the entire signal to show
+%    ylabel(ylabels(i));
+%     
+%     
+% %     
+% %     
+% %     arrays of RMS values, one for each second of a 10 sec segment
+% %     may want overlap in timeframes eventually
+% %     This is gross and needs to be edited to reduce redundancy
+%     all_points(i).RMSvalsb=rms(d(:,fs*(tb-0.25):fs*(tb))');
+%     all_points(i).RMSvals_1=rms(d(:,fs*(tb):fs*(tb+1.00))');
+%     all_points(i).RMSvals_2=rms(d(:,fs*(tb+1.00):fs*(tb+2.00))');
+%     all_points(i).RMSvals_3=rms(d(:,fs*(tb+2.00):fs*(tb+3.00))');
+%     all_points(i).RMSvals_4=rms(d(:,fs*(tb+3.00):fs*(tb+4.00))');
+%     all_points(i).RMSvals_5=rms(d(:,fs*(tb+4.00):fs*(tb+5.00))');
+%     all_points(i).RMSvals_6=rms(d(:,fs*(tb+5.00):fs*(tb+6.00))');
+%     all_points(i).RMSvals_7=rms(d(:,fs*(tb+6.00):fs*(tb+7.00))');
+%     all_points(i).RMSvals_8=rms(d(:,fs*(tb+7.00):fs*(tb+8.00))');
+%     all_points(i).RMSvals_9=rms(d(:,fs*(tb+8.00):fs*(tb+9.00))');
+%     all_points(i).RMSvals_10=rms(d(:,fs*(tb+9.00):fs*(ta))'); % I think this is redundant
+% %     
+% %    
+% % 
+%     disp('name:')
+%     disp(names(i))
+%     disp('Individual BEFORE rms values')
+%     all_points(i).RMSvalsb'
+%     disp('mean')
+%     mean(all_points(i).RMSvalsb')
+%     disp('stddev')
+%     std(all_points(i).RMSvalsb')
+%     disp('name:')
+%     disp(names(i))
+%     disp('Individual AFTER rms values')
+%     all_points(i).RMSvals_1'
+%     disp('mean')
+%     mean(all_points(i).RMSvals_1')
+%     disp('stddev')
+%     std(all_points(i).RMSvals_1')
 % 
-    disp('name:')
-    disp(names(i))
-    disp('Individual BEFORE rms values')
-    all_points(i).RMSvalsb'
-    disp('mean')
-    mean(all_points(i).RMSvalsb')
-    disp('stddev')
-    std(all_points(i).RMSvalsb')
-    disp('name:')
-    disp(names(i))
-    disp('Individual AFTER rms values')
-    all_points(i).RMSvals_1'
-    disp('mean')
-    mean(all_points(i).RMSvals_1')
-    disp('stddev')
-    std(all_points(i).RMSvals_1')
-
-
-   disp('Paired t-test');
-    [H,P,CI,STATS] = ttest(all_points(i).RMSvalsb',all_points(i).RMSvalsa');
-    disp('Individual Percentage Changes');
-   temp=(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
-   disp('mean');
-   mean(temp);
-   disp('stddev');
-   std(temp);
-   disp('Individual Percentage Changes (absolute value)');
-   temp=abs(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
-   disp('mean');
-   mean(temp);
-   disp('stddev');
-   std(temp);
-  
-end
+% 
+%    disp('Paired t-test');
+%     [H,P,CI,STATS] = ttest(all_points(i).RMSvalsb',all_points(i).RMSvalsa');
+%     disp('Individual Percentage Changes');
+%    temp=(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
+%    disp('mean');
+%    mean(temp);
+%    disp('stddev');
+%    std(temp);
+%    disp('Individual Percentage Changes (absolute value)');
+%    temp=abs(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
+%    disp('mean');
+%    mean(temp);
+%    disp('stddev');
+%    std(temp);
+%   
+% end
 
 %%
 %collect all of the individual points of data
