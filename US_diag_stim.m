@@ -59,10 +59,11 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-    for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
-%     for j=2:(length(index_stim)-3) % for 6/25 mouse experiment 1
-%      for j=2:(length(index_stim)-5) % 6/24 experiment 3 
-%     for j=2:(length(index_stim)-3) % 6/24 experiment 1  
+      for j=2:(length(index_stim)-1)
+%     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+%     for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1
+%      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
+%     for j=2:(length(index_stim)-3) % 6/24/20 experiment 1  
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
