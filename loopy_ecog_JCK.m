@@ -11,7 +11,9 @@ clear all
 
 %work 
 
-folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-30-2020 Mouse Experiment 1/';
+folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/05-29-2020 Mouse Experiment 1/';
+% corrupt trial 1 file? ;(
+% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-30-2020 Mouse Experiment 1/';
 
 % not working
 
@@ -37,7 +39,7 @@ folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-3
 %   on trial 4
 
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
-% eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% error in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % works with datastart(5):dataend(5)
 
 % dont work 
@@ -47,7 +49,7 @@ folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-3
 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline2.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16 data? 
@@ -83,8 +85,8 @@ for_stats_analysis=[];
 %for z=1:3 
 
 for z=1:4 
-     if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
-%      if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end 
+%      if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
+     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end 
      % if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end for 12-23
      % data trials are 'Trial 2.mat w/ a space. Some are without a space
      % ex. 'trial1'
