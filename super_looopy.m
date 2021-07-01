@@ -16,7 +16,7 @@ clear all
 %work 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-30-2020 Mouse Experiment 1\'; 
-folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-25-2020 Mouse Experiment 1\'; 
@@ -39,6 +39,8 @@ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse E
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
 % works if light stim channel is set to 9 instead of 7
 
+folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-21 RECUT session 2\' ;
+% works with channel 5 as light stim 
 
 % dont work 
 
@@ -51,7 +53,8 @@ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse E
 % trial 1? 
 % folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-24 Data\' ;
 % V1L data is short-- maybe rechop
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\6-23-2021 Mouse 1 Experiment\';
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\6-23-21 Vis Stim Experiment Mouse 1\session 1\';
 % V1L data also short 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06_24_21mouse2\second session\' ; 
@@ -59,10 +62,11 @@ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse E
 %% 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'Baseline 2.mat']); % or baseline 1 or baseline 2 depending on trials 
 
-set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
-% set_channels=[1 2 3 4 9]; % for 12/16 data, 6/24 data, 6/23 data 
+% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+% set_channels=[1 2 3 4 9]; % for 12/16/19 data, 6/23/21 
+set_channels=[1 2 3 4 5]; % 6/24/21 data,
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
@@ -118,36 +122,41 @@ for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ;
 
 %%
 % histogram overlays 
-
-% 1 overlaid by 2
+% 
+% % 1 overlaid by 2
 subplot(1,3,1);
 histogram(for_stats_analysis.Trial_1)
 hold on
 histogram(for_stats_analysis.Trial_2)
 legend('Trial 1','Trial 2')
+axis([0 0.5 0 400])
 
-% 2 overlaid by 3
-subplot(1,3,3);
+% 
+% % 2 overlaid by 3
+subplot(1,3,2);
 histogram(for_stats_analysis.Trial_2)
 hold on
 histogram(for_stats_analysis.Trial_3)
 legend('Trial 2','Trial 3')
+axis([0 0.5 0 400])
 
-% 1 overlaid by 3
+% % 1 overlaid by 3
 subplot(1,3,3);
 histogram(for_stats_analysis.Trial_1)
 hold on
 histogram(for_stats_analysis.Trial_3)
 legend('Trial 1','Trial 3')
+axis([0 0.5 0 400])
 
-% all overlaid
+
+% % all overlaid
 figure
 histogram(for_stats_analysis.Trial_1)
 hold on
 histogram(for_stats_analysis.Trial_2)
 histogram(for_stats_analysis.Trial_3)
 legend('Trial 1','Trial 2','Trial 3')
-title('12/23/19 Mouse')
+% title('12/23/19 Mouse')
 %%
 % Grouping the data together for comparative analysis - trial 2=the real
 % trail 3 (refractory skipped). Thus, trial 3 = the real trial 4

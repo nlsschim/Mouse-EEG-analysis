@@ -182,7 +182,8 @@ d=stas.(char(names(1)));
 d=filtfilt(bb,aa,d')';
 
 % max_rms=0;
-   for k=1:9
+%    for k=1:9
+for k=1:9
        concat=['RMSvals_' num2str(k)];
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
 %        maxrms=max(all_points(1).(concat));
@@ -208,10 +209,18 @@ figure
 %imagesc plot
 %subplot(2,3,z);
 imagesc(matrix')
+
+% naming waterfall plots based on 'z'
+names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+title(names(z))
+
+% setting waterfall axes 
 ylim=[0 0.3];
+ylabel('Stimulus event #'); 
+ticks = 0:5:60 ; 
+yticks(ticks) ; 
+xlabel('Time after stimulus (s)') 
 colorbar
-
-
 
 
 %% calculate z-scores
