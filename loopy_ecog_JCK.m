@@ -12,7 +12,7 @@ clear all
 %work 
 
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\'; 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\'; 
+folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\'; 
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 2\'; 
 
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-25-2020 Mouse Experiment 1\'; 
@@ -31,7 +31,7 @@ clear all
 %   error in loopy line 99: disp(file_list(z).name)now runs to and breaks
 %   on trial 4
 
-folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
 % eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % works with datastart(5):dataend(5)
 
@@ -44,8 +44,8 @@ folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experimen
 file_list=dir([folder 'TRIAL*.mat']);
 baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
-% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
-set_channels=[1 2 3 4 9]; % for 12/16 data? 
+set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+% set_channels=[1 2 3 4 9]; % for 12/16 data? 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
@@ -97,31 +97,31 @@ for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ;
 
 % %histo_lines;
 % % Histogram overlay
-% subplot(1,3,1);
-% histogram(for_stats_analysis.Trial_1)
-% hold on
-% histogram(for_stats_analysis.Trial_2)
-% legend('Trial 1','Trial 2')
-% 
-% subplot(1,3,2);
-% histogram(for_stats_analysis.Trial_1)
-% hold on
-% histogram(for_stats_analysis.Trial_3)
-% legend('Trial 1','Trial 3')
-% 
-% subplot(1,3,3);
-% histogram(for_stats_analysis.Trial_2)
-% hold on
-% histogram(for_stats_analysis.Trial_3)
-% legend('Trial 2','Trial 3')
-% 
-% figure
-% histogram(for_stats_analysis.Trial_1)
-% hold on
-% histogram(for_stats_analysis.Trial_2)
-% histogram(for_stats_analysis.Trial_3)
-% legend('Trial 1','Trial 2','Trial 3')
-% title('Dec 23rd Mouse')
+subplot(1,3,1);
+histogram(for_stats_analysis.Trial_1)
+hold on
+histogram(for_stats_analysis.Trial_2)
+legend('Trial 1','Trial 2')
+
+subplot(1,3,2);
+histogram(for_stats_analysis.Trial_1)
+hold on
+histogram(for_stats_analysis.Trial_3)
+legend('Trial 1','Trial 3')
+
+subplot(1,3,3);
+histogram(for_stats_analysis.Trial_2)
+hold on
+histogram(for_stats_analysis.Trial_3)
+legend('Trial 2','Trial 3')
+
+figure
+histogram(for_stats_analysis.Trial_1)
+hold on
+histogram(for_stats_analysis.Trial_2)
+histogram(for_stats_analysis.Trial_3)
+legend('Trial 1','Trial 2','Trial 3')
+title('Dec 23rd Mouse')
 
 % Grouping the data together for comparative analysis
 first_second_vector=[for_stats_analysis.Trial_1 for_stats_analysis.Trial_2];
@@ -161,6 +161,6 @@ run_stats_tests(first_third_vector, first_vs_third);
 run_stats_tests(second_third_vector, second_vs_third);
 
 % Chi-squared variance test, between trials 1&2, 1&3
-variance_trial_one=var(for_stats_analysis.Trial_1);
-[h,p]=vartest(for_stats_analysis.Trial_2, variance_trial_one);
-[h1,p1]=vartest(for_stats_analysis.Trial_3, variance_trial_one);
+% variance_trial_one=var(for_stats_analysis.Trial_1);
+% [h,p]=vartest(for_stats_analysis.Trial_2, variance_trial_one);
+% [h1,p1]=vartest(for_stats_analysis.Trial_3, variance_trial_one);
