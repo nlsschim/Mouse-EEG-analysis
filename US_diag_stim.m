@@ -11,8 +11,8 @@ alldata.V1Ldata=data(datastart(V1L):dataend(V1L));
 alldata.S1Ldata=data(datastart(S1L):dataend(S1L));
 alldata.S1Rdata=data(datastart(S1R):dataend(S1R));
 alldata.V1Rdata=data(datastart(V1R):dataend(V1R));
-% alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-alldata.lightstimdata=data(datastart(5):dataend(5)); % works for 5/29 
+alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% alldata.lightstimdata=data(datastart(5):dataend(5)); % works for 5/29 
 
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
@@ -55,10 +55,10 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-    for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+%     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
 %     for j=2:(length(index_stim)-3) % for 6/25 mouse experiment 1
 %      for j=2:(length(index_stim)-5) % 6/24 experiment 3 
-%     for j=2:(length(index_stim)-3) % 6/24 experiment 1 
+    for j=2:(length(index_stim)-3) % 6/24 experiment 1 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end

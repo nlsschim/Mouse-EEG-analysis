@@ -14,7 +14,9 @@ clear all
 
 %%
 %work 
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-30-2020 Mouse Experiment 1/';
+folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-30-2020 Mouse Experiment 1/';
+
+% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/06-23-2021 Mouse Experiment 1/';
 
 % folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/05-29-2020 Mouse Experiment 1/';
 
@@ -70,11 +72,11 @@ clear all
 %% 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline 2.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'Baseline1.mat']); % or baseline 1 or baseline 2 depending on trials 
 
-% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16/19 data, 6/23/21 
-set_channels=[1 2 3 4 5]; % 6/24/21 data,
+% set_channels=[1 2 3 4 5]; % 6/24/21 data,
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
@@ -107,10 +109,10 @@ for_stats_analysis=[];
 %for z=1:3 
 
 for z=1:4
-     % if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
+     if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
 %      if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
-     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end %for 12-23
-     if isequal(file_list(z).name,"TRIAL 6.mat"), continue, end % for 6/24 second session 
+%      if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end %for 12-23
+     if isequal(file_list(z).name,"TRIAL6.mat"), continue, end % for 6/24 second session 
 %      if isequal(file_list(z).name,"TRIAL 10.mat"), continue, end 
 %      if isequal(file_list(z).name,"TRIAL 14 mat"), continue, end 
      % data trials are 'Trial 2.mat w/ a space. Some are without a space
