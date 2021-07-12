@@ -35,7 +35,7 @@ Z=diff(Y);
 index_allstim=find(Z>0.5);index_allstim=index_allstim+1;
 
 %find first pulse of each train, if stimulation contains trains
-index_trains=diff(index_allstim)>2*fs;
+index_trains=diff(index_allstim)>2*fs; 
 index_allstim(1)=[];
 index_stim=index_allstim(index_trains);
 
@@ -47,11 +47,12 @@ stas.(char(names(i)))=[];
 end
 
 tb=1; %time before stim to start STA
-ta=9; %time after stim to end STA
+ta=10; %time after stim to end STA
 
-%%
+%% Data conditioning (cont.) 
 % prevents errors based on discrepency between V1Ldata and
 % lightstimdata length
+
 for i=1:4  
 %     %inner_loop_size = 0;
 % %     if (fix(length(alldata.V1Ldata)/tickrate/10)) < length(index_stim)
@@ -62,22 +63,43 @@ for i=1:4
 % %     
 % %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
 %       for j=2:(length(index_stim)-1)
-% %     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
-% %     for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1
-% %      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
-       for j=2:(length(index_stim)-3) % 6/24/20 experiment 1  
+%     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+    for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20 experiment 1  
+%         for j=2:(length(index_stim)-4)
+%     for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
-%     if length(index_stim) > 61 
-%         index_stim(62,:) = [] ;
-%     end
-%     for j=2:58
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end
 end
 
+% index_stim_conditioner(fs, tb, ta, names, index_stim, stas, alldata); 
+% stas.(char(names(1))) = sta(1) ;
+% stas.(char(names(2))) = sta(2) ;
+% stas.(char(names(3))) = sta(3) ;
+% stas.(char(names(4))) = sta(4) ;
 
+% for i=1:4
+% try 
+%     for j =2:(length(index_stim)-1) 
+%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+%     end
+% catch 
+%     warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
+%     for j =2:(length(index_stim)-2) 
+%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+%     end
+% try
+%    warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
+%     for j =2:(length(index_stim)-2) 
+%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+%     end 
+% catch 
+%     for j =2:(length(index_stim)-3) 
+%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+%     end 
+% end
+% end
+% end 
 %% plot STAS
 
 responseWindowEnd=0.4;
@@ -103,7 +125,7 @@ RMSvalaarray=zeros(length(foranalysis),1);
 %     a=a-mean(stas.(char(names(i)))(1:fs));
 %     a=a/100*1000;
 %    
-%     [bb,aa]=butter(3,[3,200]/(fs/2)); %trying to get the us noise out, 3 to 200
+    [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
 %     a=filtfilt(bb,aa,a); % used for the butter filter
 %     %[minval,minidx]=min(a(fs*(tb):fs*(tb+responseWindowEnd))); %identifying min max within response window 
 %     [maxval,maxidx]=max(a(fs*(tb):fs*(tb+responseWindowEnd)));
@@ -190,9 +212,10 @@ d=stas.(char(names(1)));
 d=filtfilt(bb,aa,d')';
 
 % max_rms=0;
-   for k=1:9
+   for k=1:10
        concat=['RMSvals_' num2str(k)];
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
+%        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
 %        maxrms=max(all_points(1).(concat));
 %        if maxrms > max_rms
 %            max_rms=maxrms;
@@ -206,7 +229,7 @@ d=filtfilt(bb,aa,d')';
 %     all_points(1).RMSvals_4; all_points(1).RMSvals_3; all_points(1).RMSvals_2; all_points(1).RMSvals_1];
 
 matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
-    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9];
+    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
 
 
 %normalize the data using the baseline RMS
@@ -219,7 +242,17 @@ imagesc(matrix')
 ylim=[0 0.3];
 colorbar
 
+% naming waterfall plots based on 'z'
+names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+title(names(z)) % z = 1:4 trials in loopy
 
+% setting waterfall axes 
+ylim=[0 0.3];
+ylabel('Stimulus event #'); 
+ticks = 0:5:60 ; 
+yticks(ticks) ; 
+xlabel('Time after stimulus (s)') 
+colorbar
 
 
 %% calculate z-scores

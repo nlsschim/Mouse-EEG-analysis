@@ -26,9 +26,10 @@ clear all
 % for j=2:(length(index_stim)-5) % 6/24 experiment 3 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 1\';
-% works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim 
+% works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim
+% Baseline 1.mat
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\05-29-2020 Mouse Experiment\'; 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\05-29-2020 Mouse experiment\'; 
 % index error in char(names(i)) in US diag stim, same as 12/16 data:
 % eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % breaks trial 1
@@ -37,36 +38,53 @@ clear all
 % Trial. see line 15 of US-Diag stim 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
-% works if light stim channel is set to 9 instead of 7
+% works if light stim channel is set to 9 instead of 7, -3 for j
 
-folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-21 RECUT session 2\' ;
-% works with channel 5 as light stim 
+% folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-21 RECUT session 2\' ;
+% works with channel 5 as light stim, baseline 2, -5 for j
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-21 RECUT\06-23-21 RECUT 2.0 session 1\' ;
+%works with channel 5 as light stim, -3 for j
+
+% folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-24 Data\' ;
+% runs with us_diag_stim j=2:(length(index_stim)-5)
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-13-2019 Mouse Experiment\' ;
+%works but is missing events from 2nd light only please use recut
+
+%  folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-13-19 recut RIGHT\' ;
+%use ch 5 as light stim, -4 for j
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-27-19 RECUT\' ;
+% use ch 5 as light stim, -3 for j
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-20 MOUSE 1 RECUT\' ;
+% use ch 5 as light stim, -3 for j
+
+%  folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-12-19 RECUT\' ;
+%use ch 5 as light stim, -3 for j
+%light + US very short 
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\11-27-19 MOUSE RECUT\' ;
+%use ch 5 as light stim, -3 for j 
+
 
 % dont work 
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 1\';
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\6_23_2020_mouse_1_recut\' ;
-% corrupt trial trial 1.mat file? 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\11-22-19 MOUSE RECUT\' ;
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-13-2019 Mouse Experiment\' ;
-% needs a trial 1 rechop ; V1L data is not long as other data entries in
-% trial 1? 
-% folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-24 Data\' ;
-% V1L data is short-- maybe rechop
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\6-23-21 Vis Stim Experiment Mouse 1\session 1\';
-% V1L data also short 
-
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06_24_21mouse2\second session\' ; 
+% folder='C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\07-01-21 Vis Stim Experiment Mouse 3\'; 
 
 %% 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline 2.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 % set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
-% set_channels=[1 2 3 4 9]; % for 12/16/19 data, 6/23/21 
-set_channels=[1 2 3 4 5]; % 6/24/21 data,
+% set_channels=[1 2 3 4 9]; % for 12/16/19 data, 
+set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21
+
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
@@ -78,7 +96,7 @@ S1R=set_channels(2);
 V1R=set_channels(1);
 lightstim=set_channels(5);
 %this is important since its how the other code will find the channels.
-%Everythin is coded by name so it is not hard coded in 
+%EverythinG is coded by name so it is not hard coded in 
 %';' prevents the line outcome from appearing in the terminal everytime, it just looks bad and is useless 
 %create data arrays
 
@@ -111,8 +129,8 @@ for z=1:4
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
-    US_diag_stim;  
-%     super_US_diag_stim ;
+%     US_diag_stim;  
+    super_US_diag_stim ;
     
 end
 
@@ -120,42 +138,42 @@ end
 for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
 for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 
-%%
-% histogram overlays 
-% 
-% % 1 overlaid by 2
-subplot(1,3,1);
-histogram(for_stats_analysis.Trial_1)
-hold on
-histogram(for_stats_analysis.Trial_2)
-legend('Trial 1','Trial 2')
-axis([0 0.5 0 400])
+%% histogram overlays - will remove second waterfall plot 
 
+% % 1 overlaid by 2
+% subplot(1,4,2);
+% histogram(for_stats_analysis.Trial_1)
+% hold on
+% histogram(for_stats_analysis.Trial_2)
+% legend('Trial 1','Trial 2')
+% axis([0 0.5 0 400])
+% 
 % 
 % % 2 overlaid by 3
-subplot(1,3,2);
-histogram(for_stats_analysis.Trial_2)
-hold on
-histogram(for_stats_analysis.Trial_3)
-legend('Trial 2','Trial 3')
-axis([0 0.5 0 400])
-
+% subplot(1,4,3);
+% histogram(for_stats_analysis.Trial_2)
+% hold on
+% histogram(for_stats_analysis.Trial_3)
+% legend('Trial 2','Trial 3')
+% axis([0 0.5 0 400])
+% 
 % % 1 overlaid by 3
-subplot(1,3,3);
-histogram(for_stats_analysis.Trial_1)
-hold on
-histogram(for_stats_analysis.Trial_3)
-legend('Trial 1','Trial 3')
-axis([0 0.5 0 400])
-
-
+% subplot(1,4,4);
+% histogram(for_stats_analysis.Trial_1)
+% hold on
+% histogram(for_stats_analysis.Trial_3)
+% legend('Trial 1','Trial 3')
+% axis([0 0.5 0 400])
+% 
+% 
 % % all overlaid
-figure
-histogram(for_stats_analysis.Trial_1)
-hold on
-histogram(for_stats_analysis.Trial_2)
-histogram(for_stats_analysis.Trial_3)
-legend('Trial 1','Trial 2','Trial 3')
+% figure
+% histogram(for_stats_analysis.Trial_1)
+% hold on
+% histogram(for_stats_analysis.Trial_2)
+% hold on 
+% histogram(for_stats_analysis.Trial_3)
+% legend('Trial 1','Trial 2','Trial 3')
 % title('12/23/19 Mouse')
 %%
 % Grouping the data together for comparative analysis - trial 2=the real
