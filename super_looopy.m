@@ -116,7 +116,9 @@ load([folder baseline.name])
 calc_baseline;
 
 % create matrix to hold data for statistical testing
+
 for_stats_analysis=[];
+%insert thresholding here
 
 %create figure for plotting histograms
 %figure;
