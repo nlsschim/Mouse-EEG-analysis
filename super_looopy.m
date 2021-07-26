@@ -15,33 +15,46 @@ clear all
 %%
 %work 
 
+% SHAM 
+
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-30-2020 Mouse Experiment 1\'; 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
+% use ch 7 as light stim, use baseline 1 and -1 for j
+
+ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
+% use ch 7 as light stim, -1 for j
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-25-2020 Mouse Experiment 1\'; 
-% works with US DIAG STIM line changed to  for j=2:(length(index_stim)-3) for datastart(lightstim):dataend(lightstim)
+% use ch 7 as light stim, works with baseline 1 and  for j=2:(length(index_stim)-3) for datastart(lightstim):dataend(lightstim)
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 3\'; 
-% for j=2:(length(index_stim)-5) % 6/24 experiment 3 
+%  folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 3\'; 
+% use ch 7 as light stim, for j=2:(length(index_stim)-5) % 6/24 experiment 3 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 1\';
 % works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim
-% Baseline 1.mat
+% Baseline 1.mat, use ch 7 as light stim,
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\05-29-2020 Mouse experiment\'; 
 % index error in char(names(i)) in US diag stim, same as 12/16 data:
-% eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% error in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % breaks trial 1
 % works if lightstim = 5 in US diagstim datastart(5):dataend(5)
 % making sure the skipping refractory names are case sensitive (TRIAL vs.
 % Trial. see line 15 of US-Diag stim 
+%-1 for j
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-20 MOUSE 1 RECUT\' ;
+% use ch 5 as light stim, -3 for j
+
+% Not SHAM 
+
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
+% ch 7 as light stim
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
 % works if light stim channel is set to 9 instead of 7, -3 for j
 
 % folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-21 RECUT session 2\' ;
-% works with channel 5 as light stim, baseline 2, -5 for j
+% works with channel 5 as light stim, baseline 2, -2 for j
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-21 RECUT\06-23-21 RECUT 2.0 session 1\' ;
 %works with channel 5 as light stim, -3 for j
@@ -58,21 +71,17 @@ clear all
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-27-19 RECUT\' ;
 % use ch 5 as light stim, -3 for j
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-20 MOUSE 1 RECUT\' ;
-% use ch 5 as light stim, -3 for j
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\11-27-19 MOUSE RECUT\' ;
+%use ch 5 as light stim, -3 for j 
 
 %  folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-12-19 RECUT\' ;
 %use ch 5 as light stim, -3 for j
 %light + US very short 
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\11-27-19 MOUSE RECUT\' ;
-%use ch 5 as light stim, -3 for j 
-
 
 % dont work 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\11-22-19 MOUSE RECUT\' ;
-
 
 % folder='C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\07-01-21 Vis Stim Experiment Mouse 3\'; 
 
@@ -81,9 +90,9 @@ clear all
 file_list=dir([folder 'TRIAL*.mat']);
 baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
-% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+ set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16/19 data, 
-set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21
+%set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21
 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};

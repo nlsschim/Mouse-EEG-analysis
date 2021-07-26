@@ -5,15 +5,32 @@ fs=tickrate(1);
 time1=1:dataend(1);
 time=time1/fs/60;
 
+%% change the bandpass for filtering pls
+    % default done 
+%     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
+
+    % low gamma 
+%    [bb,aa]=butter(3,[30,59]/(fs/2)); 
+    % beta
+%     [bb,aa]=butter(3,[12,29]/(fs/2)); 
+    % theta
+%      [bb,aa]=butter(2,[4,7]/(fs/2));
+    % alpha 
+   [bb,aa]=butter(2,[8,11]/(fs/2));
+
+    % all (desired) bands 
+%    [bb,aa]=butter(3,[4,59]/(fs/2));
+
 %Organize data into structure array
 alldata=[]; %initialize structure array
 
-alldata.V1Ldata=data(datastart(V1L):dataend(V1L));
-alldata.S1Ldata=data(datastart(S1L):dataend(S1L));
-alldata.S1Rdata=data(datastart(S1R):dataend(S1R));
-alldata.V1Rdata=data(datastart(V1R):dataend(V1R));
+alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
+alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
+alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
+alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
+% alldata.lightstimdata=filtfilt(bb,aa,data(datastart(lightstim):dataend(lightstim))')';
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-% alldata.lightstimdata=data(datastart(5):dataend(5)); % for 5/29 Hypothesis:
+% alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
 % this works if not all channels are imported; channel 7 = channel 5 vs.
 % channel 1... 5, 6, 7 => channel 1-4, channel 7 
 % what changes in experiments is whether channels 5-6 are included in
@@ -24,7 +41,7 @@ names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'};
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
 
 %Filter out noise
-alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
+% alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
 %% detect stimuli
 
 X = alldata.lightstimdata;
@@ -59,14 +76,14 @@ for i=1:4
 % %         inner_loop_size = (fix(length(alldata.V1Ldata)/tickrate/10)-1);
 % %     else
 % %         inner_loop_size = length(index_stim)-1;
-% %     end
-% %     
+% %     end  
 % %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-%       for j=2:(length(index_stim)-1)
-%     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
-    for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20 experiment 1  
+
+       for j=2:(length(index_stim)-1)
+%   for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+%   for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20 experiment 1  
 %         for j=2:(length(index_stim)-4)
-%     for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
+%      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
@@ -124,8 +141,10 @@ RMSvalaarray=zeros(length(foranalysis),1);
 %     a=mean(stas.(char(names(i))));
 %     a=a-mean(stas.(char(names(i)))(1:fs));
 %     a=a/100*1000;
-%    
-    [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
+
+%%
+    
+
 %     a=filtfilt(bb,aa,a); % used for the butter filter
 %     %[minval,minidx]=min(a(fs*(tb):fs*(tb+responseWindowEnd))); %identifying min max within response window 
 %     [maxval,maxidx]=max(a(fs*(tb):fs*(tb+responseWindowEnd)));
@@ -208,12 +227,14 @@ RMSvalaarray=zeros(length(foranalysis),1);
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
 
+
 %filter data
-d=filtfilt(bb,aa,d')';
+% d=filtfilt(bb,aa,d')';
 
 % max_rms=0;
    for k=1:10
        concat=['RMSvals_' num2str(k)];
+%        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
 %        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
 %        maxrms=max(all_points(1).(concat));
@@ -242,6 +263,7 @@ imagesc(matrix')
 ylim=[0 0.3];
 colorbar
 
+
 % naming waterfall plots based on 'z'
 names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
 title(names(z)) % z = 1:4 trials in loopy
@@ -253,6 +275,8 @@ ticks = 0:5:60 ;
 yticks(ticks) ; 
 xlabel('Time after stimulus (s)') 
 colorbar
+%to set the magnitude for the color bar, change accordingly?????
+caxis([0.05 0.2])
 
 
 %% calculate z-scores
