@@ -292,19 +292,12 @@ conc=['Trial_' num2str(z)];
 for_stats_analysis.(conc)=for_stats;
 
 %% additional hardcoded filtering 
-% removes outliers data points 4 standard deviations from mean 
-
-% deviation=std(for_stats);
-% trialmean = mean(for_stats);
-% for_stats_analysis.(conc) = for_stats<trialmean+4*deviation;
+% removes outlier data points 4 standard deviations from mean 
 
 deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));
 for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4*deviation);
 
-% v1=std(for_stats_new.(conc))
-% t1m = mean(for_stats_new.(conc))
-% for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1)
 
 %% plotting the data
 
