@@ -1,4 +1,4 @@
-%% Authors: Devon Griggs, John Kucewicz, Nels Schimek
+%% Authors: Devon Griggs, John Kucewicz, Nels Schimek, Alissa Phutirat, Henry Tan
 
 close all
 clear all
