@@ -116,9 +116,11 @@ load([folder baseline.name])
 calc_baseline;
 
 % create matrix to hold data for statistical testing
-
+for_stats_new = [];
 for_stats_analysis=[];
 %insert thresholding here
+
+
 
 %create figure for plotting histograms
 %figure;
@@ -145,9 +147,14 @@ for z=1:4
     
 end
 
-% to rename trials and skip 2 
+% create matrix to hold data for statistical testing
+
+% 
+% % to rename trials and skip 2 
 for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
 for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
+ 
+
 
 %% histogram overlays - will remove second waterfall plot 
 

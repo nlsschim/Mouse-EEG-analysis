@@ -289,7 +289,34 @@ s=size(matrix);
 S=s(1)*s(2);
 for_stats=reshape(matrix,1,S);
 conc=['Trial_' num2str(z)];
-for_stats_analysis.(conc)=for_stats;
+% for_stats_analysis.(conc)=for_stats;
+for_stats_new.(conc)=for_stats;
+
+
+% after dividing data into normal distribution: 
+% >mean+4*stddev)(dataset) = [] 
+v1=std(for_stats_new.(conc))
+t1m = mean(for_stats_new.(conc))
+for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1)
+
+% v3=std(for_stats_new.Trial_3)
+% t3m = mean(for_stats_new.Trial_3)
+% for_stats_analysis.Trial_3= for_stats_new.Trial_3(for_stats_new.Trial_3<t3m+4*v3)
+% 
+% v4=std(for_stats_new.Trial_4)
+% t4m = mean(for_stats_new.Trial_4)
+% for_stats_analysis.Trial_4= for_stats_new.Trial_4(for_stats_new.Trial_4<t4m+4*v4)
+% 
+% v2=std(for_stats_new.Trial_2)
+% t2m = mean(for_stats_new.Trial_2)
+% for_stats_analysis.Trial_2 = for_stats_new.Trial_2(for_stats_new.Trial_2<t2m+4*v2)
+
+% for_stats_analysis.Trial 1
+% for_stats_analysis.Trial 2
+% for_stats_analysis.Trial 3
+% for_stats_analysis.Trial 4
+% %insert filtering here?
+
 
 %% plotting the data
 
