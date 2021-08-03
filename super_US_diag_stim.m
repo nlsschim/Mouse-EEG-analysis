@@ -9,14 +9,14 @@ time=time1/fs/60;
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
 
-    % low gamma 
-%    [bb,aa]=butter(3,[30,59]/(fs/2)); 
+%     low gamma 
+%    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
-%     [bb,aa]=butter(3,[12,29]/(fs/2)); 
+%   [bb,aa]=butter(2,[12,29]/(fs/2)); 
     % theta
-%      [bb,aa]=butter(2,[4,7]/(fs/2));
+%   [bb,aa]=butter(2,[4,7]/(fs/2));
     % alpha 
-   [bb,aa]=butter(2,[8,11]/(fs/2));
+    [bb,aa]=butter(2,[8,11]/(fs/2));
 
     % all (desired) bands 
 %    [bb,aa]=butter(3,[4,59]/(fs/2));
@@ -80,8 +80,8 @@ for i=1:4
 % %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
 
        for j=2:(length(index_stim)-1)
-%   for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
-%   for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20 experiment 1  
+% for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+% for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20 experiment 1  
 %         for j=2:(length(index_stim)-4)
 %      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
@@ -258,7 +258,7 @@ matrix=matrix/rms_baseline;
 
 figure
 %imagesc plot
-%subplot(2,3,z);
+% subplot(2,3,z);
 imagesc(matrix')
 ylim=[0 0.3];
 colorbar
@@ -276,7 +276,7 @@ yticks(ticks) ;
 xlabel('Time after stimulus (s)') 
 colorbar
 %to set the magnitude for the color bar, change accordingly?????
-caxis([0.05 0.2])
+caxis([.03 .5])
 
 
 %% calculate z-scores
@@ -295,9 +295,9 @@ for_stats_new.(conc)=for_stats;
 
 % after dividing data into normal distribution: 
 % >mean+4*stddev)(dataset) = [] 
-v1=std(for_stats_new.(conc))
-t1m = mean(for_stats_new.(conc))
-for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1)
+v1=std(for_stats_new.(conc));
+t1m = mean(for_stats_new.(conc));
+for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
 
 % v3=std(for_stats_new.Trial_3)
 % t3m = mean(for_stats_new.Trial_3)

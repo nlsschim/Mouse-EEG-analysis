@@ -20,16 +20,16 @@ clear all
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-30-2020 Mouse Experiment 1\'; 
 % use ch 7 as light stim, use baseline 1 and -1 for j
 
- folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-2020 Mouse Experiment 2\'; 
 % use ch 7 as light stim, -1 for j
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-25-2020 Mouse Experiment 1\'; 
 % use ch 7 as light stim, works with baseline 1 and  for j=2:(length(index_stim)-3) for datastart(lightstim):dataend(lightstim)
 
-%  folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 3\'; 
-% use ch 7 as light stim, for j=2:(length(index_stim)-5) % 6/24 experiment 3 
+% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 3\'; 
+% use ch 7 as light stim, for j=2:(length(index_stim)-1) % 6/24 experiment 3 
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 1\';
+%  folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-2020 Mouse Experiment 1\';
 % works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim
 % Baseline 1.mat, use ch 7 as light stim,
 
@@ -48,19 +48,23 @@ clear all
 % Not SHAM 
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-23 Mouse Experiment\'; 
-% ch 7 as light stim
+% ch 7 as light stim, -2 FOR J
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-16 RECUT\'; 
-% works if light stim channel is set to 9 instead of 7, -3 for j
+% works if light stim channel is set to 9 instead of 7, -1 for j, 
+%lg
+%caxis([0.005 0.045]), b caxis([0.02 0.07]), t, a caxis([0.005 0.06])
 
 % folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-24-21 RECUT session 2\' ;
 % works with channel 5 as light stim, baseline 2, -2 for j
 
-% folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-21 RECUT\06-23-21 RECUT 2.0 session 1\' ;
-%works with channel 5 as light stim, -3 for j
+ folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\06-23-21 RECUT\06-23-21 RECUT 2.0 session 1\' ;
+%works with channel 5 as light stim, -1 for j
 
 % folder = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-24 Data\' ;
-% runs with us_diag_stim j=2:(length(index_stim)-5)
+% runs with us_diag_stim j=2:(length(index_stim)-2), lg caxis([0.0045
+% 0.015]), b caxis([.007 .02]), t caxis([.01 .04]), a caxis([.005 .02])
+
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-13-2019 Mouse Experiment\' ;
 %works but is missing events from 2nd light only please use recut
@@ -69,7 +73,8 @@ clear all
 %use ch 5 as light stim, -4 for j
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\12-27-19 RECUT\' ;
-% use ch 5 as light stim, -3 for j
+% use ch 5 as light stim, -1 for j, a caxis([.008 .12]), lg caxis([.005 .04])
+
 
 % folder= 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\11-27-19 MOUSE RECUT\' ;
 %use ch 5 as light stim, -3 for j 
@@ -90,9 +95,9 @@ clear all
 file_list=dir([folder 'TRIAL*.mat']);
 baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
- set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+%  set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16/19 data, 
-%set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21
+ set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21
 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
