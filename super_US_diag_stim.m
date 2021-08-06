@@ -8,6 +8,7 @@ time=time1/fs/60;
 %% change the bandpass for filtering pls
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
+[bb,aa]=butter(2,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
 
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
@@ -16,7 +17,7 @@ time=time1/fs/60;
     % theta
 %   [bb,aa]=butter(2,[4,7]/(fs/2));
     % alpha 
-    [bb,aa]=butter(2,[8,11]/(fs/2));
+%     [bb,aa]=butter(2,[8,11]/(fs/2));
 
     % all (desired) bands 
 %    [bb,aa]=butter(3,[4,59]/(fs/2));
@@ -30,7 +31,7 @@ alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
 alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
 % alldata.lightstimdata=filtfilt(bb,aa,data(datastart(lightstim):dataend(lightstim))')';
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-% alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
+%  alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
 % this works if not all channels are imported; channel 7 = channel 5 vs.
 % channel 1... 5, 6, 7 => channel 1-4, channel 7 
 % what changes in experiments is whether channels 5-6 are included in
@@ -64,7 +65,8 @@ stas.(char(names(i)))=[];
 end
 
 tb=1; %time before stim to start STA
-ta=10; %time after stim to end STA
+% ta=10; %time after stim to end STA
+ ta = 3; % first 3 seconds
 
 %% Data conditioning (cont.) 
 % prevents errors based on discrepency between V1Ldata and
@@ -232,7 +234,8 @@ d=stas.(char(names(1)));
 % d=filtfilt(bb,aa,d')';
 
 % max_rms=0;
-   for k=1:10
+%    for k=1:10
+   for k = 1:3
        concat=['RMSvals_' num2str(k)];
 %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
@@ -242,6 +245,11 @@ d=stas.(char(names(1)));
 %            max_rms=maxrms;
 %        end
    end
+   
+% for 0.5 seconds increments 
+all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
+all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
+all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');   
     
  % disp(max_rms);
 
@@ -249,8 +257,12 @@ d=stas.(char(names(1)));
 % matrix=[all_points(1).RMSvals_9; all_points(1).RMSvals_8; all_points(1).RMSvals_7; all_points(1).RMSvals_6; all_points(1).RMSvals_5;
 %     all_points(1).RMSvals_4; all_points(1).RMSvals_3; all_points(1).RMSvals_2; all_points(1).RMSvals_1];
 
-matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
-    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
+% matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
+%     all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
+
+% first 3 sec
+matrix=[all_points(1).RMSvals_0point5; all_points(1).RMSvals_1; all_points(1).RMSvals_1point5; all_points(1).RMSvals_2; 
+    all_points(1).RMSvals_2point5; all_points(1).RMSvals_3]; 
 
 
 %normalize the data using the baseline RMS
@@ -274,9 +286,12 @@ ylabel('Stimulus event #');
 ticks = 0:5:60 ; 
 yticks(ticks) ; 
 xlabel('Time after stimulus (s)') 
+% for 3 second analysis 
+% ticks = 0:0.25:3 ;
+% xticks(ticks)
 colorbar
 %to set the magnitude for the color bar, change accordingly?????
-caxis([.03 .5])
+caxis([.0005 1])
 
 
 %% calculate z-scores
@@ -363,30 +378,31 @@ for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
 %disp('t-test on the before and after RMS values')
 %[H,P,CI]=ttest(RMSvalbarray,RMSvalaarray)
 
-
-%% plot CWTs of STAs
-
-if plot_cwt==1 
-%     figure
-%     caxis_track=[];
-%     ylabels={'S1 (hz)';'A1 (hz)';'V1R (hz)'; 'V1L (hz)'};
-%      xlabel('time after stimulus onset (s)');
-    for i=1:length(foranalysis)
-        figure
-        caxis_track=[];
-        ylabels={'S1L (Hz)';'A1L (Hz)';'V1R (Hz)'; 'V1L (Hz)';'A1R (Hz)';'S1R (Hz)'};
-        xlabel('time after stimulus onset (s)');
-        a=mean(stas.(char(names(i))));
-        cwt(a,[],fs);
-        ylim([0.0005 0.032]);
-        ylabel(ylabels(i));
-        colormap(jet);
-        %caxis_track=[caxis_track;caxis]
-yticks([0.0005,0.001,0.002,0.008,0.032,0.1]);
-yticklabels({0.5,1,2,8,32,100});
-xticks([0,1,2,3,4,5,6,7,8,9]);
- title(file_list(z).name,'interpreter','none');
-
-    end
-     
-end
+% 
+% %% plot CWTs of STAs
+% 
+% if plot_cwt==1 
+% %     figure
+% %     caxis_track=[];
+% %     ylabels={'S1 (hz)';'A1 (hz)';'V1R (hz)'; 'V1L (hz)'};
+% %      xlabel('time after stimulus onset (s)');
+%     for i=1:length(foranalysis)
+%         figure
+%         caxis_track=[];
+%         ylabels={'S1L (Hz)';'A1L (Hz)';'V1R (Hz)'; 'V1L (Hz)';'A1R (Hz)';'S1R (Hz)'};
+%         xlabel('time after stimulus onset (s)');
+%         a=mean(stas.(char(names(i))));
+%         cwt(a,[],fs);
+%         ylim([0.0005 0.032]);
+%         ylabel(ylabels(i));
+%         colormap(jet);
+%         %caxis_track=[caxis_track;caxis]
+% yticks([0.0005,0.001,0.002,0.008,0.032,0.1]);
+% yticklabels({0.5,1,2,8,32,100});
+% xticks([0,1,2,3,4,5,6,7,8,9]);
+% % xticks([0,0.5,1,1.5,2,2.5])
+%  title(file_list(z).name,'interpreter','none');
+% 
+%     end
+%      
+% end
