@@ -30,12 +30,12 @@ alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
 alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
 alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
 % alldata.lightstimdata=filtfilt(bb,aa,data(datastart(lightstim):dataend(lightstim))')';
-alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-%  alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
-% this works if not all channels are imported; channel 7 = channel 5 vs.
-% channel 1... 5, 6, 7 => channel 1-4, channel 7 
-% what changes in experiments is whether channels 5-6 are included in
-% export
+% if folder == 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\5-29-20 Mouse Experiment\'
+%     alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 
+% else
+    alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% end 
+
 
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
@@ -76,55 +76,41 @@ end
 % prevents errors based on discrepency between V1Ldata and
 % lightstimdata length
 
-for i=1:4  
-%     %inner_loop_size = 0;
-% %     if (fix(length(alldata.V1Ldata)/tickrate/10)) < length(index_stim)
-% %         inner_loop_size = (fix(length(alldata.V1Ldata)/tickrate/10)-1);
-% %     else
-% %         inner_loop_size = length(index_stim)-1;
-% %     end  
-% %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-
-%        for j=2:(length(index_stim)-1)
-for j=2:(length(index_stim)-2) % to compensate for data chopping so data
-% vectors are long enough (supposed to be 60 entries) for
-% for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20
-% experiment 1
-%         for j=2:(length(index_stim)-4)
-%      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
-        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-
-    end
-end
-
-% index_stim_conditioner(fs, tb, ta, names, index_stim, stas, alldata); 
-% stas.(char(names(1))) = sta(1) ;
-% stas.(char(names(2))) = sta(2) ;
-% stas.(char(names(3))) = sta(3) ;
-% stas.(char(names(4))) = sta(4) ;
-
-% for i=1:4
-% try 
-%     for j =2:(length(index_stim)-1) 
+% for i=1:4  
+% %     %inner_loop_size = 0;
+% % %     if (fix(length(alldata.V1Ldata)/tickrate/10)) < length(index_stim)
+% % %         inner_loop_size = (fix(length(alldata.V1Ldata)/tickrate/10)-1);
+% % %     else
+% % %         inner_loop_size = length(index_stim)-1;
+% % %     end  
+% % %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
+% 
+% %        for j=2:(length(index_stim)-1)
+% for j=2:(length(index_stim)-2) % to compensate for data chopping so data
+% % vectors are long enough (supposed to be 60 entries) for
+% % for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20
+% % experiment 1
+% %         for j=2:(length(index_stim)-4)
+% %      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
 %         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+% 
 %     end
-% catch 
-%     warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
-%     for j =2:(length(index_stim)-2) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end
-% try
-%    warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
-%     for j =2:(length(index_stim)-2) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end 
-% catch 
-%     for j =2:(length(index_stim)-3) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end 
 % end
-% end
-% end 
+
+
+for i=1:4
+    try 
+        for j =2:(length(index_stim)-2) 
+            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+        end
+    catch 
+        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-3)') 
+        for j =2:(length(index_stim)-3) 
+            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+        end
+    end 
+end 
+
 %% plot STAS
 
 responseWindowEnd=0.4;
@@ -210,12 +196,11 @@ s=size(matrix);
 S=s(1)*s(2);
 for_stats=reshape(matrix,1,S);
 conc=['Trial_' num2str(z)];
-% for_stats_analysis.(conc)=for_stats;
-for_stats_new.(conc)=for_stats;
+for_stats_analysis.(conc)=for_stats;
 
 
 % after dividing data into normal distribution: 
 % >mean+4*stddev)(dataset) = [] 
-v1=std(for_stats_new.(conc));
-t1m = mean(for_stats_new.(conc));
-for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
+deviation=std(for_stats_analysis.(conc));
+trialmean = mean(for_stats_analysis.(conc));
+for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4*deviation);

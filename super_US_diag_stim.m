@@ -13,13 +13,12 @@ time=time1/fs/60;
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
 %   [bb,aa]=butter(2,[12,29]/(fs/2)); 
-    % alpha 
-%     [bb,aa]=butter(2,[8,11]/(fs/2));
     % theta
 %   [bb,aa]=butter(2,[4,7]/(fs/2));
+    % alpha 
+%     [bb,aa]=butter(2,[8,11]/(fs/2));
 
-
-bandpasses = [3, 100; 30, 59; 12, 29; 8, 11; 4, 7;] ; 
+bandpasses = [3, 100; 30, 59; 12, 29; 4, 7; 8, 11] ; 
     [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
 
 %Organize data into structure array
@@ -85,8 +84,8 @@ for i=1:4
 % %     end  
 % %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
 
-%        for j=2:(length(index_stim)-1)
-for j=2:(length(index_stim)-2) % to compensate for data chopping so data
+       for j=2:(length(index_stim)-1)
+% for j=2:(length(index_stim)-2) % to compensate for data chopping so data
 % vectors are long enough (supposed to be 60 entries) for
 % j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20
 % experiment 1
@@ -230,8 +229,8 @@ RMSvalaarray=zeros(length(foranalysis),1);
 %   
 % end
 
-%% collect all of the individual points of data for waterfalls
-
+%%
+%collect all of the individual points of data
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
 
@@ -259,7 +258,8 @@ if time_series == 3
 else 
    for k=1:10
        concat=['RMSvals_' num2str(k)];
-%        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))')       all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
+%        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
+       all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
 %        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
 %        maxrms=max(all_points(1).(concat));
 %        if maxrms > max_rms
@@ -284,10 +284,8 @@ else
     all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
 end 
 
-%% normalize the data using the baseline RMS
+%normalize the data using the baseline RMS
 matrix=matrix/rms_baseline;
-
-%% plotting waterfalls 
 
 figure
 %imagesc plot
@@ -295,6 +293,8 @@ figure
 imagesc(matrix')
 ylim=[0 0.3];
 colorbar
+caxis manual
+
 
 % naming waterfall plots based on 'z'
 names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
@@ -312,13 +312,13 @@ if time_series == 3
     set(gca,'XTick',[1 2 3 4 5 6] ); %This is going to be the only values affected. 
     set(gca,'XTickLabel',[0.5 1 1.5 2 2.5 3] ); %This is what it's going to appear in those places.
 else
+    ticks = 0:1:10;
     xticks(ticks)
 end  
     
 colorbar
 %to set the magnitude for the color bar, change accordingly?????
-caxis([0.00015 0.05])
-
+% caxis([0.0104    0.233])
 
 %% calculate z-scores
 [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
@@ -330,14 +330,34 @@ s=size(matrix);
 S=s(1)*s(2);
 for_stats=reshape(matrix,1,S);
 conc=['Trial_' num2str(z)];
-for_stats_analysis.(conc)=for_stats;
+% for_stats_analysis.(conc)=for_stats;
+for_stats_new.(conc)=for_stats;
 
-%% additional hardcoded filtering 
-% removes outlier data points 4 standard deviations from mean 
 
-deviation=std(for_stats_analysis.(conc));
-trialmean = mean(for_stats_analysis.(conc));
-for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4 *deviation);
+% after dividing data into normal distribution: 
+% >mean+4*stddev)(dataset) = [] 
+v1=std(for_stats_new.(conc));
+t1m = mean(for_stats_new.(conc));
+for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
+
+% v3=std(for_stats_new.Trial_3)
+% t3m = mean(for_stats_new.Trial_3)
+% for_stats_analysis.Trial_3= for_stats_new.Trial_3(for_stats_new.Trial_3<t3m+4*v3)
+% 
+% v4=std(for_stats_new.Trial_4)
+% t4m = mean(for_stats_new.Trial_4)
+% for_stats_analysis.Trial_4= for_stats_new.Trial_4(for_stats_new.Trial_4<t4m+4*v4)
+% 
+% v2=std(for_stats_new.Trial_2)
+% t2m = mean(for_stats_new.Trial_2)
+% for_stats_analysis.Trial_2 = for_stats_new.Trial_2(for_stats_new.Trial_2<t2m+4*v2)
+
+% for_stats_analysis.Trial 1
+% for_stats_analysis.Trial 2
+% for_stats_analysis.Trial 3
+% for_stats_analysis.Trial 4
+% %insert filtering here?
+
 
 %% plotting the data
 
