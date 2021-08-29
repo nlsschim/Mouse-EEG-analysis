@@ -34,7 +34,7 @@ for q = 14:22
 end
 legend([p1 p2 p3],{'SHAM data','GEN data', 'PEN data'})
 xlabel('Trial Type'), ylabel('Median Value')
-title('Median 1LO, LUS, 2LO brain activity for all experiments')
+title('All Mice Median Values L+US and 2LO vs. 1LO')
 set(gca,'XTick',[1 2 3] );
 % set(gca,'XTickLabel',['1st LO', 'L+US' ,'2nd LO'] );
 xticklabels({'1st LO','L+US','2nd LO'});
@@ -121,7 +121,7 @@ q3 = plot(1:3, PENY_median, 'o-r', 'DisplayName', 'PEN data') ;
 
 legend([q1 q2 q3], 'SHAM DATA','GEN DATA','PEN DATA','Location','NorthWest')
 xlabel('Trial Type'), ylabel('Median Value')
-title('Median Value Trends for Light Stimulation Over Multiple Trials')
+title('Cohort Median Value Trends L+US and 2LO vs. 1LO')
 set(gca,'XTick',[1 2 3] );
 % set(gca,'XTickLabel',['1st LO', 'L+US' ,'2nd LO'] );
 xticklabels({'1st LO','L+US','2nd LO'});
