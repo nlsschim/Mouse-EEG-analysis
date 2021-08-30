@@ -106,18 +106,49 @@ for q = 15:22
 end 
 PEN_2LO_median = median(PEN_2LO) ;
 
+%% standard error 
+
+stderror(1, 1) = std(SHAM_1LO)/sqrt(length(SHAM_1LO)) ;
+stderror(1, 2) = std(SHAM_LUS)/sqrt(length(SHAM_LUS)) ;
+stderror(1, 3) = std(SHAM_2LO)/sqrt(length(SHAM_2LO)) ;
+
+stderror(2, 1) = std(GEN_1LO)/sqrt(length(GEN_1LO)) ;
+stderror(2, 2) = std(GEN_LUS)/sqrt(length(GEN_LUS)) ;
+stderror(2, 3) = std(GEN_2LO)/sqrt(length(GEN_2LO)) ;
+
+stderror(3, 1) = std(PEN_1LO)/sqrt(length(PEN_1LO)) ;
+stderror(3, 2) = std(PEN_LUS)/sqrt(length(PEN_LUS)) ;
+stderror(3, 3) = std(PEN_2LO)/sqrt(length(PEN_2LO)) ;
 %% plotting cohort medians 
+
+% stderror = std( data ) / sqrt( length( data ))
+% errorbar(x,y,err)
+
+% figure(2) 
+% SHAMY_median = [SHAM_1LO_median SHAM_LUS_median SHAM_2LO_median] ;
+% q1 = plot(1:3, SHAMY_median, 'o-g', 'DisplayName', 'SHAM data') ;
+% hold on 
+
+% GENY_median = [GEN_1LO_median GEN_LUS_median GEN_2LO_median] ;
+% q2 = plot(1:3, GENY_median, 'o-b', 'DisplayName', 'GEN data') ;
+% hold on 
+
+% PENY_median = [PEN_1LO_median PEN_LUS_median PEN_2LO_median] ;
+% q3 = plot(1:3, PENY_median, 'o-r', 'DisplayName', 'PEN data') ;
+
 figure(2) 
 SHAMY_median = [SHAM_1LO_median SHAM_LUS_median SHAM_2LO_median] ;
-q1 = plot(1:3, SHAMY_median, 'o-g', 'DisplayName', 'SHAM data') ;
+q1 = errorbar(1:3, SHAMY_median, stderror(1,:), 'o-g', 'DisplayName', 'SHAM data') ;
 hold on 
 
 GENY_median = [GEN_1LO_median GEN_LUS_median GEN_2LO_median] ;
-q2 = plot(1:3, GENY_median, 'o-b', 'DisplayName', 'GEN data') ;
+q2 = errorbar(1:3, GENY_median, stderror(2,:), 'o-b', 'DisplayName', 'GEN data') ;
 hold on 
 
 PENY_median = [PEN_1LO_median PEN_LUS_median PEN_2LO_median] ;
-q3 = plot(1:3, PENY_median, 'o-r', 'DisplayName', 'PEN data') ;
+q3 = errorbar(1:3, PENY_median, stderror(3,:), 'o-r', 'DisplayName', 'PEN data') ;
+
+
 
 legend([q1 q2 q3], 'SHAM DATA','GEN DATA','PEN DATA','Location','NorthWest')
 xlabel('Trial Type'), ylabel('Median Value')
