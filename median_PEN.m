@@ -4,11 +4,11 @@
 
 
 %% 
-file1={'06-24-21 RECUT session 2\', '8_10_21 m1\', '8_10_21 m2 session 1\', '06-23-21 RECUT 2.0 session 1\', '06-24-21 RECUT session 2\','8_12_21 m1\','8_12_21 m2\', '8_13_21\' };
+file1={'06-24-21 RECUT session 2\', '8_10_21 m1\', '8_10_21 m2 session 1\', '06-23-21 RECUT 2.0 session 1\','8_12_21 m1\','8_12_21 m2\', '8_13_21\' };
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
-PEN_MATRIX = zeros(8,3);
+PEN_MATRIX = zeros(7,3);
 % figure 
 % hold on
 for f=1:length(str)
