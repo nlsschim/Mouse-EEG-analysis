@@ -1,3 +1,7 @@
+%% Authors: Kat Floerchinger, Hannah Mach, Henry Tan :) 
+
+clc
+close all 
 
 % median_SHAM
 % median_GEN
@@ -173,5 +177,29 @@ secondLO_matrix = [SHAM_MATRIX(:,3) GEN_MATRIX(:,3) PEN_MATRIX(:,3)] ;
 % harry_plotter and the-
 chamber_of_statistics(LUS_matrix) 
 title('KW of L+US medians between cohorts')
+hold on 
+set(gca, 'XTick', [1 2 3]) ; 
+set(gca, 'XTickLabel', [{'SHAM' 'GEN' 'PEN'}]) ; 
+
 chamber_of_statistics(secondLO_matrix) 
-title('KW of 2nd LO medians between cohorts') 
+title('KW of 2nd LO medians between cohorts')
+hold on 
+set(gca, 'XTick', [1 2 3]) ; 
+set(gca, 'XTickLabel', [{'SHAM' 'GEN' 'PEN'}]) ; 
+
+%% individual Mann Whitney comparisons 
+
+
+SHAM_MATRIX = SHAM_MATRIX';
+GEN_MATRIX = GEN_MATRIX';
+PEN_MATRIX = PEN_MATRIX';
+
+% for L+US 
+MWp1 = ranksum(SHAM_MATRIX(2,:),GEN_MATRIX(2,:)); % SHAM L+US vs. GEN L+US 
+MWp2 = ranksum(SHAM_MATRIX(2,:),PEN_MATRIX(2,:)); % SHAM L+US vs. PEN L+US 
+MWp3 = ranksum(GEN_MATRIX(2,:),PEN_MATRIX(2,:)); % GEN L+US vs. PEN L+US 
+
+% for 2nd LO
+MWp4 = ranksum(SHAM_MATRIX(3,:),GEN_MATRIX(3,:)); % SHAM 2LO vs. GEN 2LO 
+MWp5 = ranksum(SHAM_MATRIX(3,:),PEN_MATRIX(3,:)); % SHAM 2LO vs. PEN 2LO 
+MWp6 = ranksum(GEN_MATRIX(3,:),PEN_MATRIX(3,:)); % GEN 2LO vs. PEN 2LO 
