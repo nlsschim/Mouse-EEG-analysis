@@ -172,7 +172,8 @@ xticklabels({'1st LO','L+US','2nd LO'});
 % LUS_matrix = [SHAM_MATRIX(:,2) GEN_MATRIX(:,2) PEN_MATRIX(:,2)] ;
 % secondLO_matrix = [SHAM_MATRIX(:,3) GEN_MATRIX(:,3) PEN_MATRIX(:,3)] ; 
  
-%%Running statistics for all the data points in each cohort 
+%%Running statistics for all the data points in each cohort
+%MUST RUN THROUGH MEDIAN SHAM SCRIPT TO HAVE ALL VECTORS IN THE WORK SPACE:(
  
 firstLO_matrix = [Sham_1 Gen_1 Pen_1] ;
 %NULL HYPOTHESIS: all pts in Sham 1st LO = all pts in Gen 1st LO = all pts in Pen 1st LO

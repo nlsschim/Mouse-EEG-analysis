@@ -1,4 +1,3 @@
-RUN_STATS_TESTS
 function [p_kw,tbl,stats, p_anova] = run_stats_tests(data, groups)
 [p_kw,tbl,stats] = kruskalwallis(data,groups);
 title('Kruskal-Wallis') 
