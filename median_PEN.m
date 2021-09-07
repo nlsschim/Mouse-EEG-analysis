@@ -8,7 +8,7 @@
 file1={'06-24-2021 Mouse Experiment 1 (Session 2)/', '08-10-2021 Mouse Experiment 1 /', '08-10-2021 Mouse Experiment 2 (Session 1)/', '06-23-2021 Mouse Expirement 1/', '08-12-21 Mouse Experiment 1/', '08-12-21 Mouse Experiment 2/', '08-13-21 Mouse Experiment 1/'};
 str=string(file1);
 MainDirectory = '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/';
-PEN_MATRIX = zeros(8,3);
+PEN_MATRIX = zeros(7,3);
 % figure 
 % hold on
 for f=1:length(str)
@@ -81,14 +81,11 @@ end
 % % to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
-    
-Pen_1 = for_stats_analysis.Trial_1;
-Pen_2 = for_stats_analysis.Trial_2;
-Pen_3 = for_stats_analysis.Trial_3;
+   
     %%Creating a vector to call on later to plot the medians
-    PEN_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
-    PEN_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
-    PEN_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
+    PEN_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+    PEN_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+    PEN_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
     
     PENY = [PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
     PEN_MATRIX(f, :) = [PENY] ;
@@ -97,4 +94,4 @@ Pen_3 = for_stats_analysis.Trial_3;
 end
  
 PEN_MATRIX 
-Harry_Plotter;
+% Harry_Plotter;

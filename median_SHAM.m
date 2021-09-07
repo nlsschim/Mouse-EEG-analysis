@@ -11,6 +11,7 @@ str=string(file1);
 MainDirectory = '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/';
  
 SHAM_MATRIX = zeros(7,3);
+% sham_stats_matrix = [];
 figure 
 hold on
 for f=1:length(str)
@@ -50,6 +51,7 @@ for f=1:length(str)
     % create matrix to hold data for statistical testing
     for_stats_new = [];
     for_stats_analysis=[];
+%     kronk=['date_' num2str(f)];
     %insert thresholding here
  
     for z=1:4
@@ -68,14 +70,12 @@ for f=1:length(str)
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
     
-Sham_1 = for_stats_analysis.Trial_1;
-Sham_2 = for_stats_analysis.Trial_2;
-Sham_3 = for_stats_analysis.Trial_3;
-    
+% sham_stats_matrix = [for_stats_analysis];
+
     %%Creating a vector to call on later to plot the medians
-    SHAM_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
-    SHAM_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
-    SHAM_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
+    SHAM_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+    SHAM_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+    SHAM_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
     
     % minus first light median 
     SHAMY = [SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
@@ -86,4 +86,5 @@ Sham_3 = for_stats_analysis.Trial_3;
 end
  
 SHAM_MATRIX
+
 median_GEN;

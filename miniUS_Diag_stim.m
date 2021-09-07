@@ -204,3 +204,18 @@ for_stats_analysis.(conc)=for_stats;
 deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));
 for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4*deviation);
+
+%%IN ORDER TO COMPARE EVERY POINT IN STATS TEST
+% reshape rms matrix into a vector to be used to statistical testing
+% s=size(matrix);
+% S=s(1)*s(2);
+% for_stats=reshape(matrix,1,S);
+% conc=['Trial_' num2str(z)];
+% for_stats_analysis.(conc).(kronk)=for_stats;
+%  
+%  
+% % after dividing data into normal distribution: 
+% % >mean+4*stddev)(dataset) = [] 
+% deviation=std(for_stats_analysis.(conc).(kronk));
+% trialmean = mean(for_stats_analysis.(conc).(kronk));
+% for_stats_analysis.(conc).(kronk) = for_stats_analysis.(conc).(kronk)(for_stats_analysis.(conc).(kronk)<trialmean+4*deviation);

@@ -62,15 +62,12 @@ end
 %     to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
-    
-Gen_1 = for_stats_analysis.Trial_1;
-Gen_2 = for_stats_analysis.Trial_2;
-Gen_3 = for_stats_analysis.Trial_3;
+   
  
 %     Creating a vector to call on later to plot the medians
-    GEN_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
-    GEN_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
-    GEN_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
+    GEN_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+    GEN_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+    GEN_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
     
     GENY = [GEN_FIRST_LIGHT-GEN_FIRST_LIGHT, GEN_LIGHT_ULTRASOUND-GEN_FIRST_LIGHT, GEN_SECOND_LIGHT-GEN_FIRST_LIGHT];
     GEN_MATRIX(f, :) = [GENY] ;
