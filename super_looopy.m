@@ -169,43 +169,66 @@ for z=1:4
     super_US_diag_stim ;
     
 end
- 
-% for pj=1:4
-%     if pj==2, continue, end
-%     kronkat=['Trial_' num2str(pj)];
-%  yayy=yay.(kronkat);
-%  yup11=yup1.(kronkat);
-%  pie([yayy yup11]);
-% labels = {'Outliers', 'Trial'}
-% lgd = legend(labels);
-%  legend;
-% end
- 
 
-tiledlayout(1,3)
+% figure
+ax1 = subplot(1,3,1);
 yTrial_1 = [yay.Trial_1 yup1.Trial_1];
-yTrial_3 = [yay.Trial_3 yup1.Trial_3];
-yTrial_4 = [yay.Trial_4 yup1.Trial_4];
-pielabels = {'Outliers','Trial Data'};
-mymap = [0.4660 0.6740 0.1880
-    0.4940 0.1840 0.5560];
-colormap(mymap);
-% Create pie charts
-ax1 = nexttile;
-pie(ax1,yTrial_1)
+p=pie(ax1,yTrial_1);
+pielabels = {'Outliers','Non Outliers'};
+lgd = legend(pielabels);
+set(lgd,'visible','off')
+% pText = findobj(p,'Type','text');
+% percentValues = get(pText,'String'); 
+% txt = {'Outliers: ';'Non Outliers: '}; 
+% combinedtxt = strcat(txt,percentValues); 
+% pText(1).String = combinedtxt(1);
+% pText(2).String = combinedtxt(2);
+slice11 = p(1);
+slice11.FaceColor = [0.75, 0.6, 0.91];
+slice12 = p(3);
+slice12.FaceColor = [0.53, 0.77, 0.53];
 title('1st LO')
 
-ax2 = nexttile;
-pie(ax2,yTrial_3)
+% figure
+ax2 = subplot(1,3,2);
+yTrial_3 = [yay.Trial_3 yup1.Trial_3];
+p2=pie(ax2,yTrial_3);
+pielabels = {'Outliers','Non Outliers'};
+lgd = legend(pielabels);
+lgd.Location = 'southoutside';
+% p2Text = findobj(p2,'Type','text');
+% percentValues = get(p2Text,'String'); 
+% txt = {'Outliers: ';'Non Outliers: '}; 
+% combinedtxt = strcat(txt,percentValues); 
+% p2Text(1).String = combinedtxt(1);
+% p2Text(2).String = combinedtxt(2);
+slice21 = p2(1);
+slice21.FaceColor = [0.75, 0.6, 0.91];
+slice22 = p2(3);
+slice22.FaceColor = [0.53, 0.77, 0.53];
 title('L+US')
 
-ax3 = nexttile;
-pie(ax3,yTrial_4)
-title('2nd LO')
-
-% Create legend
+% figure
+ax3 = subplot(1,3,3);
+yTrial_4 = [yay.Trial_4 yup1.Trial_4];
+p3=pie(ax3,yTrial_4);
+pielabels = {'Outliers','Non Outliers'};
 lgd = legend(pielabels);
-lgd.Layout.Tile = 'east';
+set(lgd,'visible','off')
+% p3Text = findobj(p3,'Type','text');
+% percentValues = get(p3Text,'String'); 
+% txt = {'Outliers: ';'Non Outliers: '}; 
+% combinedtxt = strcat(txt,percentValues); 
+% p3Text(1).String = combinedtxt(1);
+% p3Text(2).String = combinedtxt(2);
+slice31 = p3(1);
+slice31.FaceColor = [0.75, 0.6, 0.91];
+slice32 = p3(3);
+slice32.FaceColor = [0.53, 0.77, 0.53];
+title('2nd LO')
+sgtitle('Percent of Outliers') 
+
+
 
 %create matrix to hold data for statistical testing
 %  
