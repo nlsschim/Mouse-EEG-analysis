@@ -170,9 +170,45 @@ for z=1:4
     
 end
  
+% for pj=1:4
+%     if pj==2, continue, end
+%     kronkat=['Trial_' num2str(pj)];
+%  yayy=yay.(kronkat);
+%  yup11=yup1.(kronkat);
+%  pie([yayy yup11]);
+% labels = {'Outliers', 'Trial'}
+% lgd = legend(labels);
+%  legend;
+% end
  
-% create matrix to hold data for statistical testing
- 
+
+tiledlayout(1,3)
+yTrial_1 = [yay.Trial_1 yup1.Trial_1];
+yTrial_3 = [yay.Trial_3 yup1.Trial_3];
+yTrial_4 = [yay.Trial_4 yup1.Trial_4];
+pielabels = {'Outliers','Trial Data'};
+mymap = [0.4660 0.6740 0.1880
+    0.4940 0.1840 0.5560];
+colormap(mymap);
+% Create pie charts
+ax1 = nexttile;
+pie(ax1,yTrial_1)
+title('1st LO')
+
+ax2 = nexttile;
+pie(ax2,yTrial_3)
+title('L+US')
+
+ax3 = nexttile;
+pie(ax3,yTrial_4)
+title('2nd LO')
+
+% Create legend
+lgd = legend(pielabels);
+lgd.Layout.Tile = 'east';
+
+%create matrix to hold data for statistical testing
+%  
 % 
 % % to rename trials and skip 2 
 for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 

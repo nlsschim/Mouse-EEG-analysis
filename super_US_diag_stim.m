@@ -339,6 +339,32 @@ for_stats_new.(conc)=for_stats;
 v1=std(for_stats_new.(conc));
 t1m = mean(for_stats_new.(conc));
 for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
+
+%%ISOLATING OUTLIERS
+quarter = quantile (for_stats_analysis.(conc), [0.25, 0.75]);
+IQR = quarter(2) - quarter (1);
+for_stats_outliers.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>= 1.5*IQR+quarter(2));
+ 
+figure
+histogram(for_stats_outliers.(conc),'BinWidth', 0.005 );
+
+% t = tiledlayout (1,3,'TileSpacing','compact');
+yay.(conc) = length(for_stats_outliers.(conc));
+yay2.(conc) = length(for_stats_analysis.(conc));
+yup1.(conc) = yay2.(conc)-yay.(conc);
+
+% pie([yay yup1],{'Outliers', 'Trial'});
+% labels = {'Outliers', 'Trial'}
+% lgd = legend(labels);
+%  legend;
+% piee = pie([yay1 yup1],explode)
+% set(piee(1),'FaceColor','r')
+ 
+
+
+
+
+
  
 % v3=std(for_stats_new.Trial_3)
 % t3m = mean(for_stats_new.Trial_3)

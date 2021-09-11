@@ -121,19 +121,19 @@ SHAM_1LO = [];
 for q = 1:7
     SHAM_1LO = [SHAM_1LO MATRIX(q, 1)] ;
 end 
-SHAM_1LO_variance = var(SHAM_1LO) ;
+SHAM_1LO_variance = median(SHAM_1LO) ;
  
 SHAM_LUS = [];
 for q = 1:7
     SHAM_LUS = [SHAM_LUS MATRIX(q, 2)] ;
 end 
-SHAM_LUS_variance = var(SHAM_LUS) ;
+SHAM_LUS_variance = median(SHAM_LUS) ;
  
 SHAM_2LO = [];
 for q = 1:7
     SHAM_2LO = [SHAM_2LO MATRIX(q, 3)] ;
 end 
-SHAM_2LO_variance = var(SHAM_2LO) ;
+SHAM_2LO_variance = median(SHAM_2LO) ;
  
 % GEN VARIANCE
  
@@ -141,19 +141,19 @@ GEN_1LO = [];
 for q = 8:14
     GEN_1LO = [GEN_1LO MATRIX(q, 1)] ;
 end 
-GEN_1LO_variance = var(GEN_1LO) ;
+GEN_1LO_variance = median(GEN_1LO) ;
  
 GEN_LUS = [];
 for q = 8:14
     GEN_LUS = [GEN_LUS MATRIX(q, 2)] ;
 end 
-GEN_LUS_variance = var(GEN_LUS) ;
+GEN_LUS_variance = median(GEN_LUS) ;
  
 GEN_2LO = [];
 for q = 8:14
     GEN_2LO = [GEN_2LO MATRIX(q, 3)] ;
 end 
-GEN_2LO_variance = var(GEN_2LO) ;
+GEN_2LO_variance = median(GEN_2LO) ;
  
 % PEN VARIANCE
  
@@ -161,19 +161,19 @@ PEN_1LO = [];
 for q = 15:21
     PEN_1LO = [PEN_1LO MATRIX(q, 1)] ;
 end 
-PEN_1LO_variance = var(PEN_1LO) ;
+PEN_1LO_variance = median(PEN_1LO) ;
  
 PEN_LUS = [];
 for q = 15:21
     PEN_LUS = [PEN_LUS MATRIX(q, 2)] ;
 end 
-PEN_LUS_variance = var(PEN_LUS) ;
+PEN_LUS_variance = median(PEN_LUS) ;
  
 PEN_2LO = [];
 for q = 15:21
     PEN_2LO = [PEN_2LO MATRIX(q, 3)] ;
 end 
-PEN_2LO_variance = var(PEN_2LO) ;
+PEN_2LO_variance = median(PEN_2LO) ;
  
 %% standard error matrix creation 
  
@@ -225,7 +225,7 @@ PENY_variance = [PEN_1LO_variance PEN_LUS_variance PEN_2LO_variance] ;
 q3 = errorbar(1:3, PENY_variance, stderror(3,:), 'o-r', 'DisplayName', 'PEN Data') ;
  
 legend([q1 q2 q3], 'SHAM DATA','GEN DATA','PEN DATA','Location','NorthWest')
-xlabel('Trial Type'), ylabel('Variance Value')
+xlabel('Trial Type'), ylabel('Median Variance Value')
 title('Cohort Variance Value Trends L+US and 2LO vs. 1LO')
 set(gca,'XTick',[1 2 3] );
 % set(gca,'XTickLabel',['1st LO', 'L+US' ,'2nd LO'] );
