@@ -230,6 +230,7 @@ sgtitle('Percent of Outliers')
 
 
 
+
 %create matrix to hold data for statistical testing
 %  
 % 
@@ -237,6 +238,16 @@ sgtitle('Percent of Outliers')
 for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
 for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
  
+LastName = {'1st LO';'L+US';'2nd LO'};
+firstQuartile = [quantile(for_stats_analysis.Trial_1,0.25) ;quantile(for_stats_analysis.Trial_2,0.25);quantile(for_stats_analysis.Trial_3,0.25)];
+thirdQuartile = [quantile(for_stats_analysis.Trial_1,0.75) ;quantile(for_stats_analysis.Trial_2,0.75);quantile(for_stats_analysis.Trial_3,0.75)];
+Outliers = [yay.Trial_1 ;yay.Trial_3;yay.Trial_4];
+TotalData = [yay2.Trial_1 ;yay2.Trial_3;yay2.Trial_4];
+PercentOutliers= [yay.Trial_1/yay2.Trial_1*100;yay.Trial_3/yay2.Trial_3*100;yay.Trial_4/yay2.Trial_4*100];
+IQRs=thirdQuartile-firstQuartile
+UpperLimit= [thirdQuartile(1)+1.5*IQRs(1);thirdQuartile(2)+1.5*IQRs(2);thirdQuartile(3)+1.5*IQRs(3)];
+LowerLimit= [firstQuartile(1)-1.5*IQRs(1);firstQuartile(2)-1.5*IQRs(2);firstQuartile(3)-1.5*IQRs(3)];
+T = table(firstQuartile,thirdQuartile,Outliers,PercentOutliers,UpperLimit,LowerLimit,'RowNames',LastName)
  
  
 %% histogram overlays - will remove second waterfall plot 

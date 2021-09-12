@@ -341,10 +341,12 @@ t1m = mean(for_stats_new.(conc));
 for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
 
 %%ISOLATING OUTLIERS
-quarter = quantile (for_stats_analysis.(conc), [0.25, 0.75]);
+quarter = quantile (for_stats_analysis.(conc), [0.25, 0.75]);               
 IQR = quarter(2) - quarter (1);
-for_stats_outliers.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>= 1.5*IQR+quarter(2));
- 
+for_stats_outliers1.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>= quarter(2)+1.5*IQR);
+for_stats_outliers.(conc) = for_stats_outliers1.(conc)+ (for_stats_analysis.(conc)<= quarter(1)-1.5*IQR);
+%%Trying to get for_stats_outliers.(conc) to have potential outliers on
+%%both sides of the limits not sure if this is the way
 figure
 histogram(for_stats_outliers.(conc),'BinWidth', 0.005 );
 
