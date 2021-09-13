@@ -2,19 +2,30 @@
 %This code is for the Sham cohort to run through the data and get the
 %median values 
 
-%% 
+clc
+clear all 
+close all 
+
+%% reading cohort files 
 file1={'12-23 Mouse Experiment\', '12-16 RECUT\', '12-13-19 recut RIGHT\', '12-24 Data\', '12-27-19 RECUT\','12-12-19 RECUT\', '11-27-19 MOUSE RECUT\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\GEN\';
 
-GEN_MATRIX = zeros(7,3);
+%% medians or variance 
+
+button = input("Create GEN matrix of median values or variance? '1'=medians, '2'=variance: ") ;
+button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
+
+%% creating GEN Matrix to store medians or variance 
+GEN_MATRIX = zeros(7,4);
 % figure 
 % hold on
+
+%% Reading experiment dates 
 for f=1:length(str)
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 
-%% 
 %Change what is in the string depending on which file\files you want to run
 file_list = dir([folder 'TRIAL*.mat']);
 baseline = dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
@@ -46,6 +57,7 @@ calc_baseline;
 for_stats_new = [];
 for_stats_analysis=[];
 
+%% running each experiment date 
 for z=1:4
 %      if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
 %      if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
@@ -68,16 +80,36 @@ end
 %     to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
+    
 
-%     Creating a vector to call on later to plot the medians
+%% Creating a vector to call on later to plot the medians
+
+if button ==1 
     GEN_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
     GEN_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
     GEN_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
-    
-    GENY = [GEN_FIRST_LIGHT-GEN_FIRST_LIGHT, GEN_LIGHT_ULTRASOUND-GEN_FIRST_LIGHT, GEN_SECOND_LIGHT-GEN_FIRST_LIGHT];
+end
+% variance 
+if button == 2 
+    GEN_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+    GEN_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+    GEN_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
+end 
+
+if button2 == 1 
+    % minus first light median/variance
+    GENY = [rms_baseline, GEN_FIRST_LIGHT-GEN_FIRST_LIGHT, GEN_LIGHT_ULTRASOUND-GEN_FIRST_LIGHT, GEN_SECOND_LIGHT-GEN_FIRST_LIGHT];
+else
+    % medianL+US and median2LO NOT - median of 1LO
+    GENY = [rms_baseline, GEN_FIRST_LIGHT, GEN_LIGHT_ULTRASOUND, GEN_SECOND_LIGHT];
+end
+
+%% filling matrix 
+
     GEN_MATRIX(f, :) = [GENY] ;
-%     plot(1:3, GENY, 'o-', 'DisplayName','GEN DATA')
-%     title('GEN DATA') 
+    plot(1:4, GENY, 'o-', 'DisplayName','GEN DATA')
+    title('GEN DATA') 
+
 end
 
 GEN_MATRIX 

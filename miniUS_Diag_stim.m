@@ -187,7 +187,7 @@ matrix=matrix/rms_baseline;
 
 
 %% calculate z-scores
-[z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
+% [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
 
 %% arrange data for statistical analysis
 

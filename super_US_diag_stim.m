@@ -321,7 +321,8 @@ colorbar
 % caxis([0.0104    0.233])
 
 %% calculate z-scores
-[z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
+% uncertain if we are using this correctly 
+% [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
 
 %% arrange data for statistical analysis
 

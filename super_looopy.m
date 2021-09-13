@@ -65,7 +65,7 @@ clear all
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 RECUT\'; 
 % works if light stim channel is set to 9 instead of 7
 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\'; 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\GEN\12-23 Mouse Experiment\'; 
 
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-24 Data\';
 
@@ -78,10 +78,10 @@ clear all
 % folder='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-21 RECUT\1st session\'; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\6.24.21\06-24-21 RECUT session 2\';
 
-folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\'; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\'; 
 % C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_10_21 m2\Session 2
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_10_21 m2\' ; 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_12_21 m1\' ;
+folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_12_21 m2\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_13_21\' ; 
 
@@ -91,7 +91,7 @@ file_list=dir([folder 'TRIAL*.mat']);
 baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 % set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
-% set_channels=[1 2 3 4 9]; % for 12/16/19 data, 
+% set_channels=[1 2 3 4 9]; % for 12/16/19 data
 set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
@@ -105,11 +105,11 @@ brain_wave = input("'3-100' = 1, low gamma = '2', beta = '3', alpha ='4', theta 
 % V1L=set_channels(1);S1L=set_channels(2);S1R=set_channels(3);V1R=set_channels(4);lightstim=set_channels(5);
 
 % 8/10/21 m1
-V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+% V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 % 8/10/21 m2
 % V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 % 8/12/21 m1
-% V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
 % 8/12/21 m2
 % V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
 % 8/13/21
@@ -155,6 +155,7 @@ for z=1:4
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
 %     US_diag_stim;  
 %     super_US_diag_stim ;
+    % 
 miniUS_Diag_stim
 end
 

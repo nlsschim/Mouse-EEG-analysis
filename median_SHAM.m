@@ -1,18 +1,30 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 %This code is for the Sham cohort to run through the data and get the
 %median values 
-close all
-clear all
-%clears all data so that there are no missasinged values
 
+clc
+clear all 
+close all 
+
+%% reading cohort files 
 
 file1={'06-30-2020 Mouse Experiment 1\', '06-23-2020 Mouse Experiment 2\', '06-25-2020 Mouse Experiment 1\', '06-24-2020 Mouse Experiment 3\', '06-24-2020 Mouse Experiment 1\', '06-23-20 MOUSE 1 RECUT\','5-29-20 Mouse Experiment\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 
-SHAM_MATRIX = zeros(7,3);
+%% medians or variance 
+
+button = input("Create SHAM matrix of median values or variance? '1'=medians, '2'=variance: ") ;
+button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
+
+%% creating SHAM Matrix to store medians or variance 
+
+SHAM_MATRIX = zeros(7,4);
 figure 
 hold on
+
+%% Reading experiment dates 
+
 for f=1:length(str)
     folder = fullfile(MainDirectory,str{f});
     % dir ('folder');
@@ -40,7 +52,8 @@ for f=1:length(str)
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
     end
 
-    %calculate pre-stim RMS for normalization
+%% calculate pre-stim RMS for normalization
+
     baseline_rms=[];
     disp(baseline.name);
     load([folder baseline.name])
@@ -68,15 +81,31 @@ for f=1:length(str)
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 
-    %%Creating a vector to call on later to plot the medians
+%% Creating a vector to call on later to plot the medians
+
+if button ==1 
     SHAM_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
     SHAM_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
     SHAM_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
-    
-    % minus first light median 
-    SHAMY = [SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
+end
+% variance 
+if button == 2 
+    SHAM_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+    SHAM_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+    SHAM_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
+end 
+
+if button2 == 1 
+    % minus first light median/variance
+    SHAMY = [rms_baseline, SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
+else
+    % medianL+US and median2LO NOT - median of 1LO
+    SHAMY = [rms_baseline, SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
+end
+
+%% filling matrix 
     SHAM_MATRIX(f, :) = [SHAMY] ;
-    plot(1:3, SHAMY, 'o-', 'DisplayName','SHAM DATA')
+    plot(1:4, SHAMY, 'o-', 'DisplayName','SHAM DATA')
     title('SHAM DATA') 
 
 end
