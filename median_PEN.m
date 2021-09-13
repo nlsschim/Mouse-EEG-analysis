@@ -8,7 +8,7 @@ close all
 
 %% reading cohort files 
 
-file1={'06-24-21 RECUT session 2\', '8_10_21 m1\', '8_10_21 m2 session 1\', '06-23-21 RECUT 2.0 session 1\','8_12_21 m1\','8_12_21 m2\', '8_13_21\' };
+file1={'06-24-21 RECUT session 2 m2\', '8_10_21 m1\', '8_10_21 m2 session 1\', '06-23-21 RECUT 2.0 session 1 m1\','8_12_21 m1\','8_12_21 m2\', '8_13_21\' };
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
@@ -25,7 +25,7 @@ hold on
 
 %% Reading experiment dates 
 
-for f=1:length(str)
+for f=1:length(str) 
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 
@@ -40,11 +40,11 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 
 %% channel configuration 
 
-if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\"
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1 m1\"
 V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end
 
-if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-24-21 RECUT session 2\" 
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-24-21 RECUT session 2 m2\" 
 V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end
 

@@ -349,6 +349,12 @@ end
 %% KW analysis 
 
 % harry_plotter and the-
+chamber_of_statistics(firstLO_matrix) 
+title('KW of 1st LO medians between cohorts')
+hold on 
+set(gca, 'XTick', [1 2 3]) ; 
+set(gca, 'XTickLabel', [{'SHAM' 'GEN' 'PEN'}]) ; 
+
 chamber_of_statistics( LUS_matrix) 
 title('KW of L+US medians between cohorts')
 hold on 
@@ -368,6 +374,11 @@ GEN_MATRIX = GEN_MATRIX';
 PEN_MATRIX = PEN_MATRIX';
 
 if button1 == 1 
+    % for 1st LO 
+    MWp7 = ranksum(SHAM_MATRIX(2,:),GEN_MATRIX(2,:)); % SHAM 1LO vs. GEN 1LO
+    MWp8 = ranksum(SHAM_MATRIX(2,:),PEN_MATRIX(2,:)); % SHAM 1LO vs. PEN 1LO 
+    MWp9 = ranksum(GEN_MATRIX(2,:),PEN_MATRIX(2,:)); % GEN 1LO vs. PEN 1LO
+    
     % for L+US 
     MWp1 = ranksum(SHAM_MATRIX(3,:),GEN_MATRIX(3,:)); % SHAM L+US vs. GEN L+US 
     MWp2 = ranksum(SHAM_MATRIX(3,:),PEN_MATRIX(3,:)); % SHAM L+US vs. PEN L+US 

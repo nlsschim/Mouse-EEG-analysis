@@ -6,17 +6,6 @@ time1=1:dataend(1);
 time=time1/fs/60;
 
 %% change the bandpass for filtering pls
-    % default done 
-%     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-% [bb,aa]=butter(2,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-%     low gamma 
-%    [bb,aa]=butter(2,[30,59]/(fs/2)); 
-    % beta
-%   [bb,aa]=butter(2,[12,29]/(fs/2)); 
-    % theta
-%   [bb,aa]=butter(2,[4,7]/(fs/2));
-    % alpha 
-%     [bb,aa]=butter(2,[8,11]/(fs/2));
 
 bandpasses = [3, 100; 30, 59; 12, 29; 4, 7; 8, 11] ; 
     [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
@@ -75,55 +64,19 @@ end
 % prevents errors based on discrepency between V1Ldata and
 % lightstimdata length
 
-for i=1:4  
-%     %inner_loop_size = 0;
-% %     if (fix(length(alldata.V1Ldata)/tickrate/10)) < length(index_stim)
-% %         inner_loop_size = (fix(length(alldata.V1Ldata)/tickrate/10)-1);
-% %     else
-% %         inner_loop_size = length(index_stim)-1;
-% %     end  
-% %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
+for i=1:4
+    try 
+        for j =2:(length(index_stim)-2) 
+            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+        end
+    catch 
+        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-3)') 
+        for j =2:(length(index_stim)-3) 
+            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+        end
+    end 
+end 
 
-       for j=2:(length(index_stim)-1)
-% for j=2:(length(index_stim)-2) % to compensate for data chopping so data
-% vectors are long enough (supposed to be 60 entries) for
-% j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20
-% experiment 1
-%         for j=2:(length(index_stim)-4)
-%      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
-        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-
-    end
-end
-
-% index_stim_conditioner(fs, tb, ta, names, index_stim, stas, alldata); 
-% stas.(char(names(1))) = sta(1) ;
-% stas.(char(names(2))) = sta(2) ;
-% stas.(char(names(3))) = sta(3) ;
-% stas.(char(names(4))) = sta(4) ;
-
-% for i=1:4
-% try 
-%     for j =2:(length(index_stim)-1) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end
-% catch 
-%     warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
-%     for j =2:(length(index_stim)-2) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end
-% try
-%    warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
-%     for j =2:(length(index_stim)-2) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end 
-% catch 
-%     for j =2:(length(index_stim)-3) 
-%         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%     end 
-% end
-% end
-% end 
 %% plot STAS
 
 responseWindowEnd=0.4;
@@ -139,95 +92,6 @@ maxvalarray=zeros(length(foranalysis),1);
 maxidxarray=zeros(length(foranalysis),1);
 RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
-
-%%
-% for i=1:length(foranalysis)
-%     figure(i+1)
-%     ylabels={'V1L (Hz)';'S1L (Hz)';'S1R (Hz)'; 'V1R (Hz)'};
-%     subplot(4,1,i);
-%     a=mean(stas.(char(names(i))));
-%     a=a-mean(stas.(char(names(i)))(1:fs));
-%     a=a/100*1000;
-
-%%
-    
-
-%     a=filtfilt(bb,aa,a); % used for the butter filter
-%     %[minval,minidx]=min(a(fs*(tb):fs*(tb+responseWindowEnd))); %identifying min max within response window 
-%     [maxval,maxidx]=max(a(fs*(tb):fs*(tb+responseWindowEnd)));
-%     RMSvalb=rms(a(fs*(tb-0.25):fs*(tb)));%RMS before zero
-%     RMSvala=rms(a(fs*(tb):fs*(tb+0.25)));%RMS after zero
-%     
-%     RMSvalbarray(i)=RMSvalb; %declares RMS arrays for print
-%     RMSvalaarray(i)=RMSvala;
-%     
-%     %minvalarray(i)=minval; %declares minmax arrays for print 
-%     %minidxarray(i)=minidx;
-%     maxvalarray(i)=maxval;
-%     maxidxarray(i)=maxidx; %maxtime array 
-%     
-% %     Plot STA's. IMPORTANT TO KEEP
-%     figure;
-%     plot(x2,a,'linewidth',1);hold on 
-%    plot(x2(maxidx+fs*(tb)),a(maxidx+fs*(tb)),'o');hold on
-%     xlim([-0.5 1.5]);% seconds that will be shown in the plot, stim is on at time 0    
-%     ylim([-0.05 0.05]);%mV range on the plot, edit to get the entire signal to show
-%    ylabel(ylabels(i));
-%     
-%     
-% %     
-% %     
-% %     arrays of RMS values, one for each second of a 10 sec segment
-% %     may want overlap in timeframes eventually
-% %     This is gross and needs to be edited to reduce redundancy
-%     all_points(i).RMSvalsb=rms(d(:,fs*(tb-0.25):fs*(tb))');
-%     all_points(i).RMSvals_1=rms(d(:,fs*(tb):fs*(tb+1.00))');
-%     all_points(i).RMSvals_2=rms(d(:,fs*(tb+1.00):fs*(tb+2.00))');
-%     all_points(i).RMSvals_3=rms(d(:,fs*(tb+2.00):fs*(tb+3.00))');
-%     all_points(i).RMSvals_4=rms(d(:,fs*(tb+3.00):fs*(tb+4.00))');
-%     all_points(i).RMSvals_5=rms(d(:,fs*(tb+4.00):fs*(tb+5.00))');
-%     all_points(i).RMSvals_6=rms(d(:,fs*(tb+5.00):fs*(tb+6.00))');
-%     all_points(i).RMSvals_7=rms(d(:,fs*(tb+6.00):fs*(tb+7.00))');
-%     all_points(i).RMSvals_8=rms(d(:,fs*(tb+7.00):fs*(tb+8.00))');
-%     all_points(i).RMSvals_9=rms(d(:,fs*(tb+8.00):fs*(tb+9.00))');
-%     all_points(i).RMSvals_10=rms(d(:,fs*(tb+9.00):fs*(ta))'); % I think this is redundant
-% %     
-% %    
-% % 
-%     disp('name:')
-%     disp(names(i))
-%     disp('Individual BEFORE rms values')
-%     all_points(i).RMSvalsb'
-%     disp('mean')
-%     mean(all_points(i).RMSvalsb')
-%     disp('stddev')
-%     std(all_points(i).RMSvalsb')
-%     disp('name:')
-%     disp(names(i))
-%     disp('Individual AFTER rms values')
-%     all_points(i).RMSvals_1'
-%     disp('mean')
-%     mean(all_points(i).RMSvals_1')
-%     disp('stddev')
-%     std(all_points(i).RMSvals_1')
-% 
-% 
-%    disp('Paired t-test');
-%     [H,P,CI,STATS] = ttest(all_points(i).RMSvalsb',all_points(i).RMSvalsa');
-%     disp('Individual Percentage Changes');
-%    temp=(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
-%    disp('mean');
-%    mean(temp);
-%    disp('stddev');
-%    std(temp);
-%    disp('Individual Percentage Changes (absolute value)');
-%    temp=abs(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
-%    disp('mean');
-%    mean(temp);
-%    disp('stddev');
-%    std(temp);
-%   
-% end
 
 %%
 %collect all of the individual points of data
@@ -331,104 +195,50 @@ s=size(matrix);
 S=s(1)*s(2);
 for_stats=reshape(matrix,1,S);
 conc=['Trial_' num2str(z)];
-% for_stats_analysis.(conc)=for_stats;
-for_stats_new.(conc)=for_stats;
+for_stats_analysis.(conc)=for_stats;
 
+%% additional hardcoded filtering 
+% removes outlier data points 4 standard deviations from mean 
 
-% after dividing data into normal distribution: 
-% >mean+4*stddev)(dataset) = [] 
-v1=std(for_stats_new.(conc));
-t1m = mean(for_stats_new.(conc));
-for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
+deviation=std(for_stats_analysis.(conc));
+trialmean = mean(for_stats_analysis.(conc));
+for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4*deviation);
 
-% v3=std(for_stats_new.Trial_3)
-% t3m = mean(for_stats_new.Trial_3)
-% for_stats_analysis.Trial_3= for_stats_new.Trial_3(for_stats_new.Trial_3<t3m+4*v3)
-% 
-% v4=std(for_stats_new.Trial_4)
-% t4m = mean(for_stats_new.Trial_4)
-% for_stats_analysis.Trial_4= for_stats_new.Trial_4(for_stats_new.Trial_4<t4m+4*v4)
-% 
-% v2=std(for_stats_new.Trial_2)
-% t2m = mean(for_stats_new.Trial_2)
-% for_stats_analysis.Trial_2 = for_stats_new.Trial_2(for_stats_new.Trial_2<t2m+4*v2)
+%% ISOLATING OUTLIERS
 
-% for_stats_analysis.Trial 1
-% for_stats_analysis.Trial 2
-% for_stats_analysis.Trial 3
-% for_stats_analysis.Trial 4
-% %insert filtering here?
+if outliersyn == 1 
+    quarter = quantile (for_stats_analysis.(conc), [0.25, 0.75]);               
+    IQR = quarter(2) - quarter (1);
+    for_stats_outliershigh.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>= quarter(2)+1.5*IQR);
+    for_stats_outlierslow.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<= quarter(1)-1.5*IQR);
+    for_histogram_outliers.(conc)=[for_stats_outlierslow.(conc) for_stats_outliershigh.(conc)]; 
+    
+    for_stats_nonoutliers1.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<quarter(2)+1.5*IQR) ;   
+%     for_stats_nonoutliers2.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>quarter(1)-1.5*IQR) ;
+    for_stats_nonoutliers2.(conc) = for_stats_analysis.(conc)(for_stats_nonoutliers1.(conc)>quarter(1)-1.5*IQR) ;
+    for_histogram_nonoutliers.(conc) = [for_stats_nonoutliers1.(conc) for_stats_nonoutliers2.(conc)] ;
+%     for_histogram_nonoutliers.(conc) = [for_stats_nonoutliers2.(conc)] ;
+    
+    figure
+    
+    histogram(for_histogram_outliers.(conc),'BinWidth', 0.003, 'Facecolor', 'r' );
+    hold on
+    histogram(for_histogram_nonoutliers.(conc),'BinWidth', 0.003, 'Facecolor', 'b' );
 
+    histonames = {'1st LO outliers', 'This shouldnt be plotted', 'L+US outliers', '2nd LO outliers'} ;
+    title(histonames(z)) 
+    xlabel('Normalized magnitude') 
+    ylabel('# of data points') 
 
-%% plotting the data
+    % t = tiledlayout (1,3,'TileSpacing','compact');
+    totaloutliers.(conc) = length(for_stats_outliershigh.(conc))+length(for_stats_outlierslow.(conc));% yay
+    totalpoints.(conc) = length(for_stats_analysis.(conc));%yay2
+    nonoutliers.(conc) = totalpoints.(conc)-totaloutliers.(conc);%yup
 
-% subplot(2,3,z)
-% histogram(matrix)
-% title('RMS Distribution','interpreter','none');
-% xlabel('RMS');
-% ylim([0 200]);
-% 
-% subplot(2,3,z+3)
-% histogram(z_scores)
-% title('Z score Distribution','interpreter','none');
-% xlabel('Z score');
-% ylim([0 150]);
-
-
-% plot raw EEG data
-% figure
-% plot(alldata.V1Ldata)
-% title(trial_names(z),'interpreter','none');
-% ylabel('V1L response (mV)');
-% xlabel('Time (ms)');
-
-%xlabel('time after stimulus onset (s)');
-%prints minmax arrays declared above 
-%disp('minvals') 
-%minvalarray
-%disp('minidx')
-%minidxarray
-% disp('maxvals')
-% maxvalarray
-%disp('maxtime');
-%(maxidxarray/fs);
-% disp('maxtime')
-% x2(maxidxarray)' %where we think we need Devon for fixing time values
-% a(maxidxarray)' %where we think we need Devon for fixing time values
-%disp('mintime')
-%x2(minidxarray)'
-%disp('RMSval before zero');
-%RMSvalbarray;;
-%disp('RMSval after zero');
-%RMSvalaarray;;
-
-%disp('t-test on the before and after RMS values')
-%[H,P,CI]=ttest(RMSvalbarray,RMSvalaarray)
-
-% 
-% %% plot CWTs of STAs
-% 
-% if plot_cwt==1 
-% %     figure
-% %     caxis_track=[];
-% %     ylabels={'S1 (hz)';'A1 (hz)';'V1R (hz)'; 'V1L (hz)'};
-% %      xlabel('time after stimulus onset (s)');
-%     for i=1:length(foranalysis)
-%         figure
-%         caxis_track=[];
-%         ylabels={'S1L (Hz)';'A1L (Hz)';'V1R (Hz)'; 'V1L (Hz)';'A1R (Hz)';'S1R (Hz)'};
-%         xlabel('time after stimulus onset (s)');
-%         a=mean(stas.(char(names(i))));
-%         cwt(a,[],fs);
-%         ylim([0.0005 0.032]);
-%         ylabel(ylabels(i));
-%         colormap(jet);
-%         %caxis_track=[caxis_track;caxis]
-% yticks([0.0005,0.001,0.002,0.008,0.032,0.1]);
-% yticklabels({0.5,1,2,8,32,100});
-% xticks([0,1,2,3,4,5,6,7,8,9]);
-%  title(file_list(z).name,'interpreter','none');
-% 
-%     end
-%      
-% end
+    % pie([yay yup1],{'Outliers', 'Trial'});
+    % labels = {'Outliers', 'Trial'}
+    % lgd = legend(labels);
+    %  legend;
+    % piee = pie([yay1 yup1],explode)
+    % set(piee(1),'FaceColor','r')
+end 

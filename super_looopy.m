@@ -74,16 +74,16 @@ clear all
 
 
 %% REAL PEN US - 2020-2021
-
-% folder='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-21 RECUT\1st session\'; 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\6.24.21\06-24-21 RECUT session 2\';
+folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\GEN\12-13-19 recut RIGHT\' 
+% folder='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-24-21 RECUT session 2 m2\';
 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\'; 
 % C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_10_21 m2\Session 2
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_10_21 m2\' ; 
-folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_12_21 m2\';
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_13_21\' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2 session 1\' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m2\';
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21\' ; 
 
 %% 
 %Change what is in the string depending on which file/files you want to run
@@ -97,19 +97,27 @@ set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %plot_cwt=input('Plot CWTs? Y=1 N=2 :'); %CWT will show the frequency breakdown, use 2 if you just want to look at the averages of the EEG
-plot_cwt=2;
+% plot_cwt=2;
+
+%% automation 
+
 time_series = input('time series(3 or 10)?');
 brain_wave = input("'3-100' = 1, low gamma = '2', beta = '3', alpha ='4', theta = '5', : ");
+outliersyn = input("run outliers analysis? '1'= yes, '2' = no: ") ;
 %% this names the channels based on where they were placed, make sure they match lab chart
 
-% V1L=set_channels(1);S1L=set_channels(2);S1R=set_channels(3);V1R=set_channels(4);lightstim=set_channels(5);
+V1L=set_channels(1);S1L=set_channels(2);S1R=set_channels(3);V1R=set_channels(4);lightstim=set_channels(5);
 
+% 6/23/21
+% V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+% 6/24/21 m2 s2
+% V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 % 8/10/21 m1
 % V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 % 8/10/21 m2
 % V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 % 8/12/21 m1
-V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+% V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
 % 8/12/21 m2
 % V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
 % 8/13/21
@@ -130,8 +138,6 @@ calc_baseline;
 for_stats_new = [];
 for_stats_analysis=[];
 
-
-
 %create figure for plotting histograms
 %figure;
 % measure each file 
@@ -142,6 +148,7 @@ for_stats_analysis=[];
 for z=1:4
 %      if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
      if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
+     if isequal(file_list(z).name,"Trial 6.mat"), continue, end 
 %      if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end %for 12-23
      
 %      if isequal(file_list(z).name,"TRIAL6.mat"), continue, end % for 6/24 second session 
@@ -154,60 +161,93 @@ for z=1:4
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
 %     US_diag_stim;  
-%     super_US_diag_stim ;
-    % 
-miniUS_Diag_stim
+    super_US_diag_stim ;
+% miniUS_Diag_stim
 end
 
-% create matrix to hold data for statistical testing
+%% outlier pi charts 
 
-% 
-% % to rename trials and skip 2 
+if outliersyn == 1 
+    figure
+    ax1 = subplot(1,3,1);
+    yTrial_1 = [totaloutliers.Trial_1 nonoutliers.Trial_1];
+    p=pie(ax1,yTrial_1);
+    pielabels = {'Outliers','Non Outliers'};
+    lgd = legend(pielabels);
+    set(lgd,'visible','off')
+    % pText = findobj(p,'Type','text');
+    % percentValues = get(pText,'String'); 
+    % txt = {'Outliers: ';'Non Outliers: '}; 
+    % combinedtxt = strcat(txt,percentValues); 
+    % pText(1).String = combinedtxt(1);
+    % pText(2).String = combinedtxt(2);
+    slice11 = p(1);
+    slice11.FaceColor = [0.75, 0.6, 0.91];
+    slice12 = p(3);
+    slice12.FaceColor = [0.53, 0.77, 0.53];
+    title('1st LO')
+
+    % figure
+    ax2 = subplot(1,3,2);
+    yTrial_3 = [totaloutliers.Trial_3 nonoutliers.Trial_3];
+    p2=pie(ax2,yTrial_3);
+    pielabels = {'Outliers','Non Outliers'};
+    lgd = legend(pielabels);
+    lgd.Location = 'southoutside';
+    % p2Text = findobj(p2,'Type','text');
+    % percentValues = get(p2Text,'String'); 
+    % txt = {'Outliers: ';'Non Outliers: '}; 
+    % combinedtxt = strcat(txt,percentValues); 
+    % p2Text(1).String = combinedtxt(1);
+    % p2Text(2).String = combinedtxt(2);
+    slice21 = p2(1);
+    slice21.FaceColor = [0.75, 0.6, 0.91];
+    slice22 = p2(3);
+    slice22.FaceColor = [0.53, 0.77, 0.53];
+    title('L+US')
+
+    % figure
+    ax3 = subplot(1,3,3);
+    yTrial_4 = [totaloutliers.Trial_4 nonoutliers.Trial_4];
+    p3=pie(ax3,yTrial_4);
+    pielabels = {'Outliers','Non Outliers'};
+    lgd = legend(pielabels);
+    set(lgd,'visible','off')
+    % p3Text = findobj(p3,'Type','text');
+    % percentValues = get(p3Text,'String'); 
+    % txt = {'Outliers: ';'Non Outliers: '}; 
+    % combinedtxt = strcat(txt,percentValues); 
+    % p3Text(1).String = combinedtxt(1);
+    % p3Text(2).String = combinedtxt(2);
+    slice31 = p3(1);
+    slice31.FaceColor = [0.75, 0.6, 0.91];
+    slice32 = p3(3);
+    slice32.FaceColor = [0.53, 0.77, 0.53];
+    title('2nd LO')
+    sgtitle('Percent of Outliers') 
+end 
+
+% to rename trials and skip 2 
 for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
 for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
- 
 
+if outliersyn == 1
+    LastName = {'1st LO';'L+US';'2nd LO'};
+    firstQuartile = [quantile(for_stats_analysis.Trial_1,0.25) ;quantile(for_stats_analysis.Trial_2,0.25);quantile(for_stats_analysis.Trial_3,0.25)];
+    thirdQuartile = [quantile(for_stats_analysis.Trial_1,0.75) ;quantile(for_stats_analysis.Trial_2,0.75);quantile(for_stats_analysis.Trial_3,0.75)];
+    Outliers = [totaloutliers.Trial_1 ;totaloutliers.Trial_3;totaloutliers.Trial_4];
+    TotalData = [totalpoints.Trial_1 ;totalpoints.Trial_3;totalpoints.Trial_4];
+    PercentOutliers= [totaloutliers.Trial_1/totalpoints.Trial_1*100; totaloutliers.Trial_3/totalpoints.Trial_3*100; totaloutliers.Trial_4/totalpoints.Trial_4*100];
+    IQRs=thirdQuartile-firstQuartile
+    UpperLimit= [thirdQuartile(1)+1.5*IQRs(1); thirdQuartile(2)+1.5*IQRs(2); thirdQuartile(3)+1.5*IQRs(3)];
+    LowerLimit= [firstQuartile(1)-1.5*IQRs(1); firstQuartile(2)-1.5*IQRs(2); firstQuartile(3)-1.5*IQRs(3)];
+    All_Data_Points = [totalpoints.Trial_1 ; totalpoints.Trial_3; totalpoints.Trial_4];
+    T = table(firstQuartile,thirdQuartile,Outliers,All_Data_Points,PercentOutliers,UpperLimit,LowerLimit,'RowNames',LastName)
+end
 
-%% histogram overlays - will remove second waterfall plot 
-
-% % 1 overlaid by 2
-% subplot(1,4,2);
-% histogram(for_stats_analysis.Trial_1)
-% hold on
-% histogram(for_stats_analysis.Trial_2)
-% legend('Trial 1','Trial 2')
-% axis([0 0.5 0 400])
-% 
-% 
-% % 2 overlaid by 3
-% subplot(1,4,3);
-% histogram(for_stats_analysis.Trial_2)
-% hold on
-% histogram(for_stats_analysis.Trial_3)
-% legend('Trial 2','Trial 3')
-% axis([0 0.5 0 400])
-% 
-% % 1 overlaid by 3
-% subplot(1,4,4);
-% histogram(for_stats_analysis.Trial_1)
-% hold on
-% histogram(for_stats_analysis.Trial_3)
-% legend('Trial 1','Trial 3')
-% axis([0 0.5 0 400])
-% 
-% 
-% % all overlaid
-% figure
-% histogram(for_stats_analysis.Trial_1)
-% hold on
-% histogram(for_stats_analysis.Trial_2)
-% hold on 
-% histogram(for_stats_analysis.Trial_3)
-% legend('Trial 1','Trial 2','Trial 3')
-% title('12/23/19 Mouse')
 %%
 % Grouping the data together for comparative analysis - trial 2=the real
-% trail 3 (refractory skipped). Thus, trial 3 = the real trial 4
+% trial 3 (refractory skipped). Thus, trial 3 = the real trial 4
 
 
 % for kruskal-wallis 3 pairings 
