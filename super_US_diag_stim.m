@@ -74,27 +74,19 @@ end
 %% Data conditioning (cont.) 
 % prevents errors based on discrepency between V1Ldata and
 % lightstimdata length
- 
-for i=1:4  
-%     %inner_loop_size = 0;
-% %     if (fix(length(alldata.V1Ldata)/tickrate/10)) < length(index_stim)
-% %         inner_loop_size = (fix(length(alldata.V1Ldata)/tickrate/10)-1);
-% %     else
-% %         inner_loop_size = length(index_stim)-1;
-% %     end  
-% %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
- 
-       for j=2:(length(index_stim)-1)
-% for j=2:(length(index_stim)-2) % to compensate for data chopping so data
-% vectors are long enough (supposed to be 60 entries) for
-% j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20
-% experiment 1
-%         for j=2:(length(index_stim)-4)
-%      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
-        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
- 
-    end
-end
+ for i=1:4
+    try 
+        for j =2:(length(index_stim)-1) 
+            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+        end
+    catch 
+        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-3)') 
+        for j =2:(length(index_stim)-2) 
+            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+        end
+    end 
+ end 
+
  
 % index_stim_conditioner(fs, tb, ta, names, index_stim, stas, alldata); 
 % stas.(char(names(1))) = sta(1) ;
@@ -343,15 +335,16 @@ for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
 %%ISOLATING OUTLIERS
 quarter = quantile (for_stats_analysis.(conc), [0.25, 0.75]);               
 IQR = quarter(2) - quarter (1);
-for_stats_outliers1.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>= quarter(2)+1.5*IQR);
-for_stats_outliers.(conc) = for_stats_outliers1.(conc)+ (for_stats_analysis.(conc)<= quarter(1)-1.5*IQR);
+for_stats_outliershigh.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>= quarter(2)+1.5*IQR);
+for_stats_outlierslow.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<= quarter(1)-1.5*IQR);
 %%Trying to get for_stats_outliers.(conc) to have potential outliers on
 %%both sides of the limits not sure if this is the way
 figure
-histogram(for_stats_outliers.(conc),'BinWidth', 0.005 );
+for_histogram_outliers.(conc)=[for_stats_outlierslow.(conc) for_stats_outliershigh.(conc)]; 
+histogram(for_histogram_outliers.(conc),'BinWidth', 0.005 );
 
 % t = tiledlayout (1,3,'TileSpacing','compact');
-yay.(conc) = length(for_stats_outliers.(conc));
+yay.(conc) = length(for_stats_outliershigh.(conc))+length(for_stats_outlierslow.(conc));
 yay2.(conc) = length(for_stats_analysis.(conc));
 yup1.(conc) = yay2.(conc)-yay.(conc);
 
