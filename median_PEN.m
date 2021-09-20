@@ -1,5 +1,5 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
-%This code is for the Sham cohort to run through the data and get the
+%This code is for the PEN cohort to run through the data and get the
 %median values 
 
 clc
@@ -14,17 +14,19 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 %% medians or variance 
 
-button = input("Create SHAM matrix of median values or variance? '1'=medians? '2'=variance: ") ;
+button = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
+normalize = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 %% creating PEN Matrix to store medians or variance 
 
-PEN_MATRIX = zeros(7,4);
+% PEN_MATRIX = zeros(7,4);
+
 figure 
 hold on
 
 %% Reading experiment dates 
-
+counter = 0 ;
 for f=1:length(str) 
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
@@ -118,10 +120,110 @@ else
 end
 
 %% filling matrix 
-    
-    PEN_MATRIX(f, :) = [PENY] ;
-    plot(1:4, PENY, 'o-', 'DisplayName','PEN DATA')
-    title('PEN DATA') 
-end
+%     
+%     PEN_MATRIX(f, :) = [PENY] ;
+%     plot(1:4, PENY, 'o-', 'DisplayName','PEN DATA')
+%     title('PEN DATA') 
 
-PEN_MATRIX 
+%% for plotting each experiment data normalized its median of 1st LO 
+
+% for ii = 1:3 
+%     concat=['Trial_' num2str(ii)];
+%     PEN_MATRIX.(f)(ii, : ) = for_stats_analysis.(concat)(1:550) ; 
+% end 
+% 
+% counter = 0 ; 
+% row = (counter*3);
+% for ii = 1:3 
+%     concat=['Trial_' num2str(ii)];
+%     PEN_MATRIX.(ii) = for_stats_analysis.(concat) ; 
+% end 
+% counter = counter+f ;
+
+% 
+% for ii = 1:3 
+% concat=[counter 'Trial_' num2str(ii)];
+% concat2=['Trial_' num2str(ii)];
+% PEN_MATRIX.(concat) = for_stats_analysis.(concat2) ;
+% end
+% counter = counter + 1 ;
+% 
+% PEN_MATRIX = for_stats_analysis ;
+
+% dummy = [ for_stats_analysis.Trial_1(1:550);  for_stats_analysis.Trial_2(1:550);  for_stats_analysis.Trial_3(1:550)] ;
+
+% for ii = 1+(3*counter):3*f 
+%     concat=['Trial_' num2str(i)];
+%     dummy(ii, :) = for_stats_analysis.(concat) ;
+% end 
+% counter = counter + 1 ;
+% 
+% if f == 1 
+%     PEN_MATRIX1 = [for_stats_analysis.Trial_1(1:550); for_stats_analysis.Trial_2(1:550); for_stats_analysis.Trial_3(1:550)] ;
+% elseif f == 2 
+%     PEN_MATRIX2.a = [for_stats_analysis.Trial_1(1:329)] ;
+%     PEN_MATRIX2.b = [for_stats_analysis.Trial_2(1:550)] ;
+%     PEN_MATRIX2.c = [for_stats_analysis.Trial_3(1:550)] ; 
+% elseif f == 3 
+%     PEN_MATRIX3.a = [for_stats_analysis.Trial_1(1:416) ] ;
+%     PEN_MATRIX3.b = [for_stats_analysis.Trial_2(1:550) ];
+%     PEN_MATRIX3.c = [for_stats_analysis.Trial_3(1:550)] ; 
+% elseif f == 4 
+%     PEN_MATRIX4.a = [for_stats_analysis.Trial_1(1:529) ];
+%     PEN_MATRIX4.b = [for_stats_analysis.Trial_2(1:529)] ;
+%     PEN_MATRIX4.c = [for_stats_analysis.Trial_3(1:550)] ; 
+% elseif f == 5 
+%     PEN_MATRIX5 = [for_stats_analysis.Trial_1(1:550); for_stats_analysis.Trial_2(1:550); for_stats_analysis.Trial_3(1:550)] ; 
+% elseif f == 6
+%     PEN_MATRIX6 = [for_stats_analysis.Trial_1(1:550); for_stats_analysis.Trial_2(1:550); for_stats_analysis.Trial_3(1:550)] ; 
+% elseif f == 7
+%     PEN_MATRIX7 = [for_stats_analysis.Trial_1(1:550); for_stats_analysis.Trial_2(1:550); for_stats_analysis.Trial_3(1:550)] ; 
+% end 
+
+% for ii = 1+(3*counter):3*f 
+%     for i= 1:3 
+%         concat=['Trial_' num2str(i)];
+%         PEN_MATRIX.(ii) = for_stats_analysis.(concat) ; 
+%     end 
+% end
+% counter = counter + 1 ;
+
+if f == 1 
+    PEN_MATRIX{1} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{2} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{3} = [for_stats_analysis.Trial_3] ;
+elseif f == 2 
+    PEN_MATRIX{4} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{5} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{6} = [for_stats_analysis.Trial_3] ; 
+elseif f == 3 
+    PEN_MATRIX{7} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{8} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{9} = [for_stats_analysis.Trial_3] ;
+elseif f == 4 
+    PEN_MATRIX{10} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{11} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{12} = [for_stats_analysis.Trial_3] ;
+elseif f == 5 
+    PEN_MATRIX{13} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{14} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{15} = [for_stats_analysis.Trial_3] ;
+elseif f == 6
+    PEN_MATRIX{16} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{17} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{18} = [for_stats_analysis.Trial_3] ;
+elseif f == 7
+    PEN_MATRIX{19} = [for_stats_analysis.Trial_1] ;
+    PEN_MATRIX{20} = [for_stats_analysis.Trial_2] ;
+    PEN_MATRIX{21} = [for_stats_analysis.Trial_3] ;
+end 
+end 
+
+%                 m1           m2              m3            m4               m5             m6               m7 
+PEN{1} = {PEN_MATRIX{1}; PEN_MATRIX{4}; PEN_MATRIX{7}; PEN_MATRIX{10}; PEN_MATRIX{13}; PEN_MATRIX{16}; PEN_MATRIX{19}} ; % 1LO 
+PEN{2} = {PEN_MATRIX{2}; PEN_MATRIX{5}; PEN_MATRIX{8}; PEN_MATRIX{11}; PEN_MATRIX{14}; PEN_MATRIX{17}; PEN_MATRIX{20}} ; % L+US 
+PEN{3} = {PEN_MATRIX{3}; PEN_MATRIX{6}; PEN_MATRIX{9}; PEN_MATRIX{12}; PEN_MATRIX{15}; PEN_MATRIX{18}; PEN_MATRIX{21}} ; % 2LO 
+% how to call cell in cell array 
+% PEN{1}(1,1) 
+
+% PEN_MATRIX 

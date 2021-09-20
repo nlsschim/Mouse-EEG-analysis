@@ -158,21 +158,35 @@ d=stas.(char(names(1)));
     all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
 % end 
 
-%normalize the data using the baseline RMS
-matrix=matrix/rms_baseline;
+% duplicated here from "arrange data for statistical analysis"
+% in order to normalize matrix by median of 1st LO (trial 1)
+% matrix is unchanged 
+
+fakes=size(matrix);
+fakeS=fakes(1)*fakes(2);
+fakefor_stats=reshape(matrix,1,fakeS);
+% fakeconc=['Trial_' num2str(z)];
+fakeconc=['Trial_1'];
+fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
-
+% normalize the data using the baseline RMS
+if normalize == 2 
+    matrix=matrix/rms_baseline;
+elseif normalize == 1
+    matrix=matrix/(median(fakefor_stats_analysis.Trial_1));
+end 
 
 %% calculate z-scores
 % [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
 
 %% arrange data for statistical analysis
+% values for for_stats_analysis are reset by normalized values 
 
-% reshape rms matrix into a vector to be used to statistical testing
-s=size(matrix);
-S=s(1)*s(2);
-for_stats=reshape(matrix,1,S);
+% % reshape rms matrix into a vector to be used to statistical testing
+s=size(matrix); % 10 by 22 matrix 
+S=s(1)*s(2); % S = 10*22 = 220 
+for_stats=reshape(matrix,1,S); % turns 10x22 matrix into 1 by 220 vector
 conc=['Trial_' num2str(z)];
 for_stats_analysis.(conc)=for_stats;
 

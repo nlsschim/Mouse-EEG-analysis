@@ -214,10 +214,8 @@ if outliersyn == 1
     for_histogram_outliers.(conc)=[for_stats_outlierslow.(conc) for_stats_outliershigh.(conc)]; 
     
     for_stats_nonoutliers1.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<quarter(2)+1.5*IQR) ;   
-%     for_stats_nonoutliers2.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)>quarter(1)-1.5*IQR) ;
-    for_stats_nonoutliers2.(conc) = for_stats_analysis.(conc)(for_stats_nonoutliers1.(conc)>quarter(1)-1.5*IQR) ;
-    for_histogram_nonoutliers.(conc) = [for_stats_nonoutliers1.(conc) for_stats_nonoutliers2.(conc)] ;
-%     for_histogram_nonoutliers.(conc) = [for_stats_nonoutliers2.(conc)] ;
+    for_stats_nonoutliers2.(conc) = for_stats_nonoutliers1.(conc)(for_stats_nonoutliers1.(conc)>quarter(1)-1.5*IQR) ;
+    for_histogram_nonoutliers.(conc) = [for_stats_nonoutliers2.(conc)] ;
     
     figure
     
