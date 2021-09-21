@@ -165,8 +165,7 @@ d=stas.(char(names(1)));
 fakes=size(matrix);
 fakeS=fakes(1)*fakes(2);
 fakefor_stats=reshape(matrix,1,fakeS);
-% fakeconc=['Trial_' num2str(z)];
-fakeconc=['Trial_1'];
+fakeconc=['Trial_' num2str(z)];
 fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
@@ -174,7 +173,8 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 if normalize == 2 
     matrix=matrix/rms_baseline;
 elseif normalize == 1
-    matrix=matrix/(median(fakefor_stats_analysis.Trial_1));
+    med_1LO = median(fakefor_stats_analysis.Trial_1);
+    matrix=matrix/med_1LO;
 end 
 
 %% calculate z-scores
@@ -184,9 +184,9 @@ end
 % values for for_stats_analysis are reset by normalized values 
 
 % % reshape rms matrix into a vector to be used to statistical testing
-s=size(matrix); % 10 by 22 matrix 
-S=s(1)*s(2); % S = 10*22 = 220 
-for_stats=reshape(matrix,1,S); % turns 10x22 matrix into 1 by 220 vector
+s=size(matrix); % 10 by 60 matrix 
+S=s(1)*s(2); % S = 10*60 = 600 
+for_stats=reshape(matrix,1,S); % turns 10x60 matrix into 1 by 600 vector
 conc=['Trial_' num2str(z)];
 for_stats_analysis.(conc)=for_stats;
 
@@ -194,5 +194,5 @@ for_stats_analysis.(conc)=for_stats;
 % after dividing data into normal distribution: 
 % >mean+4*stddev)(dataset) = [] 
 deviation=std(for_stats_analysis.(conc));
-trialmean = mean(for_stats_analysis.(conc));
+   trialmean = mean(for_stats_analysis.(conc));
 for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4*deviation);

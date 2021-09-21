@@ -222,8 +222,9 @@ if outliersyn == 1
     histogram(for_histogram_outliers.(conc),'BinWidth', 0.003, 'Facecolor', 'r' );
     hold on
     histogram(for_histogram_nonoutliers.(conc),'BinWidth', 0.003, 'Facecolor', 'b' );
-
-    histonames = {'1st LO outliers', 'This shouldnt be plotted', 'L+US outliers', '2nd LO outliers'} ;
+    legend('outliers data','nonoutliers data')
+    
+    histonames = {'1st LO Data', 'This shouldnt be plotted', 'L+US Data', '2nd LO Data'} ;
     title(histonames(z)) 
     xlabel('Normalized magnitude') 
     ylabel('# of data points') 

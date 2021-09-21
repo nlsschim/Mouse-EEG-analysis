@@ -2,9 +2,6 @@
 %This code is for the GEN cohort to run through the data and get the
 %median values 
 
-clc
-clear all 
-close all 
 
 %% reading cohort files 
 file1={'12-23 Mouse Experiment\', '12-16 RECUT\', '12-13-19 recut RIGHT\', '12-24 Data\', '12-27-19 RECUT\','12-12-19 RECUT\', '11-27-19 MOUSE RECUT\'};
@@ -177,8 +174,8 @@ end
 end
 
 %                 m1           m2              m3            m4               m5             m6               m7 
-GEN{1} = [GEN_MATRIX{1}; GEN_MATRIX{4}; GEN_MATRIX{7}; GEN_MATRIX{10}; GEN_MATRIX{13}; GEN_MATRIX{16}; GEN_MATRIX{19}] ; % 1LO 
-GEN{2} = [GEN_MATRIX{2}; GEN_MATRIX{5}; GEN_MATRIX{8}; GEN_MATRIX{11}; GEN_MATRIX{14}; GEN_MATRIX{17}; GEN_MATRIX{20}] ; % L+US 
-GEN{3} = [GEN_MATRIX{3}; GEN_MATRIX{6}; GEN_MATRIX{9}; GEN_MATRIX{12}; GEN_MATRIX{15}; GEN_MATRIX{18}; GEN_MATRIX{21}] ; % 2LO 
+GEN{1} = {GEN_MATRIX{1}; GEN_MATRIX{4}; GEN_MATRIX{7}; GEN_MATRIX{10}; GEN_MATRIX{13}; GEN_MATRIX{16}; GEN_MATRIX{19}} ; % 1LO 
+GEN{2} = {GEN_MATRIX{2}; GEN_MATRIX{5}; GEN_MATRIX{8}; GEN_MATRIX{11}; GEN_MATRIX{14}; GEN_MATRIX{17}; GEN_MATRIX{20}} ; % L+US 
+GEN{3} = {GEN_MATRIX{3}; GEN_MATRIX{6}; GEN_MATRIX{9}; GEN_MATRIX{12}; GEN_MATRIX{15}; GEN_MATRIX{18}; GEN_MATRIX{21}} ; % 2LO 
 
 

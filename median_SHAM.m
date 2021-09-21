@@ -1,10 +1,7 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 %This code is for the Sham cohort to run through the data and get the
 %median values 
-
-clc
-clear all 
-close all 
+ 
 
 %% reading cohort files 
 
@@ -143,7 +140,6 @@ end
 end
 
 %                 m1           m2              m3            m4               m5             m6               m7 
-SHAM{1} = [SHAM_MATRIX{1}; SHAM_MATRIX{4}; SHAM_MATRIX{7}; SHAM_MATRIX{10}; SHAM_MATRIX{13}; SHAM_MATRIX{16}; SHAM_MATRIX{19}] ; % 1LO 
-SHAM{2} = [SHAM_MATRIX{2}; SHAM_MATRIX{5}; SHAM_MATRIX{8}; SHAM_MATRIX{11}; SHAM_MATRIX{14}; SHAM_MATRIX{17}; SHAM_MATRIX{20}] ; % L+US 
-SHAM{3} = [SHAM_MATRIX{3}; SHAM_MATRIX{6}; SHAM_MATRIX{9}; SHAM_MATRIX{12}; SHAM_MATRIX{15}; SHAM_MATRIX{18}; SHAM_MATRIX{21}] ; % 2LO 
-
+SHAM{1} = {SHAM_MATRIX{1}; SHAM_MATRIX{4}; SHAM_MATRIX{7}; SHAM_MATRIX{10}; SHAM_MATRIX{13}; SHAM_MATRIX{16}; SHAM_MATRIX{19}} ; % 1LO 
+SHAM{2} = {SHAM_MATRIX{2}; SHAM_MATRIX{5}; SHAM_MATRIX{8}; SHAM_MATRIX{11}; SHAM_MATRIX{14}; SHAM_MATRIX{17}; SHAM_MATRIX{20}} ; % L+US 
+SHAM{3} = {SHAM_MATRIX{3}; SHAM_MATRIX{6}; SHAM_MATRIX{9}; SHAM_MATRIX{12}; SHAM_MATRIX{15}; SHAM_MATRIX{18}; SHAM_MATRIX{21}} ; % 2LO 

@@ -2,9 +2,6 @@
 %This code is for the PEN cohort to run through the data and get the
 %median values 
 
-clc
-clear all 
-close all 
 
 %% reading cohort files 
 
@@ -27,6 +24,7 @@ hold on
 
 %% Reading experiment dates 
 counter = 0 ;
+% for f=1:length(str) 
 for f=1:length(str) 
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
