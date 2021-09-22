@@ -104,6 +104,7 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 time_series = input('time series(3 or 10)?');
 brain_wave = input("'3-100' = 1, low gamma = '2', beta = '3', alpha ='4', theta = '5', : ");
 outliersyn = input("run outliers analysis? '1'= yes, '2' = no: ") ;
+
 %% this names the channels based on where they were placed, make sure they match lab chart
 
 V1L=set_channels(1);S1L=set_channels(2);S1R=set_channels(3);V1R=set_channels(4);lightstim=set_channels(5);
@@ -119,7 +120,7 @@ V1L=set_channels(1);S1L=set_channels(2);S1R=set_channels(3);V1R=set_channels(4);
 % 8/12/21 m1
 % V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
 % 8/12/21 m2
-% V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
+V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
 % 8/13/21
 % V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
 

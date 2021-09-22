@@ -13,7 +13,7 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 button = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
-normalize = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
+normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 %% creating PEN Matrix to store medians or variance 
 
@@ -24,7 +24,6 @@ hold on
 
 %% Reading experiment dates 
 counter = 0 ;
-% for f=1:length(str) 
 for f=1:length(str) 
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');

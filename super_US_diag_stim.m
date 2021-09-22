@@ -104,6 +104,9 @@ d=stas.(char(names(1)));
 
 % max_rms=0;
 if time_series == 3 
+    all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
+	all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
+    all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');  
     for k=1:3 
        concat=['RMSvals_' num2str(k)];
 %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
@@ -116,9 +119,7 @@ if time_series == 3
  
     end 
     % % for 0.5 seconds increments 
-    all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
-	all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
-    all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');  
+    
 else 
    for k=1:10
        concat=['RMSvals_' num2str(k)];
