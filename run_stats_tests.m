@@ -1,7 +1,8 @@
 function [p_kw,tbl,stats, p_anova] = run_stats_tests(data, groups)
 [p_kw,tbl,stats] = kruskalwallis(data,groups);
+
 title('Kruskal-Wallis') 
-ylabel('magnitude (mV)')
+ylabel('normalized magnitude')
 
 % Trying to connect median lines to see the trend better
 

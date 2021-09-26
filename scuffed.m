@@ -1,5 +1,8 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
+
 close all
+clear all 
+clc
 
 % this script plots the median rms. values for each cohort by trial type,
 % as well as combines the bins for histograms by cohort and trial type
@@ -323,55 +326,125 @@ if button2 ==1
     ylabel('# of data points') 
 end 
 
+%% statistical analysis - using all experiment data NOT medians 
+
 %% KW Analysis for 1 LO 
+% NaN are ignored - done with groups vs matrix because data lengths are unequal  
 
+genvec1LO = aMat1(:)' ;
+shamvec1LO = aMat2(:)' ;
+penvec1LO = aMat3(:)' ;
+% creating vector of data 
+vec1LO = [genvec1LO shamvec1LO penvec1LO] ;
 
-% for kruskal-wallis 3 pairings 
-% first_second_third_vector=[for_stats_analysis.Trial_1 for_stats_analysis.Trial_2 for_stats_analysis.Trial_3];
-% % broken up for mann whitney/wilcox test (or just use stats analysis trials
-% 
-% % first_second_vector=[for_stats_analysis.Trial_1 for_stats_analysis.Trial_2];
-% % first_third_vector=[for_stats_analysis.Trial_1 for_stats_analysis.Trial_3];
-% % second_third_vector=[for_stats_analysis.Trial_2 for_stats_analysis.Trial_3];
-% 
-% 
-% str1=strings(1,length(for_stats_analysis.Trial_1));
-% for ii=1:length(for_stats_analysis.Trial_1)
-%     str1(ii)='LIGHT ONLY - FIRST';
-% end
-% 
-% str2=strings(1,length(for_stats_analysis.Trial_2));
-% for ii=1:length(for_stats_analysis.Trial_2)
-%     str2(ii)='LIGHT + ULTRASOUND';
-% end
-% 
-% str3=strings(1,length(for_stats_analysis.Trial_3));
-% for ii=1:length(for_stats_analysis.Trial_3)
-%     str3(ii)='LIGHT ONLY - SECOND';
-% end
-% 
-% % creating a list of group labels corresponding to the data
-% first_vs_second_vs_third=[str1 str2 str3];
-% % first_vs_third=[str1 str3];
-% % second_vs_third=[str2 str3];
-% 
-% % % grouping={my_string};
-% % [p12,tbl12,stats12]=kruskalwallis(first_second_vector,first_vs_second);
-% % [p13,tbl13,stats13]=kruskalwallis(first_third_vector,first_vs_third);
-% % [p23,tbl23,stats23]=kruskalwallis(second_third_vector,second_vs_third);
-% 
-% %Kruskal-wallis and Anova1 tests between trials 1&2, 1&3, 2&3
-% run_stats_tests(first_second_third_vector, first_vs_second_vs_third); %ANOVA BETWEEN ALL
-% % run_stats_tests(first_third_vector, first_vs_third);
-% % run_stats_tests(second_third_vector, second_vs_third);
-% 
-% 
-% % Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
-% MWp1 = ranksum(for_stats_analysis.Trial_1,for_stats_analysis.Trial_2); % pairing 1 1st LO vs. L+US 
-% MWp2 = ranksum(for_stats_analysis.Trial_1,for_stats_analysis.Trial_3); % pairing 2 1st. LO vs. 2nd LO 
-% MWp3 = ranksum(for_stats_analysis.Trial_2,for_stats_analysis.Trial_3); % pairing 3 L+US vs. 2nd LO 
-% 
-% % Chi-squared variance test, between trials 1&2, 1&3
-% % variance_trial_one=var(for_stats_analysis.Trial_1);
-% % [h,p]=vartest(for_stats_analysis.Trial_2, variance_trial_one);
-% % [h1,p1]=vartest(for_stats_analysis.Trial_3, variance_trial_one);
+str1=strings(1,length(genvec1LO));
+for ii=1:length(genvec1LO)
+    str1(ii)='GEN - 1st LO';
+end
+
+str2=strings(1,length(shamvec1LO));
+for ii=1:length(shamvec1LO)
+    str2(ii)='SHAM - 1st LO';
+end
+
+str3=strings(1,length(penvec1LO));
+for ii=1:length(penvec1LO)
+    str3(ii)='PEN - 1st LO';
+end
+
+% creating a list of group labels corresponding to the data (mat1LO)
+first_vs_second_vs_third=[str1 str2 str3];
+
+%Kruskal-wallis between 1LO cohorts 
+kwtitle = {'between Cohorts 1st LO' }; 
+run_stats_tests_scuffed(vec1LO, first_vs_second_vs_third, kwtitle); 
+
+% 1LO Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
+MWp1 = ranksum(genvec1LO, shamvec1LO); % pairing GEN vs. SHAM 1LO 
+MWp2 = ranksum(penvec1LO,shamvec1LO); % pairing PEN vs. SHAM 1LO 
+MWp3 = ranksum(penvec1LO, genvec1LO);  % pairing PEN vs. GEN 1LO 
+
+%% KW Analysis for L+US by cohort
+
+genvecLUS = aMat4(:)' ;
+shamvecLUS = aMat5(:)' ;
+penvecLUS = aMat6(:)' ;
+% creating vector of data 
+vecLUS = [genvecLUS shamvecLUS penvecLUS] ;
+
+str4=strings(1,length(genvecLUS));
+for ii=1:length(genvecLUS)
+    str4(ii)='GEN - L+US';
+end
+
+str5=strings(1,length(shamvecLUS));
+for ii=1:length(shamvecLUS)
+    str5(ii)='SHAM - L+US';
+end
+
+str6=strings(1,length(penvecLUS));
+for ii=1:length(penvecLUS)
+    str6(ii)='PEN - L+US';
+end
+
+% creating a list of group labels corresponding to the data (mat1LO)
+first_vs_second_vs_third2=[str4 str5 str6];
+
+%Kruskal-wallis between 1LO cohorts 
+kwtitle = {'between Cohorts L+US' }; 
+run_stats_tests_scuffed(vecLUS, first_vs_second_vs_third2, kwtitle); 
+
+% 1LO Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
+MWp4 = ranksum(genvecLUS, shamvecLUS); % pairing GEN vs. SHAM L+US 
+MWp5 = ranksum(penvecLUS,shamvecLUS); % pairing PEN vs. SHAM L+US 
+MWp6 = ranksum(penvecLUS, genvecLUS);  % pairing PEN vs. GEN L+US 
+
+%% KW Analysis for 2nd LO by cohort
+
+genvec2LO = aMat7(:)' ;
+shamvec2LO = aMat8(:)' ;
+penvec2LO = aMat9(:)' ;
+% creating vector of data 
+vec2LO = [genvec2LO shamvec2LO penvec2LO] ;
+
+str4=strings(1,length(genvec2LO));
+for ii=1:length(genvec2LO)
+    str4(ii)='GEN - 2nd LO';
+end
+
+str5=strings(1,length(shamvec2LO));
+for ii=1:length(shamvec2LO)
+    str5(ii)='SHAM - 2nd LO';
+end
+
+str6=strings(1,length(penvec2LO));
+for ii=1:length(penvec2LO)
+    str6(ii)='PEN - 2nd LO';
+end
+
+% creating a list of group labels corresponding to the data (mat1LO)
+first_vs_second_vs_third3=[str4 str5 str6];
+
+%Kruskal-wallis between 1LO cohorts 
+kwtitle = {'between Cohorts 2nd LO' }; 
+run_stats_tests_scuffed(vec2LO, first_vs_second_vs_third3, kwtitle); 
+
+% 1LO Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
+MWp7 = ranksum(genvec2LO, shamvec2LO); % pairing GEN vs. SHAM L+US 
+MWp8 = ranksum(penvec2LO,shamvec2LO); % pairing PEN vs. SHAM L+US 
+MWp9 = ranksum(penvec2LO, genvec2LO);  % pairing PEN vs. GEN L+US 
+
+%% Mann Whitney key 
+
+% 1 LO 
+% MWp1 = ranksum(genvec1LO, shamvec1LO); pairing GEN vs. SHAM 1LO 
+% MWp2 = ranksum(penvec1LO,shamvec1LO); pairing PEN vs. SHAM 1LO 
+% MWp3 = ranksum(penvec1LO, genvec1LO); pairing PEN vs. GEN 1LO 
+% L+US 
+% MWp4 = ranksum(genvecLUS, shamvecLUS); pairing GEN vs. SHAM L+US 
+% MWp5 = ranksum(penvecLUS,shamvecLUS); pairing PEN vs. SHAM L+US  
+% MWp6 = ranksum(penvecLUS, genvecLUS);  pairing PEN vs. GEN L+US
+% 2 LO 
+% MWp7 = ranksum(genvec2LO, shamvec2LO); pairing GEN vs. SHAM L+US 
+% MWp8 = ranksum(penvec2LO,shamvec2LO); pairing PEN vs. SHAM L+US 
+% MWp9 = ranksum(penvec2LO, genvec2LO); pairing PEN vs. GEN L+US 
