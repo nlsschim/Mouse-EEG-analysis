@@ -11,7 +11,7 @@ MainDirectory = '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/D
 
 button = input("Create GEN matrix of median values or variance? '1'=medians, '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
-normalize = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
+normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 %% creating GEN Matrix to store medians or variance 
 % GEN_MATRIX = zeros(7,4);
@@ -173,6 +173,6 @@ end
 end
 
 %                 m1           m2              m3            m4               m5             m6               m7 
-GEN{1} = [GEN_MATRIX{1}; GEN_MATRIX{4}; GEN_MATRIX{7}; GEN_MATRIX{10}; GEN_MATRIX{13}; GEN_MATRIX{16}; GEN_MATRIX{19}] ; % 1LO 
-GEN{2} = [GEN_MATRIX{2}; GEN_MATRIX{5}; GEN_MATRIX{8}; GEN_MATRIX{11}; GEN_MATRIX{14}; GEN_MATRIX{17}; GEN_MATRIX{20}] ; % L+US 
-GEN{3} = [GEN_MATRIX{3}; GEN_MATRIX{6}; GEN_MATRIX{9}; GEN_MATRIX{12}; GEN_MATRIX{15}; GEN_MATRIX{18}; GEN_MATRIX{21}] ; % 2LO 
+GEN{1} = {GEN_MATRIX{1}; GEN_MATRIX{4}; GEN_MATRIX{7}; GEN_MATRIX{10}; GEN_MATRIX{13}; GEN_MATRIX{16}; GEN_MATRIX{19}} ; % 1LO 
+GEN{2} = {GEN_MATRIX{2}; GEN_MATRIX{5}; GEN_MATRIX{8}; GEN_MATRIX{11}; GEN_MATRIX{14}; GEN_MATRIX{17}; GEN_MATRIX{20}} ; % L+US 
+GEN{3} = {GEN_MATRIX{3}; GEN_MATRIX{6}; GEN_MATRIX{9}; GEN_MATRIX{12}; GEN_MATRIX{15}; GEN_MATRIX{18}; GEN_MATRIX{21}} ; % 2LO 

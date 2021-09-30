@@ -160,9 +160,7 @@ for_stats_analysis=[];
 %for z=1:3 
 
 for z=1:4
-%      if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
-     if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
-     if isequal(file_list(z).name,"Trial 6.mat"), continue, end 
+     if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
 %      if isequal(file_list(z).name,"TRIAL 2.mat"), continue, end %for 12-23
      
 %      if isequal(file_list(z).name,"TRIAL6.mat"), continue, end % for 6/24 second session 
@@ -175,7 +173,7 @@ for z=1:4
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
 %     US_diag_stim;  
-    super_US_diag_stim ;
+  super_US_diag_stim ;
 % miniUS_Diag_stim
 end
 

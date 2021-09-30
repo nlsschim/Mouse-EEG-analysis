@@ -8,11 +8,12 @@
 file1={'06-24-2021 Mouse Experiment 1 (Session 2)/', '08-10-2021 Mouse Experiment 1 /', '08-10-2021 Mouse Experiment 2 (Session 1)/', '06-23-2021 Mouse Expirement 1/', '08-12-21 Mouse Experiment 1/', '08-12-21 Mouse Experiment 2/', '08-13-21 Mouse Experiment 1/'};
 str=string(file1);
 MainDirectory = '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/';
+
 %% medians or variance 
 
 button = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
-normalize = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
+normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 %% creating PEN Matrix to store medians or variance 
 
