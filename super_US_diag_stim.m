@@ -8,8 +8,7 @@ time=time1/fs/60;
 %% change the bandpass for filtering pls
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-[bb,aa]=butter(2,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-
+% [bb,aa]=butter(2,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
@@ -19,8 +18,8 @@ time=time1/fs/60;
     % alpha 
 %     [bb,aa]=butter(2,[8,11]/(fs/2));
 
-    % all (desired) bands 
-%    [bb,aa]=butter(3,[4,59]/(fs/2));
+bandpasses = [3, 100; 30, 59; 12, 29; 4, 7; 8, 11] ; 
+    [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
 
 %Organize data into structure array
 alldata=[]; %initialize structure array
@@ -64,9 +63,13 @@ stas.(char(names(i)))=[];
        % title(file_list(z).name,'interpreter','none');
 end
 
-tb=1; %time before stim to start STA
-% ta=10; %time after stim to end STA
- ta = 3; % first 3 seconds
+if  time_series ==3 
+    tb=1; %time before stim to start STA
+    ta = 3; % first 3 seconds
+else 
+    tb=1;
+    ta=10; %time after stim to end STA
+end 
 
 %% Data conditioning (cont.) 
 % prevents errors based on discrepency between V1Ldata and
@@ -81,9 +84,11 @@ for i=1:4
 % %     end  
 % %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
 
-       for j=2:(length(index_stim)-1)
-% for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
-% for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20 experiment 1  
+%        for j=2:(length(index_stim)-1)
+for j=2:(length(index_stim)-2) % to compensate for data chopping so data
+% vectors are long enough (supposed to be 60 entries) for
+% j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1,  6/24/20
+% experiment 1
 %         for j=2:(length(index_stim)-4)
 %      for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
@@ -234,8 +239,8 @@ d=stas.(char(names(1)));
 % d=filtfilt(bb,aa,d')';
 
 % max_rms=0;
-%    for k=1:10
-   for k = 1:3
+if time_series == 3 
+    for k=1:3 
        concat=['RMSvals_' num2str(k)];
 %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
@@ -244,26 +249,40 @@ d=stas.(char(names(1)));
 %        if maxrms > max_rms
 %            max_rms=maxrms;
 %        end
-   end
-   
-% for 0.5 seconds increments 
-all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
-all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
-all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');   
-    
+ 
+    end 
+    % % for 0.5 seconds increments 
+    all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
+	all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
+    all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');  
+else 
+   for k=1:10
+       concat=['RMSvals_' num2str(k)];
+%        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
+       all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
+%        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
+%        maxrms=max(all_points(1).(concat));
+%        if maxrms > max_rms
+%            max_rms=maxrms;
+%        end
+   end 
+end 
+
+      
  % disp(max_rms);
 
 % Create matrix of V1L RMS vals for plotting
 % matrix=[all_points(1).RMSvals_9; all_points(1).RMSvals_8; all_points(1).RMSvals_7; all_points(1).RMSvals_6; all_points(1).RMSvals_5;
 %     all_points(1).RMSvals_4; all_points(1).RMSvals_3; all_points(1).RMSvals_2; all_points(1).RMSvals_1];
 
-% matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
-%     all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
-
 % first 3 sec
-matrix=[all_points(1).RMSvals_0point5; all_points(1).RMSvals_1; all_points(1).RMSvals_1point5; all_points(1).RMSvals_2; 
+if time_series == 3 
+    matrix=[all_points(1).RMSvals_0point5; all_points(1).RMSvals_1; all_points(1).RMSvals_1point5; all_points(1).RMSvals_2; 
     all_points(1).RMSvals_2point5; all_points(1).RMSvals_3]; 
-
+else 
+    matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
+    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
+end 
 
 %normalize the data using the baseline RMS
 matrix=matrix/rms_baseline;
@@ -273,8 +292,6 @@ figure
 % subplot(2,3,z);
 imagesc(matrix')
 ylim=[0 0.3];
-colorbar
-
 
 % naming waterfall plots based on 'z'
 names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
@@ -286,12 +303,22 @@ ylabel('Stimulus event #');
 ticks = 0:5:60 ; 
 yticks(ticks) ; 
 xlabel('Time after stimulus (s)') 
+
 % for 3 second analysis 
-% ticks = 0:0.25:3 ;
-% xticks(ticks)
+if time_series == 3
+    set(gca,'XTick',[1 2 3 4 5 6] ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',[0.5 1 1.5 2 2.5 3] ); %This is what it's going to appear in those places.
+else
+    xticks(ticks)
+end  
+    
 colorbar
 %to set the magnitude for the color bar, change accordingly?????
-caxis([.0005 1])
+% caxis([0.00015 0.05])
+% caxis([0.00015 0.1])
+
+%  cmax = [];
+% cmax (z) = max(matrix(:));
 
 
 %% calculate z-scores
@@ -400,7 +427,6 @@ for_stats_analysis.(conc) = for_stats_new.(conc)(for_stats_new.(conc)<t1m+4*v1);
 % yticks([0.0005,0.001,0.002,0.008,0.032,0.1]);
 % yticklabels({0.5,1,2,8,32,100});
 % xticks([0,1,2,3,4,5,6,7,8,9]);
-% % xticks([0,0.5,1,1.5,2,2.5])
 %  title(file_list(z).name,'interpreter','none');
 % 
 %     end
