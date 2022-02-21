@@ -6,7 +6,8 @@
 %% reading cohort files 
 
 % file1={'06-30-2020 Mouse Experiment 1\', '06-23-2020 Mouse Experiment 2\', '06-25-2020 Mouse Experiment 1\', '06-24-2020 Mouse Experiment 3\', '06-24-2020 Mouse Experiment 1\', '06-23-20 MOUSE 1 RECUT\','05-29-2020 Mouse Experiment\'};
-file1={'06-30-2020 Mouse Experiment 1\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\', '05-29-2020 Mouse Experiment\'};
+file1={'06-30-2020 Mouse Experiment 1\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\', '05-29-2020 Mouse Experiment\', '2_15_22 SHAM\'};
+% file1={'06-30-2020 Mouse Experiment 1\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\', '05-29-2020 Mouse Experiment\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\SHAM\';
 
@@ -39,9 +40,11 @@ for f=1:length(str)
 %         set_channels=[1 2 3 4 5]; 
 %     elseif f == 6
 %         set_channels=[1 2 3 4 5];
-if folder == "C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\SHAM\05-29-2020 Mouse Experiment\"
+if folder == "C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\SHAM\05-29-2020 Mouse Experiment\" 
      set_channels=[1 2 3 4 5]; 
-    else 
+elseif folder == "C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\SHAM\2_15_22 SHAM\" 
+    set_channels=[1 2 3 4 5];
+else
         set_channels=[1 2 3 4 7];
     end
     ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
@@ -55,7 +58,7 @@ if folder == "C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\SHAM\05-
 %     else
     if folder == "C:\Users\Administrator\MATLAB\Projects\Mouse EEG git\Data\SHAM\05-29-2020 Mouse Experiment\"
    V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    else
+    else 
    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
     end
 
@@ -147,6 +150,9 @@ end
 %     SHAM_MATRIX{21} = [for_stats_analysis.Trial_3] ;
 % end 
     ACTUAL_SHAM_MATRIX(f, :) = [SHAMY] ;
+    plot(1:4, SHAMY, 'o-', 'DisplayName','SHAM DATA')
+    title('SHAM DATA')
+%     hold on
 end
 
 %                 m1           m2              m3            m4               m5             m6               m7 
