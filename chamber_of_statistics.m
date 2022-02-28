@@ -1,5 +1,5 @@
-function [p_kw,tbl,stats, p_anova] = chamber_of_statistics(data)
-[p_kw,tbl,stats] = kruskalwallis(data);
+function [p_kw,tbl,stats, p_anova] = chamber_of_statistics(data, group)
+[p_kw,tbl,stats] = kruskalwallis(data, group);
 ylabel('magnitude difference from 1st LO (mV)')
 
 % Trying to connect median lines to see the trend better

@@ -104,18 +104,18 @@ button2 = input("Run combined histograms of each cohort by trial type? ('1'=yes,
 %% 3 cohorts - first light only 
 % GEN 
 % median_GEN ; 
-load('GEN')  
-GEN_1LO = GEN{1}' ; % transpose cell 1 from 7x1 into 1x7
-maxNumCol = max(cellfun(@(c) size(c,2), GEN_1LO));  % max number of columns
-aMat1 = cell2mat(cellfun(@(c){padarray(c,[0,maxNumCol-size(c,2)],NaN,'Post')}, GEN_1LO)');
-GEN_1LOcolMeans = median(aMat1,1,'omitnan');
+% load('GEN')  
+% GEN_1LO = GEN{1}' ; % transpose cell 1 from 7x1 into 1x7
+% maxNumCol = max(cellfun(@(c) size(c,2), GEN_1LO));  % max number of columns
+% aMat1 = cell2mat(cellfun(@(c){padarray(c,[0,maxNumCol-size(c,2)],NaN,'Post')}, GEN_1LO)');
+% GEN_1LOcolMeans = median(aMat1,1,'omitnan');
 
 % colMeans = [GEN_1LOcolMeans GEN_LUScolMeans GEN_2LOcolMeans] ;
 % plot(colMeans, 'g') 
 % hold on 
 
 % SHAM 
-% median_SHAM ; 
+median_SHAM ; 
 load('SHAM')  
 SHAM_1LO = SHAM{1}' ; % transpose cell 1 from 7x1 into 1x7
 maxNumCol = max(cellfun(@(c) size(c,2), SHAM_1LO));  % max number of columns
@@ -148,13 +148,13 @@ if button1 == 1
 end
 if button2 == 1
     % GEN 1LO 
-    [minCombined, maxCombined] = bounds([aMat1], 'all');
-    BE = linspace(minCombined, maxCombined, 100);
-    figure
-    h1 = histogram([aMat1], BE, 'Facecolor', 'g');
-    title('GEN 1st LO') 
-    xlabel('Median 1LO Normalized magnitude') 
-    ylabel('# of data points') 
+%     [minCombined, maxCombined] = bounds([aMat1], 'all');
+%     BE = linspace(minCombined, maxCombined, 100);
+%     figure
+%     h1 = histogram([aMat1], BE, 'Facecolor', 'g');
+%     title('GEN 1st LO') 
+%     xlabel('Median 1LO Normalized magnitude') 
+%     ylabel('# of data points') 
     
     % SHAM 1LO
     [minCombined, maxCombined] = bounds([aMat2], 'all');
@@ -210,11 +210,11 @@ end
 %% 3 cohorts - L+US
 
 % GEN 
-
-GEN_LUS = GEN{2}'; 
-maxNumCol = max(cellfun(@(c) size(c,2), GEN_LUS));  % max number of columns
-aMat4 = cell2mat(cellfun(@(c){padarray(c,[0,maxNumCol-size(c,2)],NaN,'Post')}, GEN_LUS)');
-GEN_LUScolMeans = median(aMat4,1,'omitnan');
+% 
+% GEN_LUS = GEN{2}'; 
+% maxNumCol = max(cellfun(@(c) size(c,2), GEN_LUS));  % max number of columns
+% aMat4 = cell2mat(cellfun(@(c){padarray(c,[0,maxNumCol-size(c,2)],NaN,'Post')}, GEN_LUS)');
+% GEN_LUScolMeans = median(aMat4,1,'omitnan');
 
 % SHAM 
 
@@ -243,13 +243,13 @@ if button1 == 1
 end 
 if button2 ==1 
     % GEN LUS 
-    [minCombined, maxCombined] = bounds([aMat4], 'all');
-    BE = linspace(minCombined, maxCombined, 100);
-    figure
-    h4 = histogram([aMat4], BE, 'Facecolor', 'g');
-    title('GEN L+US') 
-    xlabel('Median 1LO Normalized magnitude') 
-    ylabel('# of data points') 
+%     [minCombined, maxCombined] = bounds([aMat4], 'all');
+%     BE = linspace(minCombined, maxCombined, 100);
+%     figure
+%     h4 = histogram([aMat4], BE, 'Facecolor', 'g');
+%     title('GEN L+US') 
+%     xlabel('Median 1LO Normalized magnitude') 
+%     ylabel('# of data points') 
     % SHAM LUS 
     [minCombined, maxCombined] = bounds([aMat5], 'all');
     BE = linspace(minCombined, maxCombined, 100);
@@ -271,10 +271,10 @@ end
 %% 3 cohorts - 2LO 
 
 % GEN 
-GEN_2LO = GEN{3}'; 
-maxNumCol = max(cellfun(@(c) size(c,2), GEN_2LO));  % max number of columns
-aMat7 = cell2mat(cellfun(@(c){padarray(c,[0,maxNumCol-size(c,2)],NaN,'Post')}, GEN_2LO)');
-GEN_2LOcolMeans = median(aMat7,1,'omitnan');
+% GEN_2LO = GEN{3}'; 
+% maxNumCol = max(cellfun(@(c) size(c,2), GEN_2LO));  % max number of columns
+% aMat7 = cell2mat(cellfun(@(c){padarray(c,[0,maxNumCol-size(c,2)],NaN,'Post')}, GEN_2LO)');
+% GEN_2LOcolMeans = median(aMat7,1,'omitnan');
 
 % SHAM 
 SHAM_2LO = SHAM{3}'; 
@@ -301,13 +301,13 @@ if button1 == 1
     legend([p1 p2 p3],{'GEN data', 'SHAM data', 'PEN data'})
 end 
 if button2 ==1 
-    [minCombined, maxCombined] = bounds([aMat7], 'all');
-    BE = linspace(minCombined, maxCombined, 100);
-    figure
-    h7 = histogram([aMat7], BE, 'Facecolor', 'g');
-    title('GEN 2LO') 
-    xlabel('Median 1LO Normalized magnitude') 
-    ylabel('# of data points') 
+%     [minCombined, maxCombined] = bounds([aMat7], 'all');
+%     BE = linspace(minCombined, maxCombined, 100);
+%     figure
+%     h7 = histogram([aMat7], BE, 'Facecolor', 'g');
+%     title('GEN 2LO') 
+%     xlabel('Median 1LO Normalized magnitude') 
+%     ylabel('# of data points') 
 
     [minCombined, maxCombined] = bounds([aMat8], 'all');
     BE = linspace(minCombined, maxCombined, 100);
@@ -331,16 +331,20 @@ end
 %% KW Analysis for 1 LO 
 % NaN are ignored - done with groups vs matrix because data lengths are unequal  
 
-genvec1LO = aMat1(:)' ;
+% genvec1LO = aMat1(:)' ;
 shamvec1LO = aMat2(:)' ;
 penvec1LO = aMat3(:)' ;
 % creating vector of data 
-vec1LO = [genvec1LO shamvec1LO penvec1LO] ;
+% vec1LO = [genvec1LO shamvec1LO penvec1LO] ;
+% for KW 
+% vec1LO = [ shamvec1LO penvec1LO] ;
+% for the violin plots 
+vec1LO = [ shamvec1LO penvec1LO] ;
 
-str1=strings(1,length(genvec1LO));
-for ii=1:length(genvec1LO)
-    str1(ii)='GEN - 1st LO';
-end
+% str1=strings(1,length(genvec1LO));
+% for ii=1:length(genvec1LO)
+%     str1(ii)='GEN - 1st LO';
+% end
 
 str2=strings(1,length(shamvec1LO));
 for ii=1:length(shamvec1LO)
@@ -353,29 +357,39 @@ for ii=1:length(penvec1LO)
 end
 
 % creating a list of group labels corresponding to the data (mat1LO)
-first_vs_second_vs_third=[str1 str2 str3];
+% first_vs_second_vs_third=[str1 str2 str3];
+% first_vs_second_vs_third=[str2 str3];
+
+% for the violin plots 
+first_vs_second_vs_third=[str2 str3];
 
 %Kruskal-wallis between 1LO cohorts 
-kwtitle = {'between Cohorts 1st LO' }; 
-run_stats_tests_scuffed(vec1LO, first_vs_second_vs_third, kwtitle); 
+% kwtitle = {'between Cohorts 1st LO' }; 
+% run_stats_tests_scuffed(vec1LO, first_vs_second_vs_third, kwtitle); 
+figure
+violinplot(vec1LO, first_vs_second_vs_third); 
+title('Violin Plot cohorts 1st LO')
+ylabel('normalized magnitude')
+
 
 % 1LO Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
-MWp1 = ranksum(genvec1LO, shamvec1LO); % pairing GEN vs. SHAM 1LO 
+% MWp1 = ranksum(genvec1LO, shamvec1LO); % pairing GEN vs. SHAM 1LO 
 MWp2 = ranksum(penvec1LO,shamvec1LO); % pairing PEN vs. SHAM 1LO 
-MWp3 = ranksum(penvec1LO, genvec1LO);  % pairing PEN vs. GEN 1LO 
+% MWp3 = ranksum(penvec1LO, genvec1LO);  % pairing PEN vs. GEN 1LO 
 
 %% KW Analysis for L+US by cohort
 
-genvecLUS = aMat4(:)' ;
+% genvecLUS = aMat4(:)' ;
 shamvecLUS = aMat5(:)' ;
 penvecLUS = aMat6(:)' ;
 % creating vector of data 
-vecLUS = [genvecLUS shamvecLUS penvecLUS] ;
+% vecLUS = [genvecLUS shamvecLUS penvecLUS] ;
+vecLUS = [shamvecLUS penvecLUS] ;
 
-str4=strings(1,length(genvecLUS));
-for ii=1:length(genvecLUS)
-    str4(ii)='GEN - L+US';
-end
+% str4=strings(1,length(genvecLUS));
+% for ii=1:length(genvecLUS)
+%     str4(ii)='GEN - L+US';
+% end
 
 str5=strings(1,length(shamvecLUS));
 for ii=1:length(shamvecLUS)
@@ -388,29 +402,35 @@ for ii=1:length(penvecLUS)
 end
 
 % creating a list of group labels corresponding to the data (mat1LO)
-first_vs_second_vs_third2=[str4 str5 str6];
+% first_vs_second_vs_third2=[str4 str5 str6];
+first_vs_second_vs_third2=[str5 str6];
 
 %Kruskal-wallis between 1LO cohorts 
-kwtitle = {'between Cohorts L+US' }; 
-run_stats_tests_scuffed(vecLUS, first_vs_second_vs_third2, kwtitle); 
+% kwtitle = {'between Cohorts L+US' }; 
+% run_stats_tests_scuffed(vecLUS, first_vs_second_vs_third2, kwtitle); 
+figure
+violinplot(vecLUS, first_vs_second_vs_third2); 
+title('Violin Plot cohorts L+US')
+ylabel('normalized magnitude')
 
 % 1LO Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
-MWp4 = ranksum(genvecLUS, shamvecLUS); % pairing GEN vs. SHAM L+US 
+% MWp4 = ranksum(genvecLUS, shamvecLUS); % pairing GEN vs. SHAM L+US 
 MWp5 = ranksum(penvecLUS,shamvecLUS); % pairing PEN vs. SHAM L+US 
-MWp6 = ranksum(penvecLUS, genvecLUS);  % pairing PEN vs. GEN L+US 
+% MWp6 = ranksum(penvecLUS, genvecLUS);  % pairing PEN vs. GEN L+US 
 
 %% KW Analysis for 2nd LO by cohort
 
-genvec2LO = aMat7(:)' ;
+% genvec2LO = aMat7(:)' ;
 shamvec2LO = aMat8(:)' ;
 penvec2LO = aMat9(:)' ;
 % creating vector of data 
-vec2LO = [genvec2LO shamvec2LO penvec2LO] ;
-
-str4=strings(1,length(genvec2LO));
-for ii=1:length(genvec2LO)
-    str4(ii)='GEN - 2nd LO';
-end
+% vec2LO = [genvec2LO shamvec2LO penvec2LO] ;
+vec2LO = [shamvec2LO penvec2LO] ;
+% 
+% str4=strings(1,length(genvec2LO));
+% for ii=1:length(genvec2LO)
+%     str4(ii)='GEN - 2nd LO';
+% end
 
 str5=strings(1,length(shamvec2LO));
 for ii=1:length(shamvec2LO)
@@ -423,16 +443,21 @@ for ii=1:length(penvec2LO)
 end
 
 % creating a list of group labels corresponding to the data (mat1LO)
-first_vs_second_vs_third3=[str4 str5 str6];
+% first_vs_second_vs_third3=[str4 str5 str6];
+first_vs_second_vs_third3=[ str5 str6];
 
 %Kruskal-wallis between 1LO cohorts 
-kwtitle = {'between Cohorts 2nd LO' }; 
-run_stats_tests_scuffed(vec2LO, first_vs_second_vs_third3, kwtitle); 
+% kwtitle = {'between Cohorts 2nd LO' }; 
+% run_stats_tests_scuffed(vec2LO, first_vs_second_vs_third3, kwtitle); 
+figure
+violinplot(vec2LO, first_vs_second_vs_third3); 
+title('Violin Plot cohorts 2LO')
+ylabel('normalized magnitude')
 
 % 1LO Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
-MWp7 = ranksum(genvec2LO, shamvec2LO); % pairing GEN vs. SHAM L+US 
+% MWp7 = ranksum(genvec2LO, shamvec2LO); % pairing GEN vs. SHAM L+US 
 MWp8 = ranksum(penvec2LO,shamvec2LO); % pairing PEN vs. SHAM L+US 
-MWp9 = ranksum(penvec2LO, genvec2LO);  % pairing PEN vs. GEN L+US 
+% MWp9 = ranksum(penvec2LO, genvec2LO);  % pairing PEN vs. GEN L+US 
 
 %% Mann Whitney key 
 

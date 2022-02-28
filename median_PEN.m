@@ -31,7 +31,8 @@ folder = fullfile(MainDirectory,str{f});
 
 %Change what is in the string depending on which file\files you want to run
 file_list = dir([folder 'TRIAL*.mat']);
-baseline = dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline = dir([folder 'nb.mat']); % or baseline 1 or baseline 2 depending on trials 
+% baseline = dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 set_channels=[1 2 3 4 5]; 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; 
@@ -121,8 +122,10 @@ end
 %     PEN_MATRIX(f, :) = [PENY] ;
 %     plot(1:4, PENY, 'o-', 'DisplayName','PEN DATA')
 %     title('PEN DATA') 
+%     
 
 %% for plotting each experiment data normalized its median of 1st LO 
+% this was to try and create a matrix for our pen data, but differing lengths made this difficult--used string array instead 
 
 % for ii = 1:3 
 %     concat=['Trial_' num2str(ii)];
@@ -214,6 +217,7 @@ elseif f == 7
     PEN_MATRIX{20} = [for_stats_analysis.Trial_2] ;
     PEN_MATRIX{21} = [for_stats_analysis.Trial_3] ;
 end 
+ACTUAL_PEN_MATRIX_(f, :) = [PENY] ;
 end 
 
 %                 m1           m2              m3            m4               m5             m6               m7 
