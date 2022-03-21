@@ -4,8 +4,7 @@
 
 
 %% reading cohort files 
-
-file1={'06-24-21 RECUT session 2 m2\', '8_10_21 m1\', '8_10_21 m2 session 1\', '06-23-21 RECUT 2.0 session 1 m1\','8_12_21 m1\','8_12_21 m2\', '8_13_21\' };
+file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
@@ -13,12 +12,13 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 button = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
+button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
+
 
 %% creating PEN Matrix to store medians or variance 
 
 % PEN_MATRIX = zeros(7,4);
-
 figure 
 hold on
 
@@ -27,7 +27,6 @@ counter = 0 ;
 for f=1:length(str) 
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
-
 
 %Change what is in the string depending on which file\files you want to run
 file_list = dir([folder 'TRIAL*.mat']);
@@ -67,6 +66,18 @@ end
 if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21\"
 V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
 end 
+
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 PEN\"
+    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+end 
+
+if folder =="C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\03-02-22 PEN\" 
+    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+end     
+
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\"
+    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+end  
 
 %% calculate pre-stim RMS for normalization
 
@@ -109,18 +120,40 @@ if button == 2
     PEN_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
 end 
 
-if button2 == 1 
-    % minus first light median/variance
-    PENY = [rms_baseline, PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
-else
-    % medianL+US and median2LO NOT - median of 1LO
-    PENY = [rms_baseline, PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
-end
-
+if button3 == 1 
+    if button2 == 1 
+        % minus first light median/variance
+        PENY = [rms_baseline, PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
+    else
+        % medianL+US and median2LO NOT - median of 1LO
+        PENY = [rms_baseline, PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
+    end
+elseif button3 == 2 
+    if button2 == 1 
+        % minus first light median/variance
+        PENY = [PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
+    else
+        % medianL+US and median2LO NOT - median of 1LO
+        PENY = [PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
+    end
+end     
 %% filling matrix 
 %     
-%     PEN_MATRIX(f, :) = [PENY] ;
+    PEN_MATRIX(f, :) = [PENY] ;
 %     plot(1:4, PENY, 'o-', 'DisplayName','PEN DATA')
+%% plotting 
+fileorder = {'one' 'two' 'three' 'four' 'five' 'six' 'seven'};
+pen.(char(fileorder(f)))= [];
+if button3 == 1 
+    pen.(char(fileorder(f)))= plot(1:4, PENY, 'o-') ;
+else 
+    pen.(char(fileorder(f)))= plot(1:3, PENY, 'o-') ;
+end
+title('PEN DATA')
+       % title(file_list(z).name,'interpreter','none');
+% 
+% plot(1:4, PENY, 'o-', 'DisplayName',str{f})
+
 %     title('PEN DATA') 
 %     
 
@@ -188,42 +221,44 @@ end
 % end
 % counter = counter + 1 ;
 
-if f == 1 
-    PEN_MATRIX{1} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{2} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{3} = [for_stats_analysis.Trial_3] ;
-elseif f == 2 
-    PEN_MATRIX{4} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{5} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{6} = [for_stats_analysis.Trial_3] ; 
-elseif f == 3 
-    PEN_MATRIX{7} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{8} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{9} = [for_stats_analysis.Trial_3] ;
-elseif f == 4 
-    PEN_MATRIX{10} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{11} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{12} = [for_stats_analysis.Trial_3] ;
-elseif f == 5 
-    PEN_MATRIX{13} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{14} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{15} = [for_stats_analysis.Trial_3] ;
-elseif f == 6
-    PEN_MATRIX{16} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{17} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{18} = [for_stats_analysis.Trial_3] ;
-elseif f == 7
-    PEN_MATRIX{19} = [for_stats_analysis.Trial_1] ;
-    PEN_MATRIX{20} = [for_stats_analysis.Trial_2] ;
-    PEN_MATRIX{21} = [for_stats_analysis.Trial_3] ;
-end 
+% if f == 1 
+%     PEN_MATRIX{1} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{2} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{3} = [for_stats_analysis.Trial_3] ;
+% elseif f == 2 
+%     PEN_MATRIX{4} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{5} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{6} = [for_stats_analysis.Trial_3] ; 
+% elseif f == 3 
+%     PEN_MATRIX{7} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{8} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{9} = [for_stats_analysis.Trial_3] ;
+% elseif f == 4 
+%     PEN_MATRIX{10} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{11} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{12} = [for_stats_analysis.Trial_3] ;
+% elseif f == 5 
+%     PEN_MATRIX{13} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{14} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{15} = [for_stats_analysis.Trial_3] ;
+% elseif f == 6
+%     PEN_MATRIX{16} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{17} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{18} = [for_stats_analysis.Trial_3] ;
+% elseif f == 7
+%     PEN_MATRIX{19} = [for_stats_analysis.Trial_1] ;
+%     PEN_MATRIX{20} = [for_stats_analysis.Trial_2] ;
+%     PEN_MATRIX{21} = [for_stats_analysis.Trial_3] ;
+% end 
 ACTUAL_PEN_MATRIX_(f, :) = [PENY] ;
-end 
 
+% legend([pen.one pen.two pen.three pen.four pen.five],{'SHAM data','GEN data', 'PEN data'})
+end 
+legend([pen.one pen.two pen.three pen.four pen.five pen.six pen.seven],file1)
 %                 m1           m2              m3            m4               m5             m6               m7 
-PEN{1} = {PEN_MATRIX{1}; PEN_MATRIX{4}; PEN_MATRIX{7}; PEN_MATRIX{10}; PEN_MATRIX{13}; PEN_MATRIX{16}; PEN_MATRIX{19}} ; % 1LO 
-PEN{2} = {PEN_MATRIX{2}; PEN_MATRIX{5}; PEN_MATRIX{8}; PEN_MATRIX{11}; PEN_MATRIX{14}; PEN_MATRIX{17}; PEN_MATRIX{20}} ; % L+US 
-PEN{3} = {PEN_MATRIX{3}; PEN_MATRIX{6}; PEN_MATRIX{9}; PEN_MATRIX{12}; PEN_MATRIX{15}; PEN_MATRIX{18}; PEN_MATRIX{21}} ; % 2LO 
+% PEN{1} = {PEN_MATRIX{1}; PEN_MATRIX{4}; PEN_MATRIX{7}; PEN_MATRIX{10}; PEN_MATRIX{13}; PEN_MATRIX{16}; PEN_MATRIX{19}} ; % 1LO 
+% PEN{2} = {PEN_MATRIX{2}; PEN_MATRIX{5}; PEN_MATRIX{8}; PEN_MATRIX{11}; PEN_MATRIX{14}; PEN_MATRIX{17}; PEN_MATRIX{20}} ; % L+US 
+% PEN{3} = {PEN_MATRIX{3}; PEN_MATRIX{6}; PEN_MATRIX{9}; PEN_MATRIX{12}; PEN_MATRIX{15}; PEN_MATRIX{18}; PEN_MATRIX{21}} ; % 2LO 
 % how to call cell in cell array 
 % PEN{1}(1,1) 
 

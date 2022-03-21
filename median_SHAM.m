@@ -14,6 +14,7 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 
 button = input("Create SHAM matrix of median values or variance? '1'=medians, '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
+button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 %% creating SHAM Matrix to store medians or variance 
@@ -106,18 +107,31 @@ if button == 2
     SHAM_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
 end 
 
-if button2 == 1 
-    % minus first light median/variance
-    SHAMY = [rms_baseline, SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
-else
-    % medianL+US and median2LO NOT - median of 1LO
-    SHAMY = [rms_baseline, SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
-end
-
+if button3 == 1
+    if button2 == 1 
+        % minus first light median/variance
+        SHAMY = [rms_baseline, SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
+    else
+        % medianL+US and median2LO NOT - median of 1LO
+        SHAMY = [rms_baseline, SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
+    end
+elseif button3 == 2
+    if button2 == 1 
+        % minus first light median/variance
+        SHAMY = [SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
+    else
+        % medianL+US and median2LO NOT - median of 1LO
+        SHAMY = [SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
+    end
+end 
 %% filling matrix 
 %     SHAM_MATRIX(f, :) = [SHAMY] ;
+if button3 == 1 
     plot(1:4, SHAMY, 'o-', 'DisplayName','SHAM DATA')
-    title('SHAM DATA') 
+elseif button3 == 2 
+    plot(1:3, SHAMY, 'o-', 'DisplayName','SHAM DATA')
+end 
+title('SHAM DATA') 
 
 %% for plotting each experiment data normalized its median of 1st LO 
 
