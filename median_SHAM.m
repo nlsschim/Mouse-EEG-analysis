@@ -1,8 +1,9 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 %This code is for the Sham cohort to run through the data and get the
 %median values 
- 
-
+close all
+clear all
+clc
 %% reading cohort files 
 
 file1={'2_15_22\','2_24_22\','2_25_22\','06_30_20 MOUSE 1 RECUT\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\','05-29-2020 Mouse Experiment\'};

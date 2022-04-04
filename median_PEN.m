@@ -1,8 +1,9 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 %This code is for the PEN cohort to run through the data and get the
 %median values 
-
-
+close all
+clear all
+clc
 %% reading cohort files 
 file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\'};
 str=string(file1);
@@ -39,7 +40,7 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 
 %% channel configuration 
 
-if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1 m1\"
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\"
 V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end
 
@@ -51,7 +52,7 @@ if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\"
 V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end 
 
-if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2 session 1\"
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\"
 V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end 
 
@@ -255,6 +256,8 @@ ACTUAL_PEN_MATRIX_(f, :) = [PENY] ;
 % legend([pen.one pen.two pen.three pen.four pen.five],{'SHAM data','GEN data', 'PEN data'})
 end 
 legend([pen.one pen.two pen.three pen.four pen.five pen.six pen.seven],file1)
+trialtype = {'baseline' '' '1LO' '' 'L+US' '' '2LO'};
+xticklabels(trialtype) ;
 %                 m1           m2              m3            m4               m5             m6               m7 
 % PEN{1} = {PEN_MATRIX{1}; PEN_MATRIX{4}; PEN_MATRIX{7}; PEN_MATRIX{10}; PEN_MATRIX{13}; PEN_MATRIX{16}; PEN_MATRIX{19}} ; % 1LO 
 % PEN{2} = {PEN_MATRIX{2}; PEN_MATRIX{5}; PEN_MATRIX{8}; PEN_MATRIX{11}; PEN_MATRIX{14}; PEN_MATRIX{17}; PEN_MATRIX{20}} ; % L+US 

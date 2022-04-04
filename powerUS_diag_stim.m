@@ -1,7 +1,6 @@
 %% Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 %this code is meant to set the index_stim equal to 60 so that we can
 %standardize the length to calculate reliable p values 
-% antiquated 
 
 fs=tickrate(1);
 time1=1:dataend(1);
@@ -69,27 +68,13 @@ end
 % prevents errors based on discrepency between V1Ldata and
 % lightstimdata length
 
-% for i=1:4
-%     try 
-%         for j =2:(length(index_stim)-2) 
-%             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%         end
-%     catch 
-%         warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-3)') 
-%         for j =2:(length(index_stim)-3) 
-%             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%         end
-%     end 
-% end 
-
-% minusing less events because everything is cut properly? 
 for i=1:4
     try 
         for j =2:(length(index_stim)-1) 
             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
         end
     catch 
-        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
+        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-1)') 
         for j =2:(length(index_stim)-2) 
             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
         end
@@ -112,8 +97,7 @@ maxidxarray=zeros(length(foranalysis),1);
 RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
 
-%%
-%collect all of the individual points of data
+%% Waterfall amtrix and collecting all of the individual points of data
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
 
@@ -145,13 +129,53 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
 % normalize the data using the baseline RMS
-if normal == 2 
+% if normal == 2 
     matrix=matrix/rms_baseline;
-elseif normal == 1
-    med_1LO = median(fakefor_stats_analysis.Trial_1);
-    matrix=matrix/med_1LO;
-end 
+% elseif normal == 1
+%     med_1LO = median(fakefor_stats_analysis.Trial_1);
+%     matrix=matrix/med_1LO;
+% end
 
+%% plotting
+
+figure
+%imagesc plot
+% subplot(2,3,z);
+imagesc(matrix')
+ylim=[0 0.3];
+colorbar
+caxis manual
+
+% naming waterfall plots based on 'z'
+names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+title(names(z)) % z = 1:4 trials in loopy
+
+% setting waterfall axes 
+ylim=[0 0.3];
+ylabel('Stimulus event #'); 
+ticks = 0:5:60 ; 
+yticks(ticks) ; 
+xlabel('Time after stimulus (s)') 
+    
+colorbar
+
+%% for power 
+figure
+pmatrix = matrix'.^2 ;
+[rownum,colnum]=size(pmatrix);
+for i = 1:rownum 
+    plot(pmatrix(i,:)) 
+    hold on 
+end 
+title(names(z),' events')
+xlabel("seconds after stim") 
+ylabel("power")
+hold off 
+
+% smatrix = [ 1 5 9 ; 2 6 10 ; 3 7 11  ;4 8 12] ; 
+% for i = 1:3 
+%     plot(1:3, smatrix') 
+% end 
 %% calculate z-scores
 % [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
 
@@ -165,8 +189,10 @@ for_stats=reshape(matrix,1,S); % turns 10x60 matrix into 1 by 600 vector
 conc=['Trial_' num2str(z)];
 for_stats_analysis.(conc)=for_stats;
 
+
 %% additional hardcoded filtering 
-% removes outlier data points 4 standard deviations from mean 
+% removes outlier data points 4 standard deviations from mean -- does this
+% happen too late after visualization?
 
 deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));
