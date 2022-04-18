@@ -19,8 +19,8 @@ clear all
 % alldata.lightstimdata=data(datastart(5):dataend(5));
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\';
 
-% folder ='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
-folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-20 MOUSE 1 RECUT\' ;
+% % folder ='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-20 MOUSE 1 RECUT\' ;
 
 % folder= '4C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 2\'; 
 
@@ -84,15 +84,15 @@ folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-20 MOUSE 1 R
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m2\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21\' ; 
-
+folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\';
 %% 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'nb.mat']); % or baseline 1 or baseline 2 depending on trials 
 
-set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
+% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16/19 data
-% set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
+set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
@@ -102,7 +102,7 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %% automation 
 
 time_series = input('time series(3 or 10)?');
-brain_wave = input("'3-100' = 1, low gamma = '2', beta = '3', alpha ='4', theta = '5', : ");
+brain_wave = input("'3-100' = 1, '5-55' = '2', low gamma = '3', beta = '4', alpha ='5', theta = '6', : ");
 outliersyn = input("run outliers analysis? '1'= yes, '2' = no: ") ;
 
 %% this names the channels based on where they were placed, make sure they match lab chart

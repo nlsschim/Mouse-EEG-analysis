@@ -3,15 +3,18 @@
 %   stim event (1-60) for the PEN US cohort 
 % (2) This code also produces waterfall plots that differ from super_US Diag
 %   stim in that magnitude scale is the same for all figures (not sure why)
-% (3) more lightstim events are retained, and 
+% (3) more lightstim events are retained, and plotted
 % (4) data is subject to more strict hardcoded filtering to omit electrical noise recorded in eCoG -- see line 193 of powerUS_diag_stim 
- 
+% additional instructions: event quantification can be ran for multiple
+% mice; for power/rms plots, change f to desired mouse index in file1 
+
 close all 
 clear all
 clc 
 
 %% reading cohort files 
 file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\'};
+% file1={'8_10_21 m1\', '8_10_21 m2\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
@@ -22,17 +25,28 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 % button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 % normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
-
-%% creating PEN Matrix to store medians or variance 
-
-% PEN_MATRIX = zeros(7,4);
-figure 
-hold on
-
+%% quantifying ERP: event-related potential/brain response to stim - intialization 
+% by cohort 
+% eventresponsecounter.MouseXTrialX = [totaleventcount ERPcount responserate] 
+    for mousenumber = 1:7 
+        for trialnumber = 1:4 % trial 2 will be [0 0 0] (refractory) 
+            eventconcat=['Mouse' num2str(mousenumber) 'Trial' num2str(trialnumber)];   
+            eventresponsecounter.(eventconcat)= [0 0 0] ;
+        end 
+    end 
+    eventresponsecounter.totalevents = 0;
+    eventresponsecounter.totalERP = 0;
+    eventresponsecounter.total1LOevents = 0;
+    eventresponsecounter.total1LOERP = 0;
+    eventresponsecounter.totalLUSevents = 0;
+    eventresponsecounter.totalLUSERP = 0;
+    eventresponsecounter.total2LOevents = 0;
+    eventresponsecounter.total2LOERP = 0;
 %% Reading experiment dates 
-counter = 0 ;
-% for f=1:length(str) 
-for f=6
+
+% micerancounter = 0 ; % mice ran counter
+for f=1:length(str) 
+% for f=1:3
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 
@@ -107,38 +121,89 @@ for z=1:4
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
-
+    
 % quantifying ERP: event-related potential/brain response to stim 
+% by mouse 
+
     ERPcount = 0;
-    totaleventcount = 0;
-    
+    totaleventcount = 0;    
     powerUS_diag_stim2;
-    
-    if z ==1 
-        ERPcount_1LO = ERPcount ;
-        totaleventcount_1LO = totaleventcount ;
-    elseif z==3 
-        ERPcount_LUS = ERPcount ;   
-        totaleventcount_LUS = totaleventcount ;
-    elseif z==4
-        ERPcount_2LO = ERPcount ;
-        totaleventcount_2LO = totaleventcount ;
-    end 
+%     micerancounter = micerancounter + 1;
+
+%     if z ==1 
+%         ERPcount_1LO = ERPcount ;
+%         totaleventcount_1LO = totaleventcount ;
+%     elseif z==3 
+%         ERPcount_LUS = ERPcount ;   
+%         totaleventcount_LUS = totaleventcount ;
+%     elseif z==4
+%         ERPcount_2LO = ERPcount ;
+%         totaleventcount_2LO = totaleventcount ;
+%     end 
+
+% if z == 4
+%     fileorder = {'one' 'two' 'three' 'four' 'five' 'six' 'seven'};
+%     pen.(char(fileorder(f)))= [];
+%     concat3 = ['Mouse' num2str(f) 'Trial1'];concat4 = ['Mouse' num2str(f) 'Trial3'];concat5 = ['Mouse' num2str(f) 'Trial4'];
+%     firstlightLUSsecondlight = [eventresponsecounter.(concat3)(1,3) eventresponsecounter.(concat4)(1,3) eventresponsecounter.(concat5)(1,3)];
+% %     pen.(char(fileorder(f)))= plot(firstlightLUSsecondlight, 'o-') ;
+%     if f == 1 
+%         q1 = plot(1:3, firstlightLUSsecondlight, 'o-') ;
+%     elseif f == 2 
+%         q2 = plot(1:3, firstlightLUSsecondlight, 'o-') ;
+%     end 
+% end 
+
+
+
 end
 
-%% display quantification results 
-% 1LO 
-responserate_1LO = (ERPcount_1LO/totaleventcount_1LO)*100 
-% L+US 
-responserate_LUS = (ERPcount_LUS/totaleventcount_LUS)*100 
-% 2LO 
-responserate_2LO = (ERPcount_2LO/totaleventcount_2LO)*100 
-% ERPcount 
-% totaleventcount
-% event_response_rate = (ERPcount/totaleventcount)*100
-% % print('Total response rate was:' + event_response_rate)
+%% display quantification results (mouse)
+% % per mouse 
+% % 1LO 
+% responserate_1LO = (ERPcount_1LO/totaleventcount_1LO)*100 
+% % L+US 
+% responserate_LUS = (ERPcount_LUS/totaleventcount_LUS)*100 
+% % 2LO 
+% responserate_2LO = (ERPcount_2LO/totaleventcount_2LO)*100 
+% % ERPcount 
+% % totaleventcount
+% % event_response_rate = (ERPcount/totaleventcount)*100
+% % % print('Total response rate was:' + event_response_rate)
 
 %% to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
-end 
+    
+%   plotting 
+    figure(2)
+    concat3 = ['Mouse' num2str(f) 'Trial1'];concat4 = ['Mouse' num2str(f) 'Trial3'];concat5 = ['Mouse' num2str(f) 'Trial4'];
+    firstlightLUSsecondlight = [eventresponsecounter.(concat3)(1,3) eventresponsecounter.(concat4)(1,3) eventresponsecounter.(concat5)(1,3)];
+    PENresponse_matrix(f, :) = [firstlightLUSsecondlight] ;
+    fileorder = {'one' 'two' 'three' 'four' 'five' 'six' 'seven'};
+    pen.(char(fileorder(f)))= [0 0 0];
+    pen.(char(fileorder(f)))= plot(1:3, PENresponse_matrix(f,:), 'o-') ;
+    hold on 
+    
+end
+
+%% display quantification results (mice)
+
+cohortavgresponserate = (eventresponsecounter.totalERP/eventresponsecounter.totalevents)*100 ; 
+pencohortavg1LOresponserate = (eventresponsecounter.total1LOERP/eventresponsecounter.total1LOevents)*100 ; 
+pencohortavgLUSresponserate = (eventresponsecounter.totalLUSERP/eventresponsecounter.totalLUSevents)*100 ; 
+pencohortavg2LOresponserate = (eventresponsecounter.total2LOERP/eventresponsecounter.total2LOevents)*100 ; 
+   
+% message = ['For the mice ran, the average response rate was: ' num2str(cohortavgresponserate) '%' newline 'The average 1st Light Only response rate was: ' num2str(cohortavg1LOresponserate) '%' newline 'The average Light+Ultrasound response rate was: ' num2str(cohortavgLUSresponserate) '%' newline 'The average 2nd Light Only response rate was: ' num2str(cohortavg2LOresponserate) '%' ];
+message = ['For the mice ran,' newline 'the average 1st Light Only response rate was: ' num2str(pencohortavg1LOresponserate) '%' newline 'The average Light+Ultrasound response rate was: ' num2str(pencohortavgLUSresponserate) '%' newline 'The average 2nd Light Only response rate was: ' num2str(pencohortavg2LOresponserate) '%' ];
+disp(message)
+
+% plotting 
+title('PEN Cohort Response Rates vs. Trial Type')
+ylabel('Response rate (%)') 
+legend([pen.one pen.two pen.three pen.four pen.five pen.six pen.seven],file1)
+trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
+xticklabels(trialtype) ;
+
+penran = 1;
+sham_power

@@ -7,8 +7,9 @@ time=time1/fs/60;
 
 %% change the bandpass for filtering pls
 
-bandpasses = [3, 100; 30, 59; 12, 29; 4, 7; 8, 11] ; 
+bandpasses = [3, 100; 5, 55; 30, 59; 12, 29; 4, 7; 8, 11] ; 
     [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
+% [bb,aa]=butter(2,[5,55]/(fs/2));
 
 %Organize data into structure array
 alldata=[]; %initialize structure array
@@ -156,7 +157,8 @@ figure
 %imagesc plot
 % subplot(2,3,z);
 imagesc(matrix')
-ylim=[0 0.3];
+ylim=[0 0.5];
+% ylim=[0 0.3];
 colorbar
 caxis manual
 

@@ -1,14 +1,20 @@
 %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
-%This code is designed to plot the power of the 9 rms values for the seconds after each light
-%stim event (1-60) for the SHAM US cohort  
-close all
-clear all
-clc 
+% (1) This code is designed to plot the power of the 9 rms values for the seconds after each light
+%   stim event (1-~60) for the SHAM US cohort 
+% (2) This code also produces waterfall plots that differ from super_US Diag
+%   stim in that magnitude scale is the same for all figures (not sure why)
+% (3) more lightstim events are retained, and plotted
+% (4) data is subject to more strict hardcoded filtering to omit electrical noise recorded in eCoG -- see line 193 of powerUS_diag_stim 
+% additional instructions: event quantification can be ran for multiple
+% mice; for power/rms plots, change f to desired mouse index in file1 
+ 
+% close all
+% clear all
+% clc 
 
 %% reading cohort files 
 
 file1={'2_15_22\','2_24_22\','2_25_22\','06_30_20 MOUSE 1 RECUT\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\','05-29-2020 Mouse Experiment\'};
-% file1={'2_15_22\','2_24_22\','2_25_22\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 
@@ -19,6 +25,23 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 % button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 % normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
+%% quantifying ERP: event-related potential/brain response to stim - intialization 
+% by cohort 
+% eventresponsecounter.MouseXTrialX = [totaleventcount ERPcount responserate] 
+    for mousenumber = 1:7 
+        for trialnumber = 1:4 % trial 2 will be [0 0 0] (refractory) 
+            eventconcat=['Mouse' num2str(mousenumber) 'Trial' num2str(trialnumber)];   
+            eventresponsecounter.(eventconcat)= [0 0 0] ;
+        end 
+    end 
+    eventresponsecounter.totalevents = 0;
+    eventresponsecounter.totalERP = 0;
+    eventresponsecounter.total1LOevents = 0;
+    eventresponsecounter.total1LOERP = 0;
+    eventresponsecounter.totalLUSevents = 0;
+    eventresponsecounter.totalLUSERP = 0;
+    eventresponsecounter.total2LOevents = 0;
+    eventresponsecounter.total2LOERP = 0;
 %% creating SHAM Matrix to store medians or variance 
 
 % SHAM_MATRIX = zeros(7,4);
@@ -27,8 +50,8 @@ hold on
 
 %% Reading experiment dates 
 
-% for f=1:length(str)
-for f=7
+for f=1:length(str)
+% for f=1:2
     folder = fullfile(MainDirectory,str{f});
     % dir ('folder');
 
@@ -78,21 +101,86 @@ for f=7
     for_stats_new = [];
     for_stats_analysis=[];
     %insert thresholding here
-
-    for z=1:4
-    %      if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
-    %      if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
-         if isequal(file_list(z).name,"Trial 2.mat"), continue, end %for 12-23
-     if isequal(file_list(z).name,"Trial 6.mat"), continue, end 
-    %     counter = counter + 1 ; 
-        disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
-        disp(file_list(z).name);%displays the name of the file in the terminal
-        load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
-        powerUS_diag_stim;
-    end
-        
     
-        % % to rename trials and skip 2 
+%% running through each trial type for a given mouse
+
+for z=1:4
+     if isequal(file_list(z).name,"Trial 2.mat"), continue, end %for 12-23
+     if isequal(file_list(z).name,"Trial 6.mat"), continue, end %for 12-23
+    disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
+    disp(file_list(z).name);%displays the name of the file in the terminal
+    load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
+    ERPcount = 0;
+    totaleventcount = 0;    
+    powerUS_diag_stim2;
+
+end
+
+%% to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
+    
+    % plotting 
+    figure(3)
+    concat3 = ['Mouse' num2str(f) 'Trial1'];concat4 = ['Mouse' num2str(f) 'Trial3'];concat5 = ['Mouse' num2str(f) 'Trial4'];
+    firstlightLUSsecondlight = [eventresponsecounter.(concat3)(1,3) eventresponsecounter.(concat4)(1,3) eventresponsecounter.(concat5)(1,3)];
+    SHAMresponse_matrix(f, :) = [firstlightLUSsecondlight] ;
+    fileorder = {'one' 'two' 'three' 'four' 'five' 'six' 'seven'};
+    sham.(char(fileorder(f)))= [0 0 0];
+    sham.(char(fileorder(f)))= plot(1:3, SHAMresponse_matrix(f,:), 'o-') ;
+    hold on 
+    
+end 
+
+%% display quantification results (mice)
+
+cohortavgresponserate = (eventresponsecounter.totalERP/eventresponsecounter.totalevents)*100 ; 
+shamcohortavg1LOresponserate = (eventresponsecounter.total1LOERP/eventresponsecounter.total1LOevents)*100 ; 
+shamcohortavgLUSresponserate = (eventresponsecounter.totalLUSERP/eventresponsecounter.totalLUSevents)*100 ; 
+shamcohortavg2LOresponserate = (eventresponsecounter.total2LOERP/eventresponsecounter.total2LOevents)*100 ;
+   
+% message = ['For the mice ran, the average response rate was: ' num2str(cohortavgresponserate) '%' newline 'The average 1st Light Only response rate was: ' num2str(cohortavg1LOresponserate) '%' newline 'The average Light+Ultrasound response rate was: ' num2str(cohortavgLUSresponserate) '%' newline 'The average 2nd Light Only response rate was: ' num2str(cohortavg2LOresponserate) '%' ];
+message = ['For the mice ran,' newline 'the average 1st Light Only response rate was: ' num2str(shamcohortavg1LOresponserate) '%' newline 'The average Light+Ultrasound response rate was: ' num2str(shamcohortavgLUSresponserate) '%' newline 'The average 2nd Light Only response rate was: ' num2str(shamcohortavg2LOresponserate) '%' ];
+disp(message)
+
+
+% plotting 
+title('SHAM Cohort Response Rates vs. Trial Type')
+ylabel('Response rate (%)') 
+legend([sham.one sham.two sham.three sham.four sham.five sham.six sham.seven],file1)
+trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
+xticklabels(trialtype) ;
+
+% pen and sham plotting 
+try 
+    if  penran ==1 
+
+        peny = [pencohortavg1LOresponserate pencohortavgLUSresponserate pencohortavg2LOresponserate];
+        shamy = [shamcohortavg1LOresponserate shamcohortavgLUSresponserate shamcohortavg2LOresponserate];
+        stderror = zeros(2,3) ;
+        for ii = 1:3 
+            stderror(1, ii) = std(PENresponse_matrix(:,ii))/sqrt(length(PENresponse_matrix(:,ii))) ;
+        end 
+        for ii = 1:3 
+            stderror(2, ii) = std(SHAMresponse_matrix(:,ii))/sqrt(length(SHAMresponse_matrix(:,ii))) ;
+        end
+        % stderror matrix = [pen1LO, LUS, 2LO;
+                    %        sham1LO, LUS, 2LO] 
+        figure(4)
+        q1 = errorbar(1:3, peny, stderror(1,:), 'o-r', 'DisplayName', 'pen avg response rates') ;
+        hold on 
+        q2 = errorbar(1:3, shamy, stderror(2,:), 'o-b', 'DisplayName', 'sham avg response rates') ;
+        title('Cohort Response Rates vs. Trial Type')
+        ylabel('Response rate (%)') 
+        trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
+        xticklabels(trialtype) ;
+        legend([q1 q2], {'PEN', 'SHAM'}) 
+
+        % MW analysis - x and y = datasets to be compared 
+       MWLO1 = ranksum(PENresponse_matrix(:,1), SHAMresponse_matrix(:,1))
+       MWLUS = ranksum(PENresponse_matrix(:,2), SHAMresponse_matrix(:,2))
+       MW2LO = ranksum(PENresponse_matrix(:,3), SHAMresponse_matrix(:,3))
+    end 
+catch 
+    disp('SHAM data only ran') 
 end 
