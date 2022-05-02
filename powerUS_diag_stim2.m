@@ -4,6 +4,9 @@
 % compared to powerUS_diag_stim, this scipt:
 % (1) has hardcoded electrical noise-targeted filtering before plotting AND statistical analysis (powerUS_diag_stim had it after plotting waterfalls)
 % (2) has a method for quantificaition of brain responses to light stim per trial type 
+% HOWEVER, as of 5/2/22 it was suspected that this hardcoded filtering
+% messes up the timeseries for data and events -- using powerUS_diag_stim
+% for now
 
 
 fs=tickrate(1);
@@ -231,26 +234,26 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
        
 %% plotting
 
-% figure
-% %imagesc plot
-% % subplot(2,3,z);
-% imagesc(matrix')
-% ylim=[0 0.3];
-% colorbar
-% caxis manual
+figure
+%imagesc plot
+% subplot(2,3,z);
+ylim=[0 0.6];
+imagesc(matrix',ylim)
+colorbar
+caxis manual
 
-% % naming waterfall plots based on 'z'
-% names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
-% title(names(z)) % z = 1:4 trials in loopy
-% 
-% % setting waterfall axes 
+% naming waterfall plots based on 'z'
+names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+title(names(z)) % z = 1:4 trials in loopy
+
+% setting waterfall axes 
 % ylim=[0 0.3];
-% ylabel('Stimulus event #'); 
-% ticks = 0:5:60 ; 
-% yticks(ticks) ; 
-% xlabel('Time after stimulus (s)') 
-%     
-% colorbar
+ylabel('Stimulus event #'); 
+ticks = 0:5:60 ; 
+yticks(ticks) ; 
+xlabel('Time after stimulus (s)') 
+    
+colorbar
 
 %% for power 
 % figure

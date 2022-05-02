@@ -51,7 +51,7 @@ hold on
 %% Reading experiment dates 
 
 for f=1:length(str)
-% for f=1:2
+% for f=7
     folder = fullfile(MainDirectory,str{f});
     % dir ('folder');
 
@@ -111,8 +111,11 @@ for z=1:4
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
     ERPcount = 0;
-    totaleventcount = 0;    
-    powerUS_diag_stim2;
+    totaleventcount = 0;  
+    % hardcoded filtering before plots that messes up timeseries (best for median analysis?) 
+%     powerUS_diag_stim2;
+    % no hardcoded filtering that removes data values, just 5-55Hz bandpass
+    powerUS_diag_stim;
 
 end
 
@@ -129,7 +132,7 @@ end
     sham.(char(fileorder(f)))= [0 0 0];
     sham.(char(fileorder(f)))= plot(1:3, SHAMresponse_matrix(f,:), 'o-') ;
     hold on 
-    
+%     
 end 
 
 %% display quantification results (mice)

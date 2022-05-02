@@ -9,7 +9,7 @@ time=time1/fs/60;
 %% change the bandpass for filtering pls
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-[bb,aa]=butter(2,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
+[bb,aa]=butter(2,[5,55]/(fs/2)); %trying to get the us noise out, 3 to 200
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
@@ -136,46 +136,43 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 %     matrix=matrix/med_1LO;
 % end
 
+
 %% plotting
 
-figure
-%imagesc plot
-% subplot(2,3,z);
-imagesc(matrix')
-ylim=[0 0.3];
-colorbar
-caxis manual
-
-% naming waterfall plots based on 'z'
-names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
-title(names(z)) % z = 1:4 trials in loopy
-
-% setting waterfall axes 
-ylim=[0 0.3];
-ylabel('Stimulus event #'); 
-ticks = 0:5:60 ; 
-yticks(ticks) ; 
-xlabel('Time after stimulus (s)') 
-    
-colorbar
+% figure
+% %imagesc plot
+% % subplot(2,3,z);
+% ylim=[0 0.7];
+% imagesc(matrix', ylim)
+% colorbar
+% caxis manual
+% 
+% % naming waterfall plots based on 'z'
+% names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+% title(names(z)) % z = 1:4 trials in loopy
+% 
+% % setting waterfall axes 
+% % ylim=[0 0.3];
+% ylabel('Stimulus event #'); 
+% ticks = 0:5:60 ; 
+% yticks(ticks) ; 
+% xlabel('Time after stimulus (s)') 
+%     
+% colorbar
 
 %% for power 
-figure
-pmatrix = matrix'.^2 ;
-[rownum,colnum]=size(pmatrix);
-for i = 1:rownum 
-    plot(pmatrix(i,:)) 
-    hold on 
-end 
-title(names(z),' events')
-xlabel("seconds after stim") 
-ylabel("power")
-hold off 
-
-% smatrix = [ 1 5 9 ; 2 6 10 ; 3 7 11  ;4 8 12] ; 
-% for i = 1:3 
-%     plot(1:3, smatrix') 
+% figure
+% pmatrix = matrix'.^2 ;
+% [rownum,colnum]=size(pmatrix);
+% for i = 1:rownum 
+%     plot(pmatrix(i,:)) 
+%     hold on 
 % end 
+% title(names(z),' events')
+% xlabel("seconds after stim") 
+% ylabel("power")
+% hold off 
+
 %% calculate z-scores
 % [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
 
@@ -189,10 +186,78 @@ for_stats=reshape(matrix,1,S); % turns 10x60 matrix into 1 by 600 vector
 conc=['Trial_' num2str(z)];
 for_stats_analysis.(conc)=for_stats;
 
+%% finding total number of events per trial 
+        
+        forstatslength = length(for_stats_analysis.(conc)); 
+        eventtotal = floor((forstatslength/10)) ; % round down 
+        vector = for_stats_analysis.(conc)(1:10*eventtotal);
+        matrix = reshape(vector, 10, eventtotal) ; 
+         
+%% counting event-related potentials 
+ 
+% % first second versus last nine seconds 
+%         for eventcount = 1:eventtotal %1-56
+%              event_2nd_half_deviation = std(matrix(2:10,eventcount));
+%              event_2nd_half_median = median(matrix(2:10,eventcount));
+%              % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
+%              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+%              for eventsecond = 1 
+%                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+%                      ERPseconds = ERPseconds + 1;
+%                  end
+%              end 
+%                 % ERP: event-related potential/brain response to stim  
+%              if ERPseconds >= 1 
+%                  ERPcount = ERPcount + 1 ;
+%                  totaleventcount = totaleventcount + 1; 
+%              else
+%                  totaleventcount = totaleventcount + 1;
+%              end
+%         end
 
-%% additional hardcoded filtering 
+        for eventcount = 1:eventtotal 
+             event_2nd_half_deviation = std(matrix(3:10,eventcount));
+             event_2nd_half_median = median(matrix(3:10,eventcount));
+             % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
+             ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+             for eventsecond = 1:2 
+                 if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+                     ERPseconds = ERPseconds + 1;
+                 end
+             end 
+                % ERP: event-related potential/brain response to stim  
+             if ERPseconds >= 1 
+                 ERPcount = ERPcount + 1 ;
+                 totaleventcount = totaleventcount + 1; 
+             else
+                 totaleventcount = totaleventcount + 1;
+             end
+        end
+
+
+%% in the works to quantify ERP for all cohorts 
+        
+        % eventresponsecounter.MouseXTrialX = [totaleventcount ERPcount responserate] 
+%         if z == 1
+            eventconcat2=['Mouse' num2str(f) 'Trial' num2str(z)];   
+%             eventresponsecounter.(eventconcat2)= [] ;
+            eventresponsecounter.(eventconcat2) = [totaleventcount ERPcount (ERPcount/totaleventcount)*100] ;
+            eventresponsecounter.totalevents = eventresponsecounter.totalevents + totaleventcount;
+            eventresponsecounter.totalERP = eventresponsecounter.totalERP + ERPcount;
+            if z == 1
+                eventresponsecounter.total1LOevents = eventresponsecounter.total1LOevents + totaleventcount;
+                eventresponsecounter.total1LOERP = eventresponsecounter.total1LOERP + ERPcount;
+            elseif z == 3 
+                eventresponsecounter.totalLUSevents = eventresponsecounter.totalLUSevents + totaleventcount;
+                eventresponsecounter.totalLUSERP = eventresponsecounter.totalLUSERP + ERPcount; 
+            elseif z == 4
+                eventresponsecounter.total2LOevents = eventresponsecounter.total2LOevents + totaleventcount;
+                eventresponsecounter.total2LOERP = eventresponsecounter.total2LOERP + ERPcount;
+            end 
+       
+%% additional hardcoded filtering (for statistical analysis) 
 % removes outlier data points 4 standard deviations from mean -- does this
-% happen too late after visualization?
+% happen too late after visualization? 5/2/22 "yes" 
 
 deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));

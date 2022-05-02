@@ -10,7 +10,7 @@ time=time1/fs/60;
 %% change the bandpass for filtering pls
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-[bb,aa]=butter(2,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
+[bb,aa]=butter(2,[5,55]/(fs/2)); %trying to get the us noise out, 5-55Hz 
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta

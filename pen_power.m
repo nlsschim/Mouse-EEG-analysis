@@ -46,7 +46,7 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 % micerancounter = 0 ; % mice ran counter
 for f=1:length(str) 
-% for f=1:3
+% for f=7
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 
@@ -126,8 +126,12 @@ for z=1:4
 % by mouse 
 
     ERPcount = 0;
-    totaleventcount = 0;    
-    powerUS_diag_stim2;
+    totaleventcount = 0;  
+    % has hardcoded filtering before plots that messes up timeseries (best for median analysis?)
+%     powerUS_diag_stim2;
+    % without hardcoded filtering, only bandpass 
+    powerUS_diag_stim;
+    
 %     micerancounter = micerancounter + 1;
 
 %     if z ==1 
@@ -157,19 +161,6 @@ for z=1:4
 
 
 end
-
-%% display quantification results (mouse)
-% % per mouse 
-% % 1LO 
-% responserate_1LO = (ERPcount_1LO/totaleventcount_1LO)*100 
-% % L+US 
-% responserate_LUS = (ERPcount_LUS/totaleventcount_LUS)*100 
-% % 2LO 
-% responserate_2LO = (ERPcount_2LO/totaleventcount_2LO)*100 
-% % ERPcount 
-% % totaleventcount
-% % event_response_rate = (ERPcount/totaleventcount)*100
-% % % print('Total response rate was:' + event_response_rate)
 
 %% to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
