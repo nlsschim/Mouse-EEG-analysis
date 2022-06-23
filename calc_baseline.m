@@ -33,12 +33,15 @@ rms1=rms(baseline_data.sec_1);
 rms2=rms(baseline_data.sec_2);
 rms3=rms(baseline_data.sec_3);
 rms4=rms(baseline_data.sec_4);
-rms5=rms(baseline_data.sec_5);
+rms5=rms(baseline_data.sec_5); 
 rms6=rms(baseline_data.sec_6);
 rms7=rms(baseline_data.sec_7);
 rms8=rms(baseline_data.sec_8);
 rms9=rms(baseline_data.sec_9);
 % baseline_rms=[rms1 rms2 rms3 rms4 rms5 rms6 rms7 rms8 rms9];
+
+% 6/19/22 test 
+rms_baseline=rms(baseline);
 
 % baseline_rms.sec_1=rms(baseline_data.sec_1);
 % baseline_rms.sec_2=rms(baseline_data.sec_2);
