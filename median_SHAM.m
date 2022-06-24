@@ -7,7 +7,6 @@ clc
 %% reading cohort files 
 
 file1={'2_15_22\','2_24_22\','2_25_22\','06_30_20 MOUSE 1 RECUT\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\','05-29-2020 Mouse Experiment\'};
-% file1={'2_15_22\','2_24_22\','2_25_22\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 
@@ -15,18 +14,20 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 
 button = input("Create SHAM matrix of median values or variance? '1'=medians, '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
-button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
-normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
+% button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
+% normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 %% creating SHAM Matrix to store medians or variance 
 
 % SHAM_MATRIX = zeros(7,4);
 figure 
 hold on
+baseline_medians_matrix = [];
 
 %% Reading experiment dates 
 
 for f=1:length(str)
+    
     folder = fullfile(MainDirectory,str{f});
     % dir ('folder');
 
@@ -35,7 +36,8 @@ for f=1:length(str)
     file_list = dir([folder 'TRIAL*.mat']);
     baseline = dir([folder 'nb.mat']); % or baseline 1 or baseline 2 deSHAMding on trials 
     disp(length(baseline)) 
-    
+
+for i = 1 % channel configuration for each mouse
     if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\05-29-2020 Mouse Experiment\" 
         set_channels=[1 2 3 4 5]; 
     elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_15_22\" 
@@ -51,7 +53,6 @@ for f=1:length(str)
     end
     ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
     trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
-
     
 %% Channel configuration 
 
@@ -64,18 +65,21 @@ for f=1:length(str)
     else
         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
     end
+end
 
 %% calculate pre-stim RMS for normalization
 
     baseline_rms=[];
     disp(baseline.name);
     load([folder baseline.name])
-    calc_baseline;
+    calc_baseline60sec;
 
     % create matrix to hold data for statistical testing
     for_stats_new = [];
     for_stats_analysis=[];
     %insert thresholding here
+
+%% running through trials 1-4
 
     for z=1:4
     %      if isequal(file_list(z).name,"TRIAL2.mat"), continue, end % skips trial 2 for refactory period trial does we dont car about (yet)
@@ -90,7 +94,7 @@ for f=1:length(str)
     end
         
     
-        % % to rename trials and skip 2 
+% to rename trials and skip 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 
@@ -108,7 +112,6 @@ if button == 2
     SHAM_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
 end 
 
-if button3 == 1
     if button2 == 1 
         % minus first light median/variance
         SHAMY = [rms_baseline, SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
@@ -116,26 +119,15 @@ if button3 == 1
         % medianL+US and median2LO NOT - median of 1LO
         SHAMY = [rms_baseline, SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
     end
-elseif button3 == 2
-    if button2 == 1 
-        % minus first light median/variance
-        SHAMY = [SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
-    else
-        % medianL+US and median2LO NOT - median of 1LO
-        SHAMY = [SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
-    end
-end 
+
 %% filling matrix 
+
 %     SHAM_MATRIX(f, :) = [SHAMY] ;
-if button3 == 1 
-    plot(1:4, SHAMY, 'o-', 'DisplayName','SHAM DATA')
-elseif button3 == 2 
-    plot(1:3, SHAMY, 'o-', 'DisplayName','SHAM DATA')
-end 
+plot(1:4, SHAMY, 'o-', 'DisplayName','SHAM DATA')   
 title('SHAM DATA') 
 
 %% for plotting each experiment data normalized its median of 1st LO 
-
+for i =1 %to hide old code 
 % if f == 1 
 %     SHAM_MATRIX{1} = [for_stats_analysis.Trial_1] ;
 %     SHAM_MATRIX{2} = [for_stats_analysis.Trial_2] ;
@@ -165,6 +157,7 @@ title('SHAM DATA')
 %     SHAM_MATRIX{20} = [for_stats_analysis.Trial_2] ;
 %     SHAM_MATRIX{21} = [for_stats_analysis.Trial_3] ;
 % end 
+end
     ACTUAL_SHAM_MATRIX(f, :) = [SHAMY] ;
 end
 

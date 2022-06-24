@@ -44,8 +44,18 @@ baseline_medians = zeros(1,54) ;
             sixth=baseline(:,(5+ii)*fs+1:fs*(5+ii)+fs);
             baseline_data.(name)=[first second third fourth fifth sixth];
 %             baseline_medians(1, ii+1) = median(baseline_data.(name));
+
+
+
+
+% DO WE STILL NEED TO RMS VALUE? 
+% - this solved small rms values problem?
+
+
+
             baseline_medians(1, ii+1) = median(abs(baseline_data.(name)));
     end
+    
 baseline_medians_matrix = [baseline_medians_matrix ; baseline_medians] ;
 %end 
 
@@ -60,9 +70,11 @@ rms8=rms(baseline_data.sec_8);
 rms9=rms(baseline_data.sec_9);
 
 
-% 6/19/22 test 
-rms_baseline=rms(baseline);
-
+% % 6/19/22 test 
+% rms_baseline=rms(baseline);
+% 6_24_22 change 
+rms_baseline = median(baseline_medians);
+% rms_baseline = median(rms(baseline_medians));
 
 % baseline_rms=[rms1 rms2 rms3 rms4 rms5 rms6 rms7 rms8 rms9];
 

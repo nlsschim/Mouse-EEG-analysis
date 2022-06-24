@@ -15,7 +15,7 @@ alldata.V1Ldata=data(datastart(V1L):dataend(V1L));
 % matrix = matrix/rms_baseline in US DIAG STIM 
 rms_baseline=rms(alldata.V1Ldata);
 
-[bb,aa]=butter(3,[3,200]/(fs/2)); %trying to get the us noise out, 3 to 200
+[bb,aa]=butter(3,[5,55]/(fs/2)); %trying to get the us noise out, 3 to 200
 baseline=filtfilt(bb,aa,alldata.V1Ldata')'; % used for the butter filter
 
 for ii=0:8
@@ -41,7 +41,9 @@ rms9=rms(baseline_data.sec_9);
 % baseline_rms=[rms1 rms2 rms3 rms4 rms5 rms6 rms7 rms8 rms9];
 
 % 6/19/22 test 
-rms_baseline=rms(baseline);
+% rms_baseline=rms(baseline);
+
+
 
 % baseline_rms.sec_1=rms(baseline_data.sec_1);
 % baseline_rms.sec_2=rms(baseline_data.sec_2);

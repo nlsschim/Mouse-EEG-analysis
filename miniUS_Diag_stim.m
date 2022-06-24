@@ -8,9 +8,9 @@ time1=1:dataend(1);
 time=time1/fs/60;
 
 %% change the bandpass for filtering pls
-    % default done 
-%     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
+
 [bb,aa]=butter(2,[5,55]/(fs/2)); %trying to get the us noise out, 5-55Hz 
+for i = 1 
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
@@ -24,6 +24,8 @@ time=time1/fs/60;
 %     [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
 
 %Organize data into structure array
+end % to hide code for other bandpasses 
+
 alldata=[]; %initialize structure array
 
 alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
@@ -34,12 +36,18 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 
 
-%create names to access fields of 'alldata' for plotting loops
+% create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
 
-%Filter out noise
+% Filter out noise (hardcoded, but may another:) 
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
+
+% borrowed from end of code for stat analysis?? 6_24_22
+deviation=std(alldata.V1Ldata);
+trialmean = mean(alldata.V1Ldata);
+alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
+
 %% detect stimuli
 
 X = alldata.lightstimdata;
@@ -112,8 +120,7 @@ maxidxarray=zeros(length(foranalysis),1);
 RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
 
-%%
-%collect all of the individual points of data
+%% collect all of the individual points of data
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
 
@@ -145,12 +152,12 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
 % normalize the data using the baseline RMS
-if normal == 2 
+% if normal == 2 
     matrix=matrix/rms_baseline;
-elseif normal == 1
-    med_1LO = median(fakefor_stats_analysis.Trial_1);
-    matrix=matrix/med_1LO;
-end 
+% elseif normal == 1
+%     med_1LO = median(fakefor_stats_analysis.Trial_1);
+%     matrix=matrix/med_1LO;
+% end 
 
 %% calculate z-scores
 % [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
@@ -166,8 +173,8 @@ conc=['Trial_' num2str(z)];
 for_stats_analysis.(conc)=for_stats;
 
 %% additional hardcoded filtering 
-% removes outlier data points 4 standard deviations from mean 
+% removes outlier data points 4 standard deviations from mean (applies only to for_stats_analysis) 
 
 deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));
-for_stats_analysis.(conc) = for_stats_analysis.(conc)(for_stats_analysis.(conc)<trialmean+4*deviation);
+for_stats_analysis.(conc) = for_stats_analysis.(conc)(abs(for_stats_analysis.(conc))<trialmean+4*deviation);

@@ -13,8 +13,8 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 button = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
 button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
-button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
-normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
+% button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
+% normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
 
 %% creating PEN Matrix to store medians or variance 
@@ -22,24 +22,23 @@ normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median o
 % PEN_MATRIX = zeros(7,4);
 figure 
 hold on
-
+baseline_medians_matrix = [];
 %% Reading experiment dates 
-counter = 0 ;
+
 for f=1:length(str) 
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 
 %Change what is in the string depending on which file\files you want to run
 file_list = dir([folder 'TRIAL*.mat']);
-baseline = dir([folder 'nb.mat']); % or baseline 1 or baseline 2 depending on trials 
-% baseline = dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline = dir([folder 'nb.mat']); 
 
 set_channels=[1 2 3 4 5]; 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; 
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 
 %% channel configuration 
-
+for i = 1 % to hide 
 if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\"
 V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end
@@ -79,18 +78,18 @@ end
 if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
 end  
+end
 
 %% calculate pre-stim RMS for normalization
 
 baseline_rms=[];
 disp(baseline.name);
 load([folder baseline.name])
-calc_baseline;
+calc_baseline60sec;
 
 % create matrix to hold data for statistical testing
 for_stats_new = [];
-for_stats_analysis=[];
-%insert thresholding here
+for_stats_analysis =[];
 
 for z=1:4
 
@@ -99,16 +98,15 @@ for z=1:4
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
-%     US_diag_stim;  
-%     super_US_diag_stim ;
     miniUS_Diag_stim;
 end
 
-% % to rename trials and skip 2 
+% to rename trials and skip trial 2 
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 
 %% Creating a vector to call on later to plot the medians
+
 if button ==1 
     PEN_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
     PEN_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
@@ -121,44 +119,36 @@ if button == 2
     PEN_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
 end 
 
-if button3 == 1 
-    if button2 == 1 
-        % minus first light median/variance
-        PENY = [rms_baseline, PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
-    else
-        % medianL+US and median2LO NOT - median of 1LO
-        PENY = [rms_baseline, PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
-    end
-elseif button3 == 2 
-    if button2 == 1 
-        % minus first light median/variance
-        PENY = [PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
-    else
-        % medianL+US and median2LO NOT - median of 1LO
-        PENY = [PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
-    end
-end     
-%% filling matrix 
-%     
+if button2 == 1 % Trial types all minus first light
+    PENY = [rms_baseline, PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
+else % medianL+US and median2LO NOT - median of 1LO
+    PENY = [rms_baseline, PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
+end
+
+%% filling cohort matrix 
+  
     PEN_MATRIX(f, :) = [PENY] ;
 %     plot(1:4, PENY, 'o-', 'DisplayName','PEN DATA')
+
 %% plotting 
+
 fileorder = {'one' 'two' 'three' 'four' 'five' 'six' 'seven'};
 pen.(char(fileorder(f)))= [];
-if button3 == 1 
+% if button3 == 1 
     pen.(char(fileorder(f)))= plot(1:4, PENY, 'o-') ;
-else 
-    pen.(char(fileorder(f)))= plot(1:3, PENY, 'o-') ;
-end
+% else 
+%     pen.(char(fileorder(f)))= plot(1:3, PENY, 'o-') ;
+% end
 title('PEN DATA')
        % title(file_list(z).name,'interpreter','none');
 % 
 % plot(1:4, PENY, 'o-', 'DisplayName',str{f})
 
 %     title('PEN DATA') 
-%     
 
 %% for plotting each experiment data normalized its median of 1st LO 
+
+for i = 1 % to hide everything
 % this was to try and create a matrix for our pen data, but differing lengths made this difficult--used string array instead 
 
 % for ii = 1:3 
@@ -251,10 +241,11 @@ title('PEN DATA')
 %     PEN_MATRIX{20} = [for_stats_analysis.Trial_2] ;
 %     PEN_MATRIX{21} = [for_stats_analysis.Trial_3] ;
 % end 
+end 
 ACTUAL_PEN_MATRIX_(f, :) = [PENY] ;
 
-% legend([pen.one pen.two pen.three pen.four pen.five],{'SHAM data','GEN data', 'PEN data'})
 end 
+
 legend([pen.one pen.two pen.three pen.four pen.five pen.six pen.seven],file1)
 trialtype = {'baseline' '' '1LO' '' 'L+US' '' '2LO'};
 xticklabels(trialtype) ;
