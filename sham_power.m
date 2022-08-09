@@ -7,10 +7,14 @@
 % (4) data is subject to more strict hardcoded filtering to omit electrical noise recorded in eCoG -- see line 193 of powerUS_diag_stim 
 % additional instructions: event quantification can be ran for multiple
 % mice; for power/rms plots, change f to desired mouse index in file1 
- 
-% close all
-% clear all
-% clc 
+% (5) this code also quantifies event-related potentials (ERPs) by trial, by
+% cohort 
+
+if penran ~= 1 
+    close all
+    clear all
+    clc 
+end 
 
 %% reading cohort files 
 
@@ -28,6 +32,7 @@ if penran ~= 1
     responseratedecision = input("Would you like to plot response rates? '1' = yes, '2' = no: "); 
     histogramdecision = input("Would you like to plot one second after stim histogram? '1' = yes, '2' = no: "); 
 end 
+
 %% quantifying ERP: event-related potential/brain response to stim - intialization 
 % by cohort 
 % eventresponsecounter.MouseXTrialX = [totaleventcount ERPcount responserate] 
@@ -316,23 +321,23 @@ if histogramdecision == 1
     if penran == 1 
         secondLOMW = ranksum(pen2LOhisto,sham2LOhisto)
         figure(10)
-        secondLOqq = qqplot(sqrt(pen2LOhisto),sqrt(sham2LOhisto)) ;
+        secondLOqq = qqplot(pen2LOhisto,sham2LOhisto) ;
         title('QQ plot of pen 1st second after 2LO event rms values versus sham')
         hold on 
         plot(0:1:3, 0:1:3)
     end 
 
-% all trial types 
-    figure(6)
-    shamhisto = [sham1LOhisto shamLUShisto sham2LOhisto] ; 
-    p10 = histogram(shamhisto, 'Facecolor', 'b', 'BinWidth', 0.02) ;
-    legend([p5 p10], {'PEN', 'SHAM'})
-    if penran == 1 
-        alltrialsMW = ranksum(penhisto,shamhisto)
-        figure(11)
-        alltrialsqq = qqplot(penhisto,shamhisto) ;
-        title('QQ plot of pen 1st second after event rms values versus sham')
-    end 
+% % all trial types 
+%     figure(6)
+%     shamhisto = [sham1LOhisto shamLUShisto sham2LOhisto] ; 
+%     p10 = histogram(shamhisto, 'Facecolor', 'b', 'BinWidth', 0.02) ;
+%     legend([p5 p10], {'PEN', 'SHAM'})
+%     if penran == 1 
+%         alltrialsMW = ranksum(penhisto,shamhisto)
+%         figure(11)
+%         alltrialsqq = qqplot(penhisto,shamhisto) ;
+%         title('QQ plot of pen 1st second after event rms values versus sham')
+%     end 
     
 %     figure(12)
 %     pen1LOpenLUSqq = qqplot(log(pen1LOhisto), log(penLUShisto));

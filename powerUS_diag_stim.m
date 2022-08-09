@@ -9,7 +9,7 @@ time=time1/fs/60;
 %% change the bandpass for filtering pls
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-[bb,aa]=butter(2,[5,55]/(fs/2)); %trying to get the us noise out, 3 to 200
+[bb,aa]=butter(3,[5,55]/(fs/2)); %trying to get the us noise out, 3 to 200
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
@@ -24,7 +24,6 @@ time=time1/fs/60;
 
 %Organize data into structure array
 alldata=[]; %initialize structure array
-
 alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
 alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
 alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
@@ -39,6 +38,12 @@ foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
+
+% extra filtering borrowed from end of code for stat analysis?? 6_24_22
+% deviation=std(alldata.V1Ldata);
+% trialmean = mean(alldata.V1Ldata);
+% alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
+
 %% detect stimuli
 
 X = alldata.lightstimdata;
@@ -69,17 +74,11 @@ end
 % lightstimdata length
 
 for i=1:4
-    try 
-        for j =2:(length(index_stim)-1) 
-            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-        end
-    catch 
-        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-1)') 
-        for j =2:(length(index_stim)-2) 
-            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-        end
-    end 
+   for j =2:(length(index_stim)-2) 
+       stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+   end
 end 
+% end 
 
 %% plot STAS
 
@@ -100,8 +99,6 @@ RMSvalaarray=zeros(length(foranalysis),1);
 %% Waterfall amtrix and collecting all of the individual points of data
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
-
-
 
    for k=1:10
        concat=['RMSvals_' num2str(k)];
@@ -199,13 +196,32 @@ for_stats_analysis.(conc)=for_stats;
          
 %% counting event-related potentials 
  
-% first second versus last nine seconds 
-        for eventcount = 1:eventtotal %1-56
-             event_2nd_half_deviation = std(matrix(2:10,eventcount));
-             event_2nd_half_median = median(matrix(2:10,eventcount));
+% % % first second versus last nine seconds 
+%         for eventcount = 1:eventtotal %1-~56
+%              event_2nd_half_deviation = std(matrix(2:10,eventcount));
+%              event_2nd_half_median = median(matrix(2:10,eventcount));
+% %              ERPseconds = 1 second in  the first 5 secs after event that is greather than median+1std of snd 5 secs 
+%              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+%              for eventsecond = 1 
+%                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+%                      ERPseconds = ERPseconds + 1;
+%                  end
+%              end 
+% %                 ERP: event-related potential/brain response to stim  
+%              if ERPseconds >= 1 
+%                  ERPcount = ERPcount + 1 ;
+%                  totaleventcount = totaleventcount + 1; 
+%              else
+%                  totaleventcount = totaleventcount + 1;
+%              end
+%         end
+
+        for eventcount = 1:eventtotal 
+             event_2nd_half_deviation = std(matrix(3:10,eventcount));
+             event_2nd_half_median = median(matrix(3:10,eventcount));
              % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
-             for eventsecond = 1 
+             for eventsecond = 1:2 
                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
                      ERPseconds = ERPseconds + 1;
                  end
@@ -219,24 +235,6 @@ for_stats_analysis.(conc)=for_stats;
              end
         end
 
-%         for eventcount = 1:eventtotal 
-%              event_2nd_half_deviation = std(matrix(3:10,eventcount));
-%              event_2nd_half_median = median(matrix(3:10,eventcount));
-%              % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
-%              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
-%              for eventsecond = 1:2 
-%                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
-%                      ERPseconds = ERPseconds + 1;
-%                  end
-%              end 
-%                 % ERP: event-related potential/brain response to stim  
-%              if ERPseconds >= 1 
-%                  ERPcount = ERPcount + 1 ;
-%                  totaleventcount = totaleventcount + 1; 
-%              else
-%                  totaleventcount = totaleventcount + 1;
-%              end
-%         end
 
 
 %% in the works to quantify ERP for all cohorts 

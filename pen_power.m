@@ -6,7 +6,9 @@
 % (3) more lightstim events are retained, and plotted
 % (4) data is subject to more strict hardcoded filtering to omit electrical noise recorded in eCoG -- see line 193 of powerUS_diag_stim 
 % additional instructions: event quantification can be ran for multiple
-% mice; for power/rms plots, change f to desired mouse index in file1 
+% mice; for power/rms plots, change f to desired mouse index in file1
+% (5) this code also quantifies event-related potentials (ERPs) by trial, by
+% cohort 
 
 close all 
 clear all
@@ -117,9 +119,9 @@ calc_baseline60sec;
 %     histogram(baseline_medians, 'Facecolor', 'r')  
 %     hold on 
 % end 
-title('Baseline rms values') 
-ylabel('Number of points') 
-xlabel('RMS value') 
+% title('Baseline rms values') 
+% ylabel('Number of points') 
+% xlabel('RMS value') 
 
 % create matrix to hold data for statistical testing
 for_stats_new = [];
@@ -273,5 +275,7 @@ if histogramdecision == 1
     title('Both cohorts all trial types rms values')
     hold on 
 end 
+
 penran = 1;
+clearvars -except responseratedecision histogramdecision penran pencohortavg1LOresponserate pencohortavgLUSresponserate pencohortavg2LOresponserate PENresponse_matrix
 sham_power

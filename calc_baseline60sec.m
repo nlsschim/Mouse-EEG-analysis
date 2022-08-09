@@ -69,12 +69,15 @@ rms7=rms(baseline_data.sec_7);
 rms8=rms(baseline_data.sec_8);
 rms9=rms(baseline_data.sec_9);
 
-
 % % 6/19/22 test 
 % rms_baseline=rms(baseline);
+% rms_baseline = median(rms(baseline_medians));
+
+
 % 6_24_22 change 
 rms_baseline = median(baseline_medians);
-% rms_baseline = median(rms(baseline_medians));
+
+
 
 % baseline_rms=[rms1 rms2 rms3 rms4 rms5 rms6 rms7 rms8 rms9];
 

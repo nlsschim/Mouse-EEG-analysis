@@ -1,9 +1,10 @@
-%%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
+ %%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 %This code is for the Sham cohort to run through the data and get the
 %median values 
 close all
-clear all
-clc
+% clear all
+% clc
+
 %% reading cohort files 
 
 file1={'2_15_22\','2_24_22\','2_25_22\','06_30_20 MOUSE 1 RECUT\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\','05-29-2020 Mouse Experiment\'};
@@ -11,9 +12,11 @@ str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
 
 %% medians or variance 
-
-button = input("Create SHAM matrix of median values or variance? '1'=medians, '2'=variance: ") ;
-button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '2' = no: ") ; 
+if penran ~= 1
+    button = input("Create SHAM matrix of median values or variance? '1'=medians, '2'=variance: ") ;
+    button2 = input("Matrix of L+US and 2nd LO minus medians minus 1st LO medians? '1' = yes, '0' = no: ") ; 
+end 
+runnext = input("Run Harry_Plotter2? '1' = yes, '0' = no: ") ; 
 % button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 % normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
@@ -91,6 +94,8 @@ end
         disp(file_list(z).name);%displays the name of the file in the terminal
         load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
         miniUS_Diag_stim;
+        
+        shammedians.(concat2) = medians.(concat2);
     end
         
     
@@ -160,6 +165,16 @@ for i =1 %to hide old code
 end
     ACTUAL_SHAM_MATRIX(f, :) = [SHAMY] ;
 end
+
+clearvars -except penmedians ACTUAL_PEN_MATRIX shammedians ACUTAL_SHAM_MATRIX runnext 
+
+if runnext == 1 
+    Harry_Plotter2
+end 
+
+
+
+
 
 %                 m1           m2              m3            m4               m5             m6               m7 
 % SHAM{1} = {SHAM_MATRIX{1}; SHAM_MATRIX{4}; SHAM_MATRIX{7}; SHAM_MATRIX{10}; SHAM_MATRIX{13}; SHAM_MATRIX{16}; SHAM_MATRIX{19}} ; % 1LO 

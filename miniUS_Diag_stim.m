@@ -9,7 +9,7 @@ time=time1/fs/60;
 
 %% change the bandpass for filtering pls
 
-[bb,aa]=butter(2,[5,55]/(fs/2)); %trying to get the us noise out, 5-55Hz 
+[bb,aa]=butter(3,[5,55]/(fs/2)); %trying to get the us noise out, 5-55Hz 
 for i = 1 
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
@@ -27,7 +27,6 @@ for i = 1
 end % to hide code for other bandpasses 
 
 alldata=[]; %initialize structure array
-
 alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
 alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
 alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
@@ -44,9 +43,9 @@ foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
 
 % borrowed from end of code for stat analysis?? 6_24_22
-deviation=std(alldata.V1Ldata);
-trialmean = mean(alldata.V1Ldata);
-alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
+% deviation=std(alldata.V1Ldata);
+% trialmean = mean(alldata.V1Ldata);
+% alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
 
 %% detect stimuli
 
@@ -92,17 +91,18 @@ end
 
 % minusing less events because everything is cut properly? 
 for i=1:4
-    try 
-        for j =2:(length(index_stim)-1) 
-            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-        end
-    catch 
-        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
+%     try 
+%         for j =2:(length(index_stim)-1) 
+%             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+%         end
+%     catch 
+%         warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-2)') 
+%         clear stas.(char(names(i)))
         for j =2:(length(index_stim)-2) 
             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
         end
     end 
-end 
+% end 
 
 %% plot STAS
 
@@ -152,15 +152,43 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
 % normalize the data using the baseline RMS
-% if normal == 2 
     matrix=matrix/rms_baseline;
-% elseif normal == 1
-%     med_1LO = median(fakefor_stats_analysis.Trial_1);
-%     matrix=matrix/med_1LO;
-% end 
 
-%% calculate z-scores
-% [z_scores,mu,sigma]=find_zscores(matrix, baseline_rms);
+    
+%% collect event medians in separate trial matrixes for median analysis 
+% trialxmedians(mousenumber,medians) 
+s=size(matrix); % 10 by 60 matrix 
+tmatrix = matrix'; % get matrix x to be seconds, y to be event number 
+concat2=['Mouse' num2str(f) 'Trial' num2str(z)]; % to organize struct data
+trialmedians = [];
+for i = 1:s(2) % 1 to ~60 
+    eventmedian = median(tmatrix(i,:)) ; 
+    trialmedians = [trialmedians eventmedian] ;
+end 
+medians.(concat2) = trialmedians ; 
+    
+% if z == 1 % 1LO 
+%     trialmedians = [];
+%     for i = 1:s(2) % 1 to ~60 
+%         eventmedian = median(tmatrix(i,:)) ; 
+%         trialmedians = [trialmedians eventmedian] ;
+%     end 
+%     medians_1LO(f,:) = trialmedians ;
+% elseif z == 3 %L+US
+%     trialmedians = [];
+%     for i = 1:s(2) % 1 to ~60 
+%         eventmedian = median(tmatrix(i,:)) ; 
+%         trialmedians = [trialmedians eventmedian] ;
+%     end 
+%     medians_LUS(f,:) = trialmedians ;
+% elseif z == 4 %2LO 
+%     trialmedians = [];
+%     for i = 1:s(2) % 1 to ~60 
+%         eventmedian = median(tmatrix(i,:)) ; 
+%         trialmedians = [trialmedians eventmedian] ;
+%     end 
+%     medians_2LO(f,:) = trialmedians ;
+% end    
 
 %% arrange data for statistical analysis
 % values for for_stats_analysis are reset by normalized values 
