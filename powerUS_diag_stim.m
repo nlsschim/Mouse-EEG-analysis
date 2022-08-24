@@ -36,13 +36,31 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
 
+%% additional filtering 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
 
 % extra filtering borrowed from end of code for stat analysis?? 6_24_22
-% deviation=std(alldata.V1Ldata);
-% trialmean = mean(alldata.V1Ldata);
-% alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
+deviation=std(alldata.V1Ldata);
+trialmean = mean(alldata.V1Ldata);
+index = abs(alldata.V1Ldata)>trialmean+4*deviation;
+% alldata.V1Ldata(index) = NaN; % doesnt work to ommit values or act as placeholder
+% trying to remove 4std electrical noise from alldata, then fill gaps with
+% median mV values of alldata (median calulated after 4*std noise removed):
+
+% tempV1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)>trialmean+4*deviation) ;
+% % replacing  indices with a value of '0' with the median of alldata 
+% alldata.V1Ldata(index) = median(tempV1Ldata) ; 
+
+% THIS SEEMS TO MAINTAIN POSITION of events in waterfall! 
+% making all abs(values) >4*std = 0 
+alldata.V1Ldata(index) = 0 ; 
+% creating a copy of alldata with artifact removed 
+tempV1Ldata = alldata.V1Ldata;
+% finding the indexes where alldata = 0 
+index2 = find(alldata.V1Ldata==0);
+% replacing  indices with a value of '0' with the median of alldata 
+alldata.V1Ldata(index2) = median(tempV1Ldata) ; 
 
 %% detect stimuli
 
@@ -78,7 +96,6 @@ for i=1:4
        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
    end
 end 
-% end 
 
 %% plot STAS
 
@@ -196,18 +213,37 @@ for_stats_analysis.(conc)=for_stats;
          
 %% counting event-related potentials 
  
-% % % first second versus last nine seconds 
-%         for eventcount = 1:eventtotal %1-~56
-%              event_2nd_half_deviation = std(matrix(2:10,eventcount));
-%              event_2nd_half_median = median(matrix(2:10,eventcount));
-% %              ERPseconds = 1 second in  the first 5 secs after event that is greather than median+1std of snd 5 secs 
+% % first second versus last nine seconds 
+        for eventcount = 1:eventtotal %1-~56
+             event_2nd_half_deviation = std(matrix(2:10,eventcount));
+             event_2nd_half_median = median(matrix(2:10,eventcount));
+%              ERPseconds = 1 second in  the first 5 secs after event that is greather than median+1std of snd 5 secs 
+             ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+             for eventsecond = 1 
+                 if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+                     ERPseconds = ERPseconds + 1;
+                 end
+             end 
+%                 ERP: event-related potential/brain response to stim  
+             if ERPseconds >= 1 
+                 ERPcount = ERPcount + 1 ;
+                 totaleventcount = totaleventcount + 1; 
+             else
+                 totaleventcount = totaleventcount + 1;
+             end
+        end
+
+%         for eventcount = 1:eventtotal 
+%              event_2nd_half_deviation = std(matrix(3:10,eventcount));
+%              event_2nd_half_median = median(matrix(3:10,eventcount));
+%              % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
 %              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
-%              for eventsecond = 1 
+%              for eventsecond = 1:2 
 %                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
 %                      ERPseconds = ERPseconds + 1;
 %                  end
 %              end 
-% %                 ERP: event-related potential/brain response to stim  
+%                 % ERP: event-related potential/brain response to stim  
 %              if ERPseconds >= 1 
 %                  ERPcount = ERPcount + 1 ;
 %                  totaleventcount = totaleventcount + 1; 
@@ -216,24 +252,25 @@ for_stats_analysis.(conc)=for_stats;
 %              end
 %         end
 
-        for eventcount = 1:eventtotal 
-             event_2nd_half_deviation = std(matrix(3:10,eventcount));
-             event_2nd_half_median = median(matrix(3:10,eventcount));
-             % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
-             ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
-             for eventsecond = 1:2 
-                 if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
-                     ERPseconds = ERPseconds + 1;
-                 end
-             end 
-                % ERP: event-related potential/brain response to stim  
-             if ERPseconds >= 1 
-                 ERPcount = ERPcount + 1 ;
-                 totaleventcount = totaleventcount + 1; 
-             else
-                 totaleventcount = totaleventcount + 1;
-             end
-        end
+%         for eventcount = 1:eventtotal 
+%              event_2nd_half_deviation = std(matrix(4:10,eventcount));
+%              event_2nd_half_median = median(matrix(4:10,eventcount));
+%              % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
+%              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+%              for eventsecond = 1:3 
+%                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+%                      ERPseconds = ERPseconds + 1;
+%                  end
+%              end 
+%                 % ERP: event-related potential/brain response to stim  
+%              if ERPseconds >= 1 
+%                  ERPcount = ERPcount + 1 ;
+%                  totaleventcount = totaleventcount + 1; 
+%              else
+%                  totaleventcount = totaleventcount + 1;
+%              end
+%         end
+
 
 
 

@@ -80,8 +80,85 @@ close all
     % MW 
     MW2LO = ranksum(secondLOpen,secondLOsham) ;    
     
-    
- %% QQ plots 
+
+%% variance 
+% between cohorts 
+firstLOpen = firstLOpen(~isnan(firstLOpen));% removing NaN entries 
+var_1LOpen = var(firstLOpen);
+firstLOsham = firstLOsham(~isnan(firstLOsham));% removing NaN entries 
+var_1LOsham = var(firstLOsham);
+var_MW_1LO = ranksum(var_1LOpen, var_1LOsham) ;
+
+LUSpen = LUSpen(~isnan(LUSpen)); % removing NaN entries 
+var_LUSpen = var(LUSpen);
+LUSsham = LUSsham(~isnan(LUSsham)); % removing NaN entries 
+var_LUSsham = var(LUSsham);
+var_MW_LUS = ranksum(var_LUSpen, var_LUSsham) ;
+
+secondLOpen = secondLOpen(~isnan(secondLOpen)); % removing NaN entries 
+var_2LOpen = var(secondLOpen);
+secondLOsham = secondLOsham(~isnan(secondLOsham)); % removing NaN entries 
+var_2LOsham = var(secondLOsham);
+var_MW_2LO = ranksum(var_2LOpen, var_2LOsham) ;
+
+% plotting 
+figure(7) 
+var_y_pen = [var_1LOpen  var_LUSpen var_2LOpen] ;
+var_y_sham = [var_1LOsham  var_LUSsham var_2LOsham] ;
+var_1 = plot(1:3, var_y_pen, 'o-r') ; 
+hold on 
+var_2 = plot(1:3, var_y_sham, 'o-b') ;  
+legend([var_1 var_2], {'PEN data', 'SHAM data'})
+title('Variance by cohort vs. Trial Type')
+ylabel('Variance') 
+trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
+xticklabels(trialtype) ;
+
+% % standard error for errorbars 
+% var_stderror = zeros(2,3) ;
+% var_stderror(1,1) = std(firstLOpen)/sqrt(length(firstLOpen)) ;
+% var_stderror(1,2) = std(LUSpen)/sqrt(length(LUSpen)) ;
+% var_stderror(1,3) = std(secondLOpen)/sqrt(length(secondLOpen)) ;
+% 
+% var_stderror(2,1) = std(firstLOsham)/sqrt(length(firstLOsham)) ;
+% var_stderror(2,2) = std(LUSsham)/sqrt(length(LUSsham)) ;
+% var_stderror(2,3) = std(secondLOsham)/sqrt(length(secondLOsham)) ;
+% q1 = errorbar(1:3, peny, stderror(1,:), 'o-r') ;
+% hold on 
+% q2 = errorbar(1:3, shamy, stderror(2,:), 'o-b') ;
+
+
+% intercohort variance MWs 
+% pen 
+normal_var_LUSpen = var_LUSpen / var_1LOpen ;
+normal_var_2LOpen = var_2LOpen / var_1LOpen ;
+
+var_MW_pen_1LOLUS = ranksum(var_1LOpen, var_LUSpen) ; 
+var_MW_pen_LUS2LO = ranksum(normal_var_LUSpen, normal_var_2LOpen) ; 
+
+% sham 
+normal_var_LUSsham = var_LUSsham / var_1LOsham ;
+normal_var_2LOsham = var_2LOsham / var_1LOsham ; 
+
+var_MW_sham_1LOLUS = ranksum(var_1LOsham, var_LUSsham) ; 
+var_MW_sham_LUS2LO = ranksum(normal_var_LUSsham, normal_var_2LOsham) ; 
+  
+%% intercohort median MWs 
+% pen 
+MWpen1LOLUS = ranksum(firstLOpen,LUSpen);
+normal_LUSpen = LUSpen / median(firstLOpen) ;
+normal_2LOpen = secondLOpen / median(firstLOpen) ; 
+MWpenLUS2LO = ranksum(normal_LUSpen,normal_2LOpen); % was the normalization correct? 
+MWpen1LO2LO = ranksum(firstLOpen,secondLOpen);
+
+% sham 
+MWsham1LOLUS = ranksum(firstLOsham,LUSsham);
+normal_LUSsham = LUSsham / median(firstLOsham) ;
+normal_2LOsham = secondLOsham / median(firstLOsham) ;  
+MWshamLUS2LO = ranksum(normal_LUSsham,normal_2LOsham); % do both of these need to be normalized by 1LO? 
+MWsham1LO2LO = ranksum(firstLOsham,secondLOsham);
+
+%% QQ plots 
  figure(4) 
  firstLOqq = qqplot(firstLOpen,firstLOsham) ;
  title('QQ plot of pen vs sham 1LO event median rms values')
@@ -95,3 +172,10 @@ close all
  figure(6) 
  secondLOqq = qqplot(secondLOpen,secondLOsham) ;
  title('QQ plot of pen vs sham 2LO event median rms values')
+ 
+ 
+
+
+ 
+ 
+ 

@@ -39,13 +39,33 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
 
-% Filter out noise (hardcoded, but may another:) 
+%% additional filtering 
+%Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
+
 
 % borrowed from end of code for stat analysis?? 6_24_22
 % deviation=std(alldata.V1Ldata);
 % trialmean = mean(alldata.V1Ldata);
 % alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
+
+deviation=std(alldata.V1Ldata);
+trialmean = mean(alldata.V1Ldata);
+index = abs(alldata.V1Ldata)>trialmean+4*deviation;
+% alldata.V1Ldata(index) = NaN; % doesnt work to ommit values or act as placeholder
+% trying to remove 4std electrical noise from alldata, then fill gaps with
+% median mV values of alldata (median calulated after 4*std noise removed):
+
+% THIS SEEMS TO MAINTAIN POSITION of events in waterfall! 
+% making all abs(values) >4*std = 0 
+alldata.V1Ldata(index) = 0 ; 
+% creating a copy of alldata with artifact removed 
+tempV1Ldata = alldata.V1Ldata;
+% finding the indexes where alldata = 0 
+index2 = find(alldata.V1Ldata==0);
+% replacing  indices with a value of '0' with the median of alldata 
+alldata.V1Ldata(index2) = median(tempV1Ldata) ; 
+
 
 %% detect stimuli
 

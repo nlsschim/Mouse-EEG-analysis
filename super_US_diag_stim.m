@@ -7,13 +7,13 @@ time=time1/fs/60;
 
 %% change the bandpass for filtering pls
 
-bandpasses = [3, 100; 5, 55; 30, 59; 12, 29; 4, 7; 8, 11] ; 
-    [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
-% [bb,aa]=butter(2,[5,55]/(fs/2));
+% bandpasses = [3, 100; 5, 55; 30, 59; 12, 29; 4, 7; 8, 11] ; % automated bands 
+%     [bb,aa]=butter(3,bandpasses(brain_wave,:)/(fs/2));
+
+[bb,aa]=butter(2,[5,55]/(fs/2));
 
 %Organize data into structure array
 alldata=[]; %initialize structure array
-
 alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
 alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
 alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
@@ -30,8 +30,32 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
 
+%% additional filtering 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
+
+% extra filtering borrowed from end of code for stat analysis?? 6_24_22
+deviation=std(alldata.V1Ldata);
+trialmean = mean(alldata.V1Ldata);
+index = abs(alldata.V1Ldata)>trialmean+4*deviation;
+% alldata.V1Ldata(index) = NaN; % doesnt work to ommit values or act as placeholder
+% trying to remove 4std electrical noise from alldata, then fill gaps with
+% median mV values of alldata (median calulated after 4*std noise removed):
+
+tempV1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)>trialmean+4*deviation) ;
+% replacing  indices with a value of '0' with the median of alldata 
+alldata.V1Ldata(index) = median(tempV1Ldata) ; 
+
+% % THIS SEEMS TO MAINTAIN POSITION of events in waterfall! 
+% % making all abs(values) >4*std = 0 
+% alldata.V1Ldata(index) = 0 ; 
+% % creating a copy of alldata with artifact removed 
+% tempV1Ldata = alldata.V1Ldata;
+% % finding the indexes where alldata = 0 
+% index2 = find(alldata.V1Ldata==0);
+% % replacing  indices with a value of '0' with the median of alldata 
+% alldata.V1Ldata(index2) = median(tempV1Ldata) ; 
+
 %% detect stimuli
 
 X = alldata.lightstimdata;
@@ -66,16 +90,9 @@ end
 % lightstimdata length
 
 for i=1:4
-    try 
-        for j =2:(length(index_stim)-2) 
-            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-        end
-    catch 
-        warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-3)') 
-        for j =2:(length(index_stim)-3) 
-            stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-        end
-    end 
+   for j =2:(length(index_stim)-2) 
+       stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+   end
 end 
 
 %% plot STAS
@@ -99,7 +116,6 @@ RMSvalaarray=zeros(length(foranalysis),1);
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
 
-
 %filter data
 % d=filtfilt(bb,aa,d')';
 
@@ -119,8 +135,7 @@ if time_series == 3
 %        end
  
     end 
-    % % for 0.5 seconds increments 
-    
+    % % for 0.5 seconds increments   
 else 
    for k=1:10
        concat=['RMSvals_' num2str(k)];
@@ -145,7 +160,7 @@ end
 if time_series == 3 
     matrix=[all_points(1).RMSvals_0point5; all_points(1).RMSvals_1; all_points(1).RMSvals_1point5; all_points(1).RMSvals_2; 
     all_points(1).RMSvals_2point5; all_points(1).RMSvals_3]; 
-else 
+else % 10 seconds 
     matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
     all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
 end 
@@ -161,7 +176,6 @@ ylim=[0 0.5];
 % ylim=[0 0.3];
 colorbar
 caxis manual
-
 
 % naming waterfall plots based on 'z'
 names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;

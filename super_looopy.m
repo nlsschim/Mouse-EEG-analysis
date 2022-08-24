@@ -1,98 +1,47 @@
 %% Authors: Devon Griggs, John Kucewicz, Nels Schimek, Kat Floerchinger, Hannah Mach, Alissa Phutirat, Henry Tan
-%This code is like the original loopy_ecog but will run statistic analysis
-%for kruskal wallis 3 pair, anova1, and mann whitney for all 3 pairs
-%individually
+% This code is like the original loopy_ecog but will run statistic analysis
+% for kruskal wallis 3 pair, anova1, and mann whitney for all 3 pairs
+% individually
 close all
 clear all
-%clears all data so that there are no missasinged values
-
 %Change folder path to match where you save the files and data
 %always need "\" at the end of the folder name, copy adn paste so that no errors are made
 
 % note: trials have been formatted "trial x"; baselines : "baseline x"; 
 % trials > 1:4 have been placed in separate folders 
 
+%% PEN US - 2020-2021
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\';
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\'; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 PEN\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\03-02-22 PEN\';
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\' ; 
 
-%% SHAM - 2020 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\5-29-20 Mouse Experiment\'; 
+%% SHAM US mice - 2020 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\05-29-2020 Mouse Experiment\'; 
 % alldata.lightstimdata=data(datastart(5):dataend(5));
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\';
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-2020 Mouse Experiment 2\';
+% folder ='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-24-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06_30_20 MOUSE 1 RECUT\' ;
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_15_22\'; 
+folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_24_22\';
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_25_22\'; 
 
-% % folder ='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-20 MOUSE 1 RECUT\' ;
+baseline_medians_matrix = [];
 
-% folder= '4C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 2\'; 
-
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 1\';
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 3\'; 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-25-2020 Mouse Experiment 1\'; 
-
-%% REAL GEN US - 2019 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\GEN\12-23 Mouse Experiment\';
-% ch 7 as light stim, -2 FOR J 
-    
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/12-16-2019 Mouse Experiment 1/';
-% works if light stim channel is set to 9 instead of 7, -1 for j, 
-
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/12-13-2019 Mouse Experiment 1/';
-%use ch 5 as light stim, -4 for j
-
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/12-24-2019 Mouse Experiment 1/';
-% use ch 7 as light stim, runs with us_diag_stim j=2:(length(index_stim)-2),
-
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/12-13-2019 Mouse Experiment 1/';
-%use ch 5 as light stim, -4 for j
-
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/12-27-2019 Mouse Experiment 1/';
-% use ch 5 as light stim, -1 for j
-
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/12-12-2019 Mouse Experiment 1/';
-%use ch 5 as light stim, -3 for j
-
-% folder= '/Users/laurieryan/MATLAB/Mourad Lab/Mouse-EEG-analysis github/Data/11-27-2019 Mouse Experiment 1/';
-%use ch 5 as light stim, -3 for j 
-
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\11-22-19 MOUSE RECUT\' ;
-% something wrong with 
-%find first pulse of each train, if stimulation contains trains
-% index_trains=diff(index_allstim)>2*fs; 
-% index_allstim(1)=[];
-% index_stim=index_allstim(index_trains);
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 RECUT\'; 
-% works if light stim channel is set to 9 instead of 7
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\GEN\12-23 Mouse Experiment\'; 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-24 Data\';
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-27-19 RECUT\' ;
-
-
-
-%% REAL PEN US - 2020-2021
-
-% folder='C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1 m1\'; 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-24-21 RECUT session 2 m2\';
-
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\'; 
-% C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\8_10_21 m2\Session 2
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2 session 1\' ; 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m2\';
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21\' ; 
-folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\';
-%% 
-%Change what is in the string depending on which file/files you want to run
+%% Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
 baseline=dir([folder 'nb.mat']); % or baseline 1 or baseline 2 depending on trials 
 
-% set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
-% set_channels=[1 2 3 4 9]; % for 12/16/19 data
-set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-2020 Mouse Experiment 2\"       
+    set_channels=[1 2 3 4 7]; 
+elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-24-2020 Mouse Experiment 1\" 
+    set_channels=[1 2 3 4 7]; 
+else 
+    set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
+end
 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
 trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
@@ -102,38 +51,75 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %% automation 
 
 time_series = input('time series(3 or 10)?');
-brain_wave = input("'3-100' = 1, '5-55' = '2', low gamma = '3', beta = '4', alpha ='5', theta = '6', : ");
+% brain_wave = input("'3-100' = 1, '5-55' = '2', low gamma = '3', beta = '4', alpha ='5', theta = '6', : ");
 outliersyn = input("run outliers analysis? '1'= yes, '2' = no: ") ;
 
 %% this names the channels based on where they were placed, make sure they match lab chart
 
-V1L=set_channels(1);S1L=set_channels(2);S1R=set_channels(3);V1R=set_channels(4);lightstim=set_channels(5);
+%% channel configuration 
 
-% 6/23/21
-% V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-% 6/24/21 m2 s2
-% V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-% 8/10/21 m1
-% V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-% 8/10/21 m2
-% V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-% 8/12/21 m1
-% V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-% 8/12/21 m2
-V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
-% 8/13/21
-% V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
+% pen channel assignments 
+for i = 1:10 %to hide assignments 
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\"
+    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+    end
 
-%this is important since its how the other code will find the channels.
-%EverythinG is coded by name so it is not hard coded in 
-%';' prevents the line outcome from appearing in the terminal everytime, it just looks bad and is useless 
-%create data arrays
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-24-21 RECUT session 2 m2\" 
+    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+    end
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\" 
+    V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+    end 
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\"
+    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+    end 
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\" 
+    V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+    end
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m2\"
+    V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
+    end
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21\"
+    V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
+    end 
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 PEN\"
+        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+    end 
+
+    if folder =="C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\03-02-22 PEN\" 
+        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+    end     
+
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\"
+        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+    end  
+end 
+% sham channel assignments 
+for i = 1:10 
+    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\5-29 recut 2.0\"
+        V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5); 
+    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_24_22\"
+        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_25_22\" 
+        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+    else
+        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+    end   
+end 
+
+%% create data arrays
 
 %calculate pre-stim RMS for normalization
 baseline_rms=[];
 disp(baseline.name);
 load([folder baseline.name])
-calc_baseline;
+calc_baseline60sec;
 
 % create matrix to hold data for statistical testing
 for_stats_new = [];
@@ -160,10 +146,8 @@ for z=1:4
 %     counter = counter + 1 ; 
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displays the name of the file in the terminal
-    load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
-%     US_diag_stim;  
+    load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run 
     super_US_diag_stim ;
-% miniUS_Diag_stim
 end
 
 %% outlier pi charts 
