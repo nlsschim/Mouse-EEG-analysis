@@ -1,7 +1,8 @@
 %% Authors: Kat Floerchinger, Hannah Mach, Henry Tan
-%this code is meant to set the index_stim equal to 60 so that we can
-%standardize the length to calculate reliable p values 
-% antiquated 
+% this code is meant to set the index_stim equal to 60 so that we can
+% standardize the length to calculate reliable p values 
+% designed to calculate the median rms value for each event of light, or
+% the variance of each event 
 
 fs=tickrate(1);
 time1=1:dataend(1);
@@ -96,20 +97,6 @@ end
 % prevents errors based on discrepency between V1Ldata and
 % lightstimdata length
 
-% for i=1:4
-%     try 
-%         for j =2:(length(index_stim)-2) 
-%             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%         end
-%     catch 
-%         warning('Index exceeds the number of array elements. Trying j=2:(length(index_stim)-3)') 
-%         for j =2:(length(index_stim)-3) 
-%             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
-%         end
-%     end 
-% end 
-
-% minusing less events because everything is cut properly? 
 for i=1:4
 %     try 
 %         for j =2:(length(index_stim)-1) 
@@ -175,41 +162,55 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
     matrix=matrix/rms_baseline;
 
     
-%% collect event medians in separate trial matrixes for median analysis 
-% trialxmedians(mousenumber,medians) 
+%% collect event medians/var in separate trial matrixes for median/var analysis 
+
 s=size(matrix); % 10 by 60 matrix 
 tmatrix = matrix'; % get matrix x to be seconds, y to be event number 
 concat2=['Mouse' num2str(f) 'Trial' num2str(z)]; % to organize struct data
-trialmedians = [];
-for i = 1:s(2) % 1 to ~60 
-    eventmedian = median(tmatrix(i,:)) ; 
-    trialmedians = [trialmedians eventmedian] ;
-end 
-medians.(concat2) = trialmedians ; 
-    
-% if z == 1 % 1LO 
-%     trialmedians = [];
-%     for i = 1:s(2) % 1 to ~60 
-%         eventmedian = median(tmatrix(i,:)) ; 
-%         trialmedians = [trialmedians eventmedian] ;
-%     end 
-%     medians_1LO(f,:) = trialmedians ;
-% elseif z == 3 %L+US
-%     trialmedians = [];
-%     for i = 1:s(2) % 1 to ~60 
-%         eventmedian = median(tmatrix(i,:)) ; 
-%         trialmedians = [trialmedians eventmedian] ;
-%     end 
-%     medians_LUS(f,:) = trialmedians ;
-% elseif z == 4 %2LO 
-%     trialmedians = [];
-%     for i = 1:s(2) % 1 to ~60 
-%         eventmedian = median(tmatrix(i,:)) ; 
-%         trialmedians = [trialmedians eventmedian] ;
-%     end 
-%     medians_2LO(f,:) = trialmedians ;
-% end    
 
+if medians_or_variance == 1 
+    trialmedians = [];
+    for i = 1:s(2) % 1 to ~60 
+        eventmedian = median(tmatrix(i,:)) ; 
+        trialmedians = [trialmedians eventmedian] ;
+    end 
+    medians.(concat2) = trialmedians ; 
+else 
+    trialvariances = [];
+    for i = 1:s(2) % 1 to ~60 
+        eventvariance = var(tmatrix(i,:)) ; 
+        trialvariances = [trialvariances eventvariance] ;
+    end 
+    variances.(concat2) = trialvariances ; 
+end     
+
+
+%% normalizing LUS and 2LO by 1LO median/variance for each mouse 
+if normalize_by_1LO == 1 
+    if medians_or_variance == 1
+        if z == 1 
+            firstLOmedian = median(medians.(concat2)) ;
+            medians.(concat2) = (medians.(concat2))/firstLOmedian;
+        end 
+        if z == 3 
+            medians.(concat2) = medians.(concat2)/firstLOmedian;
+        end 
+        if z == 4 
+            medians.(concat2) = medians.(concat2)/firstLOmedian;
+        end 
+    else 
+        if z == 1 
+            firstLOmedian = median(variances.(concat2)) ;
+            variances.(concat2) = variances.(concat2)/firstLOmedian;
+        end 
+        if z == 3 
+            variances.(concat2) = variances.(concat2)/firstLOmedian;
+        end 
+        if z == 4 
+            variances.(concat2) = variances.(concat2)/firstLOmedian;
+        end 
+    end 
+end 
 %% arrange data for statistical analysis
 % values for for_stats_analysis are reset by normalized values 
 
