@@ -106,7 +106,7 @@ end
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 end
 
-clearvars -except penmedians penvariances medians_or_variance ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LO penran
+clearvars -except penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
 
 % if runnext == 1 
     Harry_Plotter2

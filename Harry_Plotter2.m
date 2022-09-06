@@ -122,7 +122,7 @@ end
         ylabel('variance (rms^2?)') 
     end
     
-%% variance by trial -- incorrectly calculated as of 8/24/22
+%% variance by trial 
 
 % removing NaN entries 
 firstLOpen = firstLOpen(~isnan(firstLOpen));
@@ -183,15 +183,15 @@ end
 
 %% intracohort median/variance MWs 
 
-if normalize_by_1LO == 1 
-    if medians_or_variance == 1 
-        median_MWpenLUS2LO = ranksum(LUSpen,secondLOpen); 
-        median_MWshamLUS2LO = ranksum(LUSsham,secondLOsham); 
-    else
-        var_MW_pen_LUS2LO = ranksum(LUSpen, secondLOpen) ; 
-        var_MW_sham_LUS2LO = ranksum(LUSsham, secondLOsham) ;
-    end 
-else 
+% if normalize_by_1LOvar == 1 
+%     if medians_or_variance == 1 
+%         median_MWpenLUS2LO = ranksum(LUSpen,secondLOpen); 
+%         median_MWshamLUS2LO = ranksum(LUSsham,secondLOsham); 
+%     else
+%         var_MW_pen_LUS2LO = ranksum(LUSpen, secondLOpen) ; 
+%         var_MW_sham_LUS2LO = ranksum(LUSsham, secondLOsham) ;
+%     end 
+% else 
     if medians_or_variance == 1 
         median_MWpen1LOLUS = ranksum(firstLOpen,LUSpen);
         median_MWpenLUS2LO = ranksum(LUSpen,secondLOpen); 
@@ -209,7 +209,7 @@ else
         var_MW_sham_LUS2LO = ranksum(LUSsham, secondLOsham) ;
         var_MWsham1LO2LO = ranksum(firstLOsham,secondLOsham); 
     end 
-end 
+% end 
 
 
 %% QQ plots (for median analysis) 
@@ -230,7 +230,25 @@ if medians_or_variance == 1
      title('QQ plot of pen vs sham 2LO event median rms values')
 end  
  
-
+%% two-sample F-test for equal variances 
+% returns a test decision for the null hypothesis that the data in vectors x and y comes from normal distributions with the same variance
+% The result h is 1 if the test rejects the null hypothesis at the 5% significance level, and 0 otherwise.
+if medians_or_variance == 1 
+    % intercohort 
+    [F_decision_1LO,F_pvalue_1LO] = vartest2(firstLOpen,firstLOsham);
+    [F_decision_LUS,F_pvalue_LUS] = vartest2(LUSpen,LUSsham);
+    [F_decision_2LO,F_pvalue_2LO] = vartest2(secondLOpen,secondLOsham);
+    % intracohort 
+    % pen 
+    [F_decision_pen_1LOLUS,F_pvalue_pen_1LOLUS] = vartest2(firstLOpen,LUSpen);
+    [F_decision_pen_LUS2LO,F_pvalue_pen_LUS2LO] = vartest2(LUSpen,secondLOpen);
+    [F_decision_pen_1LO2LO,F_pvalue_pen_1LO2LO] = vartest2(firstLOpen,secondLOpen);
+    % sham 
+    [F_decision_sham_1LOLUS,F_pvalue_sham_1LOLUS] = vartest2(firstLOsham,LUSsham);
+    [F_decision_sham_LUS2LO,F_pvalue_sham_LUS2LO] = vartest2(LUSsham,secondLOsham);
+    [F_decision_sham_1LO2LO,F_pvalue_sham_1LO2LO] = vartest2(firstLOsham,secondLOsham);
+end 
+    
 
  
  

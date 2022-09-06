@@ -9,7 +9,7 @@ time=time1/fs/60;
 %% change the bandpass for filtering pls
     % default done 
 %     [bb,aa]=butter(3,[3,100]/(fs/2)); %trying to get the us noise out, 3 to 200
-[bb,aa]=butter(3,[5,55]/(fs/2)); %trying to get the us noise out, 3 to 200
+[bb,aa]=butter(3,[5,55]/(fs/3)); %trying to get the us noise out, 3 to 200
 %     low gamma 
 %    [bb,aa]=butter(2,[30,59]/(fs/2)); 
     % beta
@@ -35,6 +35,26 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
+
+%% notch filtering 
+
+% Design a filter with a Q-factor of Q=35 to remove a 60 Hz tone from 
+% system running at 300 Hz.
+Wo = 0.5/(10000/2);  BW = Wo/35;
+[b,a] = iirnotch(Wo,BW); 
+alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+
+Wo = 0.5/(10000/2);  BW = Wo/100;
+[b,a] = iirnotch(Wo,BW); 
+alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+
+Wo = 1/(10000/2);  BW = Wo/35;
+[b,a] = iirnotch(Wo,BW); 
+alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+
+Wo = 1/(10000/2);  BW = Wo/100;
+[b,a] = iirnotch(Wo,BW); 
+alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
 
 %% additional filtering 
 %Filter out noise
@@ -213,25 +233,25 @@ for_stats_analysis.(conc)=for_stats;
          
 %% counting event-related potentials 
  
-% % % first second versus last nine seconds 
-%         for eventcount = 1:eventtotal %1-~56
-%              event_2nd_half_deviation = std(matrix(2:10,eventcount));
-%              event_2nd_half_median = median(matrix(2:10,eventcount));
-% %              ERPseconds = 1 second in  the first 5 secs after event that is greather than median+1std of snd 5 secs 
-%              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
-%              for eventsecond = 1 
-%                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
-%                      ERPseconds = ERPseconds + 1;
-%                  end
-%              end 
-% %                 ERP: event-related potential/brain response to stim  
-%              if ERPseconds >= 1 
-%                  ERPcount = ERPcount + 1 ;
-%                  totaleventcount = totaleventcount + 1; 
-%              else
-%                  totaleventcount = totaleventcount + 1;
-%              end
-%         end
+% % first second versus last nine seconds 
+        for eventcount = 1:eventtotal %1-~56
+             event_2nd_half_deviation = std(matrix(2:10,eventcount));
+             event_2nd_half_median = median(matrix(2:10,eventcount));
+%              ERPseconds = 1 second in  the first 5 secs after event that is greather than median+1std of snd 5 secs 
+             ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+             for eventsecond = 1 
+                 if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+                     ERPseconds = ERPseconds + 1;
+                 end
+             end 
+%                 ERP: event-related potential/brain response to stim  
+             if ERPseconds >= 1 
+                 ERPcount = ERPcount + 1 ;
+                 totaleventcount = totaleventcount + 1; 
+             else
+                 totaleventcount = totaleventcount + 1;
+             end
+        end
 
 %         for eventcount = 1:eventtotal 
 %              event_2nd_half_deviation = std(matrix(3:10,eventcount));
@@ -271,24 +291,24 @@ for_stats_analysis.(conc)=for_stats;
 %              end
 %         end
 
-        for eventcount = 1:eventtotal 
-             event_2nd_half_deviation = std(matrix(6:10,eventcount));
-             event_2nd_half_median = median(matrix(6:10,eventcount));
-             % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
-             ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
-             for eventsecond = 1:5 
-                 if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
-                     ERPseconds = ERPseconds + 1;
-                 end
-             end 
-                % ERP: event-related potential/brain response to stim  
-             if ERPseconds >= 1 
-                 ERPcount = ERPcount + 1 ;
-                 totaleventcount = totaleventcount + 1; 
-             else
-                 totaleventcount = totaleventcount + 1;
-             end
-        end
+%         for eventcount = 1:eventtotal 
+%              event_2nd_half_deviation = std(matrix(6:10,eventcount));
+%              event_2nd_half_median = median(matrix(6:10,eventcount));
+%              % ERPseconds = 1 second in in the first 5 secs after event that is greather than median+1std of snd 5 secs 
+%              ERPseconds = 0 ; % how many seconds of the first 5 secs meet criteria
+%              for eventsecond = 1:5 
+%                  if matrix(eventsecond, eventcount) > (event_2nd_half_median+1*event_2nd_half_deviation) 
+%                      ERPseconds = ERPseconds + 1;
+%                  end
+%              end 
+%                 % ERP: event-related potential/brain response to stim  
+%              if ERPseconds >= 1 
+%                  ERPcount = ERPcount + 1 ;
+%                  totaleventcount = totaleventcount + 1; 
+%              else
+%                  totaleventcount = totaleventcount + 1;
+%              end
+%         end
 
 
 

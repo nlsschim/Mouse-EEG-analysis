@@ -38,22 +38,37 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 
 % create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
-foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
+foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
+
+%% notch filtering 
+
+% % Design a filter with a Q-factor of Q=35 to remove a 0.2 Hz tone from 
+% % system running at 10000 Hz.
+% Wo = 0.2/(10000/2);  BW = Wo/35;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+% 
+% Wo = 0.2/(10000/2);  BW = Wo/100;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+% 
+% Wo = 0.25/(10000/2);  BW = Wo/35;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+% 
+% Wo = 0.25/(10000/2);  BW = Wo/100;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
 
 %% additional filtering 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
 
-
-% borrowed from end of code for stat analysis?? 6_24_22
-% deviation=std(alldata.V1Ldata);
-% trialmean = mean(alldata.V1Ldata);
-% alldata.V1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)<trialmean+4*deviation);
-
 deviation=std(alldata.V1Ldata);
 trialmean = mean(alldata.V1Ldata);
 index = abs(alldata.V1Ldata)>trialmean+4*deviation;
 % alldata.V1Ldata(index) = NaN; % doesnt work to ommit values or act as placeholder
+
 % trying to remove 4std electrical noise from alldata, then fill gaps with
 % median mV values of alldata (median calulated after 4*std noise removed):
 
@@ -67,6 +82,9 @@ index2 = find(alldata.V1Ldata==0);
 % replacing  indices with a value of '0' with the median of alldata 
 alldata.V1Ldata(index2) = median(tempV1Ldata) ; 
 
+% tempV1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)>trialmean+4*deviation) ;
+% % replacing  indices with a value of '0' with the median of alldata 
+% alldata.V1Ldata(index) = median(tempV1Ldata) ; 
 
 %% detect stimuli
 
@@ -108,7 +126,7 @@ for i=1:4
         for j =2:(length(index_stim)-2) 
             stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
         end
-    end 
+end 
 % end 
 
 %% plot STAS
@@ -159,15 +177,42 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
 % normalize the data using the baseline RMS
-    matrix=matrix/rms_baseline;
-
-    
-%% collect event medians/var in separate trial matrixes for median/var analysis 
-
+    matrix=matrix/rms_baseline;    
+  
+%% finding waterfall matrix size and initializing 
 s=size(matrix); % 10 by 60 matrix 
 tmatrix = matrix'; % get matrix x to be seconds, y to be event number 
 concat2=['Mouse' num2str(f) 'Trial' num2str(z)]; % to organize struct data
 
+%% normalizing LUS and 2LO by 1LO median before variance calculation for each mouse 
+if medians_or_variance == 2
+    if normalize_by_1LOmed == 1  
+        if z == 1 
+            trialmedians = [];
+            for i = 1:s(2) % 1 to ~60, to get a vector of median values (each from a single event) 
+                eventmedian = median(tmatrix(i,:)) ; 
+                trialmedians = [trialmedians eventmedian] ;
+            end 
+            median_of_medians = median(trialmedians); % median of 1LO medians 
+            matrix = matrix/median_of_medians ; % normalize 1LO matrix by 1LO median median 
+
+            trialvariances = [] ;
+            for i = 1:s(2) % find variance for each event of normalized matrix 
+                eventvariance = var(tmatrix(i,:)) ; 
+                trialvariances = [trialvariances eventvariance] ;
+            end
+            variances.(concat2) = trialvariances ;
+        elseif z == 3 || 4 
+            matrix = matrix/median_of_medians ; % normalize LUS||2LO matrix by 1LO median median 
+            for i = 1:s(2) % find variance for each event of normalized LUS||2LO matrix 
+                eventvariance = var(tmatrix(i,:)) ; 
+                trialvariances = [trialvariances eventvariance] ;
+            end
+            variances.(concat2) = trialvariances ;
+        end 
+    end 
+end     
+%% collect event medians/var in separate trial matrixes for median/var analysis 
 if medians_or_variance == 1 
     trialmedians = [];
     for i = 1:s(2) % 1 to ~60 
@@ -184,9 +229,8 @@ else
     variances.(concat2) = trialvariances ; 
 end     
 
-
 %% normalizing LUS and 2LO by 1LO median/variance for each mouse 
-if normalize_by_1LO == 1 
+if normalize_by_1LOvar == 1 
     if medians_or_variance == 1
         if z == 1 
             firstLOmedian = median(medians.(concat2)) ;
@@ -211,6 +255,7 @@ if normalize_by_1LO == 1
         end 
     end 
 end 
+
 %% arrange data for statistical analysis
 % values for for_stats_analysis are reset by normalized values 
 

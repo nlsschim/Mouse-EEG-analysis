@@ -12,7 +12,12 @@ MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 %% medians or variance 
 
 medians_or_variance = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
-normalize_by_1LO = input("Matrix of L+US and 2nd LO minus medians/var minus 1st LO medians/var? '1' = yes, '0' = no: ") ; 
+normalize_by_1LOvar = input("Matrix of L+US and 2LO var/medians divided by median 1LO var/medians? '1' = yes, '0' = no: ") ;
+if medians_or_variance == 2 
+    if normallize_by_1LOvar == 0 
+        normalize_by_1LOmed = input("Normalize LUS and 2LO by the median median 1LO rms value before variance calc? '1' = yes, '0' = no: ") ; 
+    end
+end 
 % button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 % normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
@@ -107,7 +112,7 @@ end
 %         penvariances.(concat2) = variances.(concat2) ; 
 %     end 
 penran = 1 ;
-clearvars -except penran medians_or_variance normalize_by_1LO penmedians penvariances ACTUAL_PEN_MATRIX 
+clearvars -except penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX 
 median_SHAM
 
 

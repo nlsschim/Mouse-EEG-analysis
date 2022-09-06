@@ -29,7 +29,71 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
+ 
+%% notch filtering 
+% 
+% Design a filter with a Q-factor of Q=35 to remove a 0.2 Hz tone from 
+% system running at 300 Hz.
+% Wo = 0.5/(10000/2);  BW = Wo/35;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+% 
+% Wo = 0.5/(10000/2);  BW = Wo/100;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+% 
+% Wo = 0.5/(10000/2);  BW = Wo/35;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
+% 
+% Wo = 0.5/(10000/2);  BW = Wo/100;
+% [b,a] = iirnotch(Wo,BW); 
+% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
 
+% Wo = 0.2/(10000/2);  BW = Wo/35;
+% [b,a] = iirnotch(Wo,BW); 
+% y = filter(b,a,alldata.V1Ldata);
+% Wo = 0.2/(10000/2);  BW = Wo/100;
+% [b,a] = iirnotch(Wo,BW); 
+% y = filter(b,a,y);
+% 
+% Wo = 0.25/(10000/2);  BW = Wo/35;
+% [b,a] = iirnotch(Wo,BW); 
+% y2 = filter(b,a,y);
+% 
+% figure
+% pspectrum([alldata.V1Ldata,y],360)
+% hold on 
+% pspectrum([alldata.V1Ldata,alldata.V1Ldata],360)
+% hold on 
+% pspectrum([alldata.V1Ldata,y2],360)
+% xlim([0 4])
+% title('Power Spectrum of ECoG Signal and Notch-filtered Signal')
+% legend('ECoG Signal', 'Notch Filtered', 'double notch filtered')
+
+% pspectrum(alldata.V1Ldata,360)
+% xlim([0 4])
+% hold on 
+% pspectrum(y,360)
+% hold on 
+% pspectrum(y2,360)
+% title('Power Spectrum of ECoG Signal and Notch-filtered Signal')
+% legend('ECoG Signal', 'Notch Filtered', 'double notch filtered')
+Wo = 0.5/(10000/2);  BW = Wo/35;
+[b,a] = iirnotch(Wo,BW); 
+y = filter(b,a,alldata.V1Ldata);
+
+Wo = 0.5/(10000/2);  BW = Wo/100;
+[b,a] = iirnotch(Wo,BW); 
+y = filter(b,a,y);
+
+Wo = 1/(10000/2);  BW = Wo/35;
+[b,a] = iirnotch(Wo,BW); 
+y = filter(b,a,y);
+
+Wo = 1/(10000/2);  BW = Wo/100;
+[b,a] = iirnotch(Wo,BW); 
+y = filter(b,a,y);
 %% additional filtering 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
@@ -42,19 +106,19 @@ index = abs(alldata.V1Ldata)>trialmean+4*deviation;
 % trying to remove 4std electrical noise from alldata, then fill gaps with
 % median mV values of alldata (median calulated after 4*std noise removed):
 
-tempV1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)>trialmean+4*deviation) ;
-% replacing  indices with a value of '0' with the median of alldata 
-alldata.V1Ldata(index) = median(tempV1Ldata) ; 
-
-% % THIS SEEMS TO MAINTAIN POSITION of events in waterfall! 
-% % making all abs(values) >4*std = 0 
-% alldata.V1Ldata(index) = 0 ; 
-% % creating a copy of alldata with artifact removed 
-% tempV1Ldata = alldata.V1Ldata;
-% % finding the indexes where alldata = 0 
-% index2 = find(alldata.V1Ldata==0);
+% tempV1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)>trialmean+4*deviation) ;
 % % replacing  indices with a value of '0' with the median of alldata 
-% alldata.V1Ldata(index2) = median(tempV1Ldata) ; 
+% alldata.V1Ldata(index) = median(tempV1Ldata) ; 
+
+% THIS SEEMS TO MAINTAIN POSITION of events in waterfall! 
+% making all abs(values) >4*std = 0 
+alldata.V1Ldata(index) = 0 ; 
+% creating a copy of alldata with artifact removed 
+tempV1Ldata = alldata.V1Ldata;
+% finding the indexes where alldata = 0 
+index2 = find(alldata.V1Ldata==0);
+% replacing  indices with a value of '0' with the median of alldata 
+alldata.V1Ldata(index2) = median(tempV1Ldata) ; 
 
 %% detect stimuli
 
