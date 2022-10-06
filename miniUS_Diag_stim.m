@@ -177,14 +177,18 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
 
 % normalize the data using the baseline RMS
-    matrix=matrix/rms_baseline;    
-  
+    matrix=matrix/rms_baseline;  
+    
+if shrink_matrix == 1 %3 second after stim only analysis 
+   matrix = matrix(1,:);
+end 
 %% finding waterfall matrix size and initializing 
 s=size(matrix); % 10 by 60 matrix 
 tmatrix = matrix'; % get matrix x to be seconds, y to be event number 
 concat2=['Mouse' num2str(f) 'Trial' num2str(z)]; % to organize struct data
 
-%% normalizing LUS and 2LO by 1LO median before variance calculation for each mouse 
+%% normalizing LUS and 2LO by 1LO median before variance calculation for each mouse  
+
 if medians_or_variance == 2
     if normalize_by_1LOmed == 1  
         if z == 1 

@@ -10,12 +10,21 @@ str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 %% medians or variance 
-
-medians_or_variance = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
-normalize_by_1LOvar = input("Matrix of L+US and 2LO var/medians divided by median 1LO var/medians? '1' = yes, '0' = no: ") ;
-if medians_or_variance == 2 
-    if normallize_by_1LOvar == 0 
-        normalize_by_1LOmed = input("Normalize LUS and 2LO by the median median 1LO rms value before variance calc? '1' = yes, '0' = no: ") ; 
+simple_median_analysis = input("Run median analysis with 1 median value per waterfall/trial?: '1' = yes, '0' = no: ") ;
+if simple_median_analysis == 1 % default other median calculations 
+    shrink_matrix = input("run first 3 second after stim matrix analysis: '1' = yes, '0' = no: ") ;
+    simple_medians_or_vaiance = input("run median or variance analysis?: '1' = medians, '0' = variance: ") ;
+    medians_or_variance = 1 ;
+    normalize_by_1LOvar = 0 ; 
+end 
+% more robust median analysis
+if simple_median_analysis == 0
+    medians_or_variance = input("Create PEN matrix of median values or variance? '1'=medians? '2'=variance: ") ;
+    normalize_by_1LOvar = input("Matrix of L+US and 2LO var/medians divided by median 1LO var/medians? '1' = yes, '0' = no: ") ;
+    if medians_or_variance == 2 
+        if normallize_by_1LOvar == 0 
+            normalize_by_1LOmed = input("Normalize LUS and 2LO by the median median 1LO rms value before variance calc? '1' = yes, '0' = no: ") ; 
+        end
     end
 end 
 % button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
@@ -30,6 +39,8 @@ baseline_medians_matrix = [];
 medians_1LO = [] ;
 medians_LUS = [] ;
 medians_2LO = [] ;
+PEN_MATRIX = zeros(7,4); %simple median analysis 
+PEN_MATRIX_1LOnormalized = zeros(7,4);
 
 %% Reading experiment dates 
 for f=1:length(str) 
@@ -101,6 +112,31 @@ end
     for_stats_analysis.Trial_2 = for_stats_analysis.Trial_3 ; 
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
 
+    
+%% Creating a vector to call on later to plot the medians for simple median analysis
+if simple_median_analysis == 1 
+    if simple_medians_or_vaiance == 1 
+        PEN_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
+        PEN_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
+        PEN_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
+    else 
+        PEN_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+        PEN_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+        PEN_SECOND_LIGHT = var(for_stats_analysis.Trial_3);  
+    end 
+end 
+
+% if simple_median_analysis_normalize == 1 % normalize simple median analysis by 1LO 
+    % minus first light median/variance
+    PENY_1LOnormalized = [rms_baseline, PEN_FIRST_LIGHT-PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND-PEN_FIRST_LIGHT, PEN_SECOND_LIGHT-PEN_FIRST_LIGHT];
+% else
+    % medianL+US and median2LO NOT - median of 1LO
+    PENY = [rms_baseline, PEN_FIRST_LIGHT, PEN_LIGHT_ULTRASOUND, PEN_SECOND_LIGHT];
+% end
+
+PEN_MATRIX(f, :) = [PENY] ;
+PEN_MATRIX_1LOnormalized(f, :) = [PENY_1LOnormalized] ;
+
 end 
 
 % normalizing LUS and 2LO by 1LO for each mouse 
@@ -112,7 +148,7 @@ end
 %         penvariances.(concat2) = variances.(concat2) ; 
 %     end 
 penran = 1 ;
-clearvars -except penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX 
+clearvars -except simple_medians_or_vaiance shrink_matrix PEN_MATRIX PEN_MATRIX_1LOnormalized simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX 
 median_SHAM
 
 
