@@ -109,28 +109,25 @@ end
     for_stats_analysis.Trial_3 = for_stats_analysis.Trial_4 ; 
     
     %% Creating a vector to call on later to plot the medians for simple median analysis
-if simple_median_analysis == 1 
-    if simple_medians_or_vaiance == 1 
-        SHAM_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
-        SHAM_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
-        SHAM_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
-    else 
-        SHAM_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
-        SHAM_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
-        SHAM_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
-    end     
-end 
-
-    % normalized by minus first light from median/variance 
-    SHAMY_1LOnormalized = [rms_baseline, SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
-    % medianL+US and median2LO NOT - median of 1LO
-    SHAMY = [rms_baseline, SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
-
-SHAM_MATRIX(f, :) = [SHAMY] ;
-SHAM_MATRIX_1LOnormalized(f, :) = [SHAMY_1LOnormalized] ;
+    if simple_median_analysis == 1 
+        if simple_medians_or_variance == 1 
+            SHAM_FIRST_LIGHT = median(for_stats_analysis.Trial_1);
+            SHAM_LIGHT_ULTRASOUND = median(for_stats_analysis.Trial_2);
+            SHAM_SECOND_LIGHT = median(for_stats_analysis.Trial_3);
+        else 
+            SHAM_FIRST_LIGHT = var(for_stats_analysis.Trial_1);
+            SHAM_LIGHT_ULTRASOUND = var(for_stats_analysis.Trial_2);
+            SHAM_SECOND_LIGHT = var(for_stats_analysis.Trial_3);
+        end     
+        SHAMY_1LOnormalized = [rms_baseline, SHAM_FIRST_LIGHT-SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND-SHAM_FIRST_LIGHT, SHAM_SECOND_LIGHT-SHAM_FIRST_LIGHT];
+        % medianL+US and median2LO NOT - median of 1LO
+        SHAMY = [rms_baseline, SHAM_FIRST_LIGHT, SHAM_LIGHT_ULTRASOUND, SHAM_SECOND_LIGHT];
+        SHAM_MATRIX(f, :) = [SHAMY] ;
+        SHAM_MATRIX_1LOnormalized(f, :) = [SHAMY_1LOnormalized] ;
+    end 
 end
 
-clearvars -except shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
+clearvars -except secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
 
 if simple_median_analysis == 1 
     Harry_Plotter

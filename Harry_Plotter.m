@@ -630,6 +630,21 @@ end
 %             MW2LO = ranksum(PEN_MATRIX(:,4),SHAM_MATRIX(:,4))
 %         end 
         
+%% variance - two ample F-test for equal variances 
+
+    [F_decision_1LO,F_pvalue_1LO] = vartest2(PEN_MATRIX(:,2),SHAM_MATRIX(:,2));
+    [F_decision_LUS,F_pvalue_LUS] = vartest2(PEN_MATRIX(:,3),SHAM_MATRIX(:,3));
+    [F_decision_2LO,F_pvalue_2LO] = vartest2(PEN_MATRIX(:,4),SHAM_MATRIX(:,4));
+    
+    % intracohort 
+    % pen 
+%     [F_decision_pen_1LOLUS,F_pvalue_pen_1LOLUS] = vartest2(firstLOpen,LUSpen);
+%     [F_decision_pen_LUS2LO,F_pvalue_pen_LUS2LO] = vartest2(LUSpen,secondLOpen);
+%     [F_decision_pen_1LO2LO,F_pvalue_pen_1LO2LO] = vartest2(firstLOpen,secondLOpen);
+%     % sham 
+%     [F_decision_sham_1LOLUS,F_pvalue_sham_1LOLUS] = vartest2(firstLOsham,LUSsham);
+%     [F_decision_sham_LUS2LO,F_pvalue_sham_LUS2LO] = vartest2(LUSsham,secondLOsham);
+%     [F_decision_sham_1LO2LO,F_pvalue_sham_1LO2LO] = vartest2(firstLOsham,secondLOsham);
 %% MW for baselines between PEN and SHAM 
 % 
 % if button1==1 %baseline included in matrix 

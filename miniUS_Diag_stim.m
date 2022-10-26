@@ -6,7 +6,7 @@
 
 fs=tickrate(1);
 time1=1:dataend(1);
-time=time1/fs/60;
+time=time1/fs/60; % in minutes?
 
 %% change the bandpass for filtering pls
 
@@ -179,9 +179,29 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 % normalize the data using the baseline RMS
     matrix=matrix/rms_baseline;  
     
-if shrink_matrix == 1 %3 second after stim only analysis 
-   matrix = matrix(1,:);
+if shrink_matrix == 1 %x second after stim only analysis 
+   matrix = matrix(1:secs,:);
 end 
+
+%% plotting waterfall
+figure
+imagesc(matrix')
+% ylim=[0 0.5];
+% ylim=[0 0.3];
+colorbar
+caxis manual
+
+% naming waterfall plots based on 'z'
+names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+title(names(z)) % z = 1:4 trials in loopy
+
+% setting waterfall axes 
+% ylim=[0 0.3];
+ylabel('Stimulus event #'); 
+ticks = 0:5:60 ; 
+yticks(ticks) ; 
+xlabel('Time after stimulus (s)') 
+
 %% finding waterfall matrix size and initializing 
 s=size(matrix); % 10 by 60 matrix 
 tmatrix = matrix'; % get matrix x to be seconds, y to be event number 
@@ -276,3 +296,23 @@ for_stats_analysis.(conc)=for_stats;
 deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));
 for_stats_analysis.(conc) = for_stats_analysis.(conc)(abs(for_stats_analysis.(conc))<trialmean+4*deviation);
+
+% waterfall data versus raw data plotting 10-20-22
+% figure(2)
+% plot(alldata.V1Ldata(224466:424463))
+% xlabel("time after 0.1Hz light stimulus (seconds)")
+% ylabel("Voltage (mV)")
+% xticks([0.2*100000 0.4*100000 0.6*100000 0.8*100000 1*100000 1.2*100000 1.4*100000 1.6*100000 1.8*100000 2*100000])
+% xticklabels({'1','2','3','4','5','6','7','8','9','10'})
+% title("Event 1, Trial 3, 8-10-21 m1 (PEN)") 
+% figure(3)
+% plot(1:10, matrix(:,1), 'red')
+% ylabel('rms baseline normalized magnitude')
+% xlabel('time after 0.1Hz light stimulus (seconds)')
+% title("Event 1, Trial 3, 8-10-21 m1 waterfall tile values")
+% figure(4) 
+% event1waterfall = matrix(:,1)';
+% imagesc(event1waterfall)
+% title('Event 1, Trial 3, 8-10-21 m1 waterfall plot')
+% ylabel("Magnitude") 
+% xlabel("time after 0.1Hz light stimulus (seconds)") 
