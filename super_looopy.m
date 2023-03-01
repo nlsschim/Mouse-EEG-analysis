@@ -13,10 +13,10 @@ clear all
 % trials > 1:4 have been placed in separate folders 
 
 %% PEN US - 2020-2021
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
+folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\'; 
-folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 PEN\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\03-02-22 PEN\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\' ; 
@@ -32,6 +32,7 @@ folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ;
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_25_22\'; 
 
 baseline_medians_matrix = [];
+% for subplotting waterfalls 
 
 %% Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
@@ -296,3 +297,62 @@ MWp3 = ranksum(for_stats_analysis.Trial_2,for_stats_analysis.Trial_3); % pairing
 % variance_trial_one=var(for_stats_analysis.Trial_1);
 % [h,p]=vartest(for_stats_analysis.Trial_2, variance_trial_one);
 % [h1,p1]=vartest(for_stats_analysis.Trial_3, variance_trial_one);
+
+%% subplotting imagesc plots for each trial (only works for 10 sec analysis) 
+% use imagesc_subplot function for tighter margins. Code below works 
+% with very thick margins 
+if time_series == 10
+    figure(7)
+    %imagesc plot
+    subplot(1,3,1);
+% plot 1 
+    imagesc(imagesc_data.Trial_1matrix')
+    colorbar
+    title('1st Light Only') 
+    % setting waterfall axes 
+    ylim=[0 0.3];
+    ylabel('Stimulus Event Number'); 
+    ticks = 0:5:60 ; 
+    yticks(ticks) ; 
+    xlabel('Time After Light Stimulus (s)') 
+    xlol = 4:4:40;
+    xlol2 = 1:1:10;
+    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+    
+    subplot(1,3,2);
+% plot 2 
+    imagesc(imagesc_data.Trial_3matrix')
+%     ylim=[0 0.5];
+    colorbar
+    title('Light + US') 
+
+    % setting waterfall axes 
+    ylim=[0 0.3];
+    ylabel('Stimulus Event Number'); 
+    ticks = 0:5:60 ; 
+    yticks(ticks) ; 
+    xlabel('Time After Light Stimulus (s)') 
+    xlol = 4:4:40;
+    xlol2 = 1:1:10;
+    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places 
+    
+subplot(1,3,3);
+% plot 3 
+    imagesc(imagesc_data.Trial_4matrix')
+%     ylim=[0 0.5];
+    colorbar
+    title('2nd Light Only') 
+
+    % setting waterfall axes 
+%     ylim=[0 0.3];
+    ylabel('Stimulus Event Number'); 
+    ticks = 0:5:60 ; 
+    yticks(ticks) ; 
+    xlabel('Time After Light Stimulus (s)') 
+    xlol = 4:4:40;
+    xlol2 = 1:1:10;
+    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+end 

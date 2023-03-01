@@ -127,7 +127,7 @@ end
     end 
 end
 
-clearvars -except secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
+clearvars -except former_mat runningrms_or_10sec secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
 
 if simple_median_analysis == 1 
     Harry_Plotter

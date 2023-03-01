@@ -70,58 +70,102 @@ end
 
 %% medians/variance box and whisker plots 
 % they like each box's data to be a column
-
-% 1LO 
-    figure(1)
-    % boxplot (input vectors: 7 x~58 = 406)
+if medians_or_variance == 1
+    subplot(1,3,1)
     boxplot([firstLOpen',firstLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
     hold on 
-    %scatterplot; scatter(x,y) creates a scatter plot with circular markers at the locations specified by the vectors x and y.
     scatter(ones(length(firstLOpen)),firstLOpen,4,'r','filled')
     hold on 
     scatter(2.*ones(length(firstLOsham)),firstLOpen,4,'r','filled')
-    if medians_or_variance == 1
-        title('1LO rms values by Cohort') 
-        ylabel('rms values') 
-    else  
-        title('1LO rms variances by Cohort') 
-        ylabel('variance (rms^2?)') 
-    end 
-           
-% L+US  
-    figure(2)
-    % boxplot (input vectors: 7 x~58 = 406)
-    boxplot([LUSpen',LUSsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+    title('First Light Only - Normalized RMS Brain Activity by Cohort') 
+    ylabel('Normalized RMS Brain Activity') 
+    
+    subplot(1,3,2)
+    boxplot([LUSpen',LUSsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'})
     hold on 
-    %scatterplot
     scatter(ones(length(LUSpen)),LUSpen,3,'r','filled')
     hold on 
     scatter(2.*ones(length(LUSsham)),LUSpen,3,'r','filled')
-    if medians_or_variance == 1
-        title('L+US rms values by Cohort') 
-        ylabel('rms values') 
-    else  
-        title('L+US variances by Cohort') 
-        ylabel('variance (rms^2?)') 
-    end 
+    title('Light + Ultrasound - Normalized RMS Brain Activity by Cohort') 
+    ylabel('Normalized RMS Brain Activity') 
     
-% 2LO  
-    figure(3)
-    % boxplot (input vectors: 7 x~58 = 406)
+    subplot(1,3,3)
     boxplot([secondLOpen',secondLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
     hold on 
-    %scatterplot
     scatter(ones(length(secondLOpen)),secondLOpen,3,'r','filled')
-    hold on 
+    hold on
     scatter(2.*ones(length(secondLOsham)),secondLOsham,3,'r','filled')
-    if medians_or_variance == 1
-        title('2LO rms values by Cohort') 
-        ylabel('rms values') 
-    else  
-        title('2LO variances by Cohort') 
-        ylabel('variance (rms^2?)') 
-    end
+    title('Second Light Only - Normalized RMS Brain Activity by Cohort') 
+    ylabel('Normalized RMS Brain Activity') 
+end 
+% % 1LO 
+%     figure(1)
+%     % boxplot (input vectors: 7 x~58 = 406)
+%     boxplot([firstLOpen',firstLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     hold on 
+%     %scatterplot; scatter(x,y) creates a scatter plot with circular markers at the locations specified by the vectors x and y.
+%     scatter(ones(length(firstLOpen)),firstLOpen,4,'r','filled')
+%     hold on 
+%     scatter(2.*ones(length(firstLOsham)),firstLOpen,4,'r','filled')
+%     if medians_or_variance == 1
+%         title('1LO rms values by Cohort') 
+%         ylabel('rms values') 
+%     else  
+%         title('1LO rms variances by Cohort') 
+%         ylabel('variance (rms^2?)') 
+%     end 
+%            
+% % L+US  
+%     figure(2)
+%     % boxplot (input vectors: 7 x~58 = 406)
+%     boxplot([LUSpen',LUSsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     hold on 
+%     %scatterplot
+%     scatter(ones(length(LUSpen)),LUSpen,3,'r','filled')
+%     hold on 
+%     scatter(2.*ones(length(LUSsham)),LUSpen,3,'r','filled')
+%     if medians_or_variance == 1
+%         title('L+US rms values by Cohort') 
+%         ylabel('rms values') 
+%     else  
+%         title('L+US variances by Cohort') 
+%         ylabel('variance (rms^2?)') 
+%     end 
+%     
+% % 2LO  
+%     figure(3)
+%     % boxplot (input vectors: 7 x~58 = 406)
+%     boxplot([secondLOpen',secondLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     hold on 
+%     %scatterplot
+%     scatter(ones(length(secondLOpen)),secondLOpen,3,'r','filled')
+%     hold on 
+%     scatter(2.*ones(length(secondLOsham)),secondLOsham,3,'r','filled')
+%     if medians_or_variance == 1
+%         title('2LO rms values by Cohort') 
+%         ylabel('rms values') 
+%     else  
+%         title('2LO variances by Cohort') 
+%         ylabel('variance (rms^2?)') 
+%     end
     
+%% Test for Equal Variances Using the Brown-Forsythe Test
+% Test the null hypothesis that the variances are equal across each column of PEN/SHAM data in the 
+% trial type matrix, using the Brown-Forsythe test. Suppress the display of the 
+% summary table of statistics and the box plot.    
+
+% trial vectors still have NaN entries so that they are same length 
+
+% creating matrix for each cohort x trial type 
+firstLO_matrix = [firstLOpen' firstLOsham'] ;
+LUS_matrix = [LUSpen' LUSsham'];
+secondLO_matrix = [secondLOpen' secondLOsham'];  
+
+% BF test 
+[BF_1LOp,bfstats1LO] = vartestn(firstLO_matrix,'TestType','BrownForsythe','Display','off');
+[BF_LUSp,bfstatsLUS] = vartestn(LUS_matrix,'TestType','BrownForsythe','Display','off');
+[BF_2LOp,bfstats2LO] = vartestn(secondLO_matrix,'TestType','BrownForsythe','Display','off');
+
 %% variance by trial 
 
 % removing NaN entries 
@@ -174,9 +218,9 @@ else
     medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:), 'o-r') ; 
     hold on 
     medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:), 'o-b') ;  
-    legend([medmed_1 medmed_2], {'PEN data', 'SHAM data'})
-    title('Median of event median by cohort vs. Trial Type')
-    ylabel('rms') 
+    legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'})
+    title('Median of Pooled Light Event Medians by Cohort vs. Trial Type')
+    ylabel('Normalized RMS Brain Activity') 
     trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
     xticklabels(trialtype) ;
 end 
@@ -230,26 +274,24 @@ if medians_or_variance == 1
      title('QQ plot of pen vs sham 2LO event median rms values')
 end  
  
-%% two-sample F-test for equal variances 
-% returns a test decision for the null hypothesis that the data in vectors x and y comes from normal distributions with the same variance
-% The result h is 1 if the test rejects the null hypothesis at the 5% significance level, and 0 otherwise.
-if medians_or_variance == 1 
-    % intercohort 
-    [F_decision_1LO,F_pvalue_1LO] = vartest2(firstLOpen,firstLOsham);
-    [F_decision_LUS,F_pvalue_LUS] = vartest2(LUSpen,LUSsham);
-    [F_decision_2LO,F_pvalue_2LO] = vartest2(secondLOpen,secondLOsham);
-    % intracohort 
-    % pen 
-    [F_decision_pen_1LOLUS,F_pvalue_pen_1LOLUS] = vartest2(firstLOpen,LUSpen);
-    [F_decision_pen_LUS2LO,F_pvalue_pen_LUS2LO] = vartest2(LUSpen,secondLOpen);
-    [F_decision_pen_1LO2LO,F_pvalue_pen_1LO2LO] = vartest2(firstLOpen,secondLOpen);
-    % sham 
-    [F_decision_sham_1LOLUS,F_pvalue_sham_1LOLUS] = vartest2(firstLOsham,LUSsham);
-    [F_decision_sham_LUS2LO,F_pvalue_sham_LUS2LO] = vartest2(LUSsham,secondLOsham);
-    [F_decision_sham_1LO2LO,F_pvalue_sham_1LO2LO] = vartest2(firstLOsham,secondLOsham);
-end 
-    
+% %% two-sample F-test for equal variances 
+% % returns a test decision for the null hypothesis that the data in vectors x and y comes from normal distributions with the same variance
+% % The result h is 1 if the test rejects the null hypothesis at the 5% significance level, and 0 otherwise.
+% if medians_or_variance == 1 
+%     % intercohort 
+%     [F_decision_1LO,F_pvalue_1LO] = vartest2(firstLOpen,firstLOsham);
+%     [F_decision_LUS,F_pvalue_LUS] = vartest2(LUSpen,LUSsham);
+%     [F_decision_2LO,F_pvalue_2LO] = vartest2(secondLOpen,secondLOsham);
+%     % intracohort 
+%     % pen 
+%     [F_decision_pen_1LOLUS,F_pvalue_pen_1LOLUS] = vartest2(firstLOpen,LUSpen);
+%     [F_decision_pen_LUS2LO,F_pvalue_pen_LUS2LO] = vartest2(LUSpen,secondLOpen);
+%     [F_decision_pen_1LO2LO,F_pvalue_pen_1LO2LO] = vartest2(firstLOpen,secondLOpen);
+%     % sham 
+%     [F_decision_sham_1LOLUS,F_pvalue_sham_1LOLUS] = vartest2(firstLOsham,LUSsham);
+%     [F_decision_sham_LUS2LO,F_pvalue_sham_LUS2LO] = vartest2(LUSsham,secondLOsham);
+%     [F_decision_sham_1LO2LO,F_pvalue_sham_1LO2LO] = vartest2(firstLOsham,secondLOsham);
+% end 
 
- 
- 
+
  

@@ -35,7 +35,6 @@ alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 
-
 % create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
@@ -150,57 +149,93 @@ all_points(1).name=names(1);
 d=stas.(char(names(1)));
 
 
-
+if runningrms_or_10sec == 1
    for k=1:10
        concat=['RMSvals_' num2str(k)];
 %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
-%        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
-%        maxrms=max(all_points(1).(concat));
-%        if maxrms > max_rms
-%            max_rms=maxrms;
-%        end
    end 
+   % creating waterfall matrix 
+   matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
+   all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
+else
+% running RMS 
+   for k=1:40
+       concat=['RMSvals_' num2str(k)];
+       all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.25)-1):fs*(tb+k*(0.25)))');
+   end 
+   % creating waterfall matrix in 0.25 interval 
+matrixpoint25 =[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
+    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10; 
+    all_points(1).RMSvals_11; all_points(1).RMSvals_12; all_points(1).RMSvals_13; all_points(1).RMSvals_14; all_points(1).RMSvals_15;
+    all_points(1).RMSvals_16; all_points(1).RMSvals_17; all_points(1).RMSvals_18; all_points(1).RMSvals_19; all_points(1).RMSvals_20;
+    all_points(1).RMSvals_21; all_points(1).RMSvals_22; all_points(1).RMSvals_23; all_points(1).RMSvals_24; all_points(1).RMSvals_25;
+    all_points(1).RMSvals_26; all_points(1).RMSvals_27; all_points(1).RMSvals_28; all_points(1).RMSvals_29; all_points(1).RMSvals_30; 
+    all_points(1).RMSvals_31; all_points(1).RMSvals_32; all_points(1).RMSvals_33; all_points(1).RMSvals_34; all_points(1).RMSvals_35;
+    all_points(1).RMSvals_36; all_points(1).RMSvals_37; all_points(1).RMSvals_38; all_points(1).RMSvals_39; all_points(1).RMSvals_40];
+
+%% ultra smooth 
+%    for k=1:100
+%        concat=['RMSvals_' num2str(k)];
+%        all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.1)-1):fs*(tb+k*(0.1)))');
+%    end 
+% 
+% matrixtenth = zeros(100,55) ;
+% for index = 1:100 
+%     concat=['RMSvals_' num2str(index)];
+%     matrixtenth(index, :) = all_points(1).(concat); 
+% end 
+%% 
+% revised running rms - make loop for this later? - attempted to hardcode 11/3
+%     matrix = []; 
+%     for lol=1:40
+% %         rmsconc = ['RMSvals_' num2str(i)];
+%         matrix(lol,:) = (matrixpoint25(i,:) + matrixpoint25(i+1,:) + matrixpoint25(i+2,:) + matrixpoint25(i+3,:))/4;
+%     end 
+
+    matrix = movmean(matrixpoint25,4,2) ; 
  
-    matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
-    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
+end 
+
 
 % duplicated here from "arrange data for statistical analysis"
 % in order to normalize matrix by median of 1st LO (trial 1)
 % matrix is unchanged 
-
 fakes=size(matrix);
 fakeS=fakes(1)*fakes(2);
 fakefor_stats=reshape(matrix,1,fakeS);
 fakeconc=['Trial_' num2str(z)];
 fakefor_stats_analysis.(fakeconc)=fakefor_stats;
 
-
 % normalize the data using the baseline RMS
     matrix=matrix/rms_baseline;  
     
 if shrink_matrix == 1 %x second after stim only analysis 
-   matrix = matrix(1:secs,:);
+    if former_mat == 1 
+        matrix = matrix(1:secs,:); 
+    else 
+        matrix = matrix((secs*4)+1:40,:); % coded for correctly running rms matrix only 
+    end 
 end 
 
 %% plotting waterfall
-figure
-imagesc(matrix')
+% figure
+% imagesc(matrix')
 % ylim=[0 0.5];
 % ylim=[0 0.3];
-colorbar
-caxis manual
-
+% colorbar
+% caxis manual
+% 
 % naming waterfall plots based on 'z'
-names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
-title(names(z)) % z = 1:4 trials in loopy
-
+% names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+% title(names(z)) % z = 1:4 trials in loopy
+% 
 % setting waterfall axes 
 % ylim=[0 0.3];
-ylabel('Stimulus event #'); 
-ticks = 0:5:60 ; 
-yticks(ticks) ; 
-xlabel('Time after stimulus (s)') 
+% ylabel('Stimulus event #'); 
+% ticks = 0:5:60 ; 
+% yticks(ticks) ; 
+% xlabel('Time after stimulus (s)') 
 
 %% finding waterfall matrix size and initializing 
 s=size(matrix); % 10 by 60 matrix 
@@ -297,21 +332,32 @@ deviation=std(for_stats_analysis.(conc));
 trialmean = mean(for_stats_analysis.(conc));
 for_stats_analysis.(conc) = for_stats_analysis.(conc)(abs(for_stats_analysis.(conc))<trialmean+4*deviation);
 
-% waterfall data versus raw data plotting 10-20-22
+% % waterfall data versus raw data plotting 10-20-22
 % figure(2)
-% plot(alldata.V1Ldata(224466:424463))
+% % light on every 10 sec, each sec = 20,000 samples, each event separated by 10sec = 200,000samples
+% % plot(alldata.V1Ldata(224466:424463)) % 8-10-21 m1 pen event 1
+% % plot(alldata.V1Ldata(7830000:8030000)) % 2.5 x 10^5, event 44 = 44th 10 second = 200,000 (10s) x 44 
+% plot(alldata.V1Ldata(309213:409213)) % 8-10-21 m1 pen event 1
 % xlabel("time after 0.1Hz light stimulus (seconds)")
 % ylabel("Voltage (mV)")
-% xticks([0.2*100000 0.4*100000 0.6*100000 0.8*100000 1*100000 1.2*100000 1.4*100000 1.6*100000 1.8*100000 2*100000])
+% % xticks([0.2*100000 0.4*100000 0.6*100000 0.8*100000 1*100000 1.2*100000 1.4*100000 1.6*100000 1.8*100000 2*100000])
+% xticks([0.1*100000 0.2*100000 0.3*100000 0.4*100000 0.5*100000 0.6*100000 0.7*100000 0.8*100000 0.9*100000 1*100000])
 % xticklabels({'1','2','3','4','5','6','7','8','9','10'})
-% title("Event 1, Trial 3, 8-10-21 m1 (PEN)") 
+% % title("Event 1, Trial 3, 8-10-21 m1 (PEN)") 
+% title("Event 1, Trial 3, 6-23-21 m1 (PEN)") 
 % figure(3)
-% plot(1:10, matrix(:,1), 'red')
+% % plot(1:10, matrix(:,1), 'or') % 8-10-21 m1 pen event 1
+% % plot(1:10, matrix(:,44), 'or') % 8_10_21 m2, event 44
+% % plot(1:10, matrix(:,1), 'or') % 11-3-22 
+% plot(1:40, matrix(:,1), 'or') % 11-3-22 
 % ylabel('rms baseline normalized magnitude')
 % xlabel('time after 0.1Hz light stimulus (seconds)')
-% title("Event 1, Trial 3, 8-10-21 m1 waterfall tile values")
+% % title("Event 1, Trial 3, 8-10-21 m1 waterfall tile values")
+% title("Event 1, Trial 3, 6-23-21 waterfall tile values")
 % figure(4) 
-% event1waterfall = matrix(:,1)';
+% % event1waterfall = matrix(:,1)';
+% % event1waterfall = matrix(:,44)'; % 8_10_21 m2, event 44
+% event1waterfall = matrix(:,1)'; 
 % imagesc(event1waterfall)
 % title('Event 1, Trial 3, 8-10-21 m1 waterfall plot')
 % ylabel("Magnitude") 

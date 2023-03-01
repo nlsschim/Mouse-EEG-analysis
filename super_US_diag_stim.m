@@ -183,35 +183,36 @@ d=stas.(char(names(1)));
 %filter data
 % d=filtfilt(bb,aa,d')';
 
-% max_rms=0;
-if time_series == 3 
-    all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
-	all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
-    all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');  
-    for k=1:3 
+% if time_series == 3 
+%     all_points(1).RMSvals_0point5=rms(d(:,fs*(tb+0.5-1):fs*(tb+0.5))');   
+% 	all_points(1).RMSvals_1point5=rms(d(:,fs*(tb+1.5-1):fs*(tb+1.5))');   
+%     all_points(1).RMSvals_2point5=rms(d(:,fs*(tb+2.5-1):fs*(tb+2.5))');  
+%     for k=1:3 
+%        concat=['RMSvals_' num2str(k)];
+% %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
+%        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
+%     end 
+%     % % for 0.5 seconds increments   
+% else 
+%    for k=1:10
+%        concat=['RMSvals_' num2str(k)];
+% %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
+%        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
+% %        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
+% %        maxrms=max(all_points(1).(concat));
+% %        if maxrms > max_rms
+% %            max_rms=maxrms;
+% %        end
+%    end 
+% end 
+
+%% uncomment from here 11 
+
+   for k=1:40
        concat=['RMSvals_' num2str(k)];
 %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
-       all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
-%        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
-%        maxrms=max(all_points(1).(concat));
-%        if maxrms > max_rms
-%            max_rms=maxrms;
-%        end
- 
-    end 
-    % % for 0.5 seconds increments   
-else 
-   for k=1:10
-       concat=['RMSvals_' num2str(k)];
-%        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
-       all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
-%        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
-%        maxrms=max(all_points(1).(concat));
-%        if maxrms > max_rms
-%            max_rms=maxrms;
-%        end
+       all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.25)-1):fs*(tb+k*(0.25)))');
    end 
-end 
 
       
  % disp(max_rms);
@@ -220,17 +221,68 @@ end
 % matrix=[all_points(1).RMSvals_9; all_points(1).RMSvals_8; all_points(1).RMSvals_7; all_points(1).RMSvals_6; all_points(1).RMSvals_5;
 %     all_points(1).RMSvals_4; all_points(1).RMSvals_3; all_points(1).RMSvals_2; all_points(1).RMSvals_1];
 
-% first 3 sec
-if time_series == 3 
-    matrix=[all_points(1).RMSvals_0point5; all_points(1).RMSvals_1; all_points(1).RMSvals_1point5; all_points(1).RMSvals_2; 
-    all_points(1).RMSvals_2point5; all_points(1).RMSvals_3]; 
-else % 10 seconds 
-    matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
-    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
-end 
+% % first 3 sec
+% if time_series == 3 
+%     matrix=[all_points(1).RMSvals_0point5; all_points(1).RMSvals_1; all_points(1).RMSvals_1point5; all_points(1).RMSvals_2; 
+%     all_points(1).RMSvals_2point5; all_points(1).RMSvals_3]; 
+% else % 10 seconds 
+%     matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
+%     all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10];
+% end 
 
-%normalize the data using the baseline RMS
+    matrix=[all_points(1).RMSvals_1; all_points(1).RMSvals_2; all_points(1).RMSvals_3; all_points(1).RMSvals_4; all_points(1).RMSvals_5;
+    all_points(1).RMSvals_6; all_points(1).RMSvals_7; all_points(1).RMSvals_8; all_points(1).RMSvals_9; all_points(1).RMSvals_10; 
+    all_points(1).RMSvals_11; all_points(1).RMSvals_12; all_points(1).RMSvals_13; all_points(1).RMSvals_14; all_points(1).RMSvals_15;
+    all_points(1).RMSvals_16; all_points(1).RMSvals_17; all_points(1).RMSvals_18; all_points(1).RMSvals_19; all_points(1).RMSvals_20;
+    all_points(1).RMSvals_21; all_points(1).RMSvals_22; all_points(1).RMSvals_23; all_points(1).RMSvals_24; all_points(1).RMSvals_25;
+    all_points(1).RMSvals_26; all_points(1).RMSvals_27; all_points(1).RMSvals_28; all_points(1).RMSvals_29; all_points(1).RMSvals_30; 
+    all_points(1).RMSvals_31; all_points(1).RMSvals_32; all_points(1).RMSvals_33; all_points(1).RMSvals_34; all_points(1).RMSvals_35;
+    all_points(1).RMSvals_36; all_points(1).RMSvals_37; all_points(1).RMSvals_38; all_points(1).RMSvals_39; all_points(1).RMSvals_40];
+
+    matrix = movmean(matrix,4,2) ; 
+%% to here     
+    % attempt to hardcode 
+    %     matrix=[(all_points(1).RMSvals_1 + all_points(1).RMSvals_2 + all_points(1).RMSvals_3 + all_points(1).RMSvals_4)/4; 
+%     (all_points(1).RMSvals_2 + all_points(1).RMSvals_3 + all_points(1).RMSvals_4 + all_points(1).RMSvals_5)/4;
+%     (all_points(1).RMSvals_3 + all_points(1).RMSvals_4 + all_points(1).RMSvals_5 + all_points(1).RMSvals_6)/4; 
+%     (all_points(1).RMSvals_4 + all_points(1).RMSvals_5 + all_points(1).RMSvals_6 + all_points(1).RMSvals_7)/4;
+%     (all_points(1).RMSvals_5 + all_points(1).RMSvals_6 + all_points(1).RMSvals_7 + all_points(1).RMSvals_8)/4;
+%     (all_points(1).RMSvals_6 + all_points(1).RMSvals_7 + all_points(1).RMSvals_8 + all_points(1).RMSvals_9)/4;
+%     (all_points(1).RMSvals_7 + all_points(1).RMSvals_8 + all_points(1).RMSvals_9 + all_points(1).RMSvals_10)/4 ;
+%     (all_points(1).RMSvals_8 + all_points(1).RMSvals_9 + all_points(1).RMSvals_10 + all_points(1).RMSvals_11)/4 ; 
+%     (all_points(1).RMSvals_9 + all_points(1).RMSvals_10 + all_points(1).RMSvals_11 + all_points(1).RMSvals_12)/4 ; 
+%     (all_points(1).RMSvals_10 + all_points(1).RMSvals_11 + all_points(1).RMSvals_12 + all_points(1).RMSvals_13)/4 ; 
+%     (all_points(1).RMSvals_11 + all_points(1).RMSvals_12 + all_points(1).RMSvals_13 + all_points(1).RMSvals_14)/4 ; 
+%     (all_points(1).RMSvals_12 + all_points(1).RMSvals_13 + all_points(1).RMSvals_14 + all_points(1).RMSvals_15)/4 ;
+%     (all_points(1).RMSvals_13 + all_points(1).RMSvals_14 + all_points(1).RMSvals_15 + all_points(1).RMSvals_16)/4 ;
+%     (all_points(1).RMSvals_14 + all_points(1).RMSvals_15 + all_points(1).RMSvals_16 + all_points(1).RMSvals_17)/4 ;
+%     (all_points(1).RMSvals_15 + all_points(1).RMSvals_16 + all_points(1).RMSvals_17 + all_points(1).RMSvals_18)/4 ;
+%     
+%     all_points(1).RMSvals_36; all_points(1).RMSvals_37; all_points(1).RMSvals_38; all_points(1).RMSvals_39; all_points(1).RMSvals_40];
+    
+%% ultrasmooth - for looking at running rms that is ultrasmoothened 
+    
+% % ultra smooth 
+%    for k=1:1000
+%        concat=['RMSvals_' num2str(k)];
+%        all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.01)-1):fs*(tb+k*(0.01)))');
+%    end 
+% 
+% matrixtenth = zeros(1000,length(all_points(1).RMSvals_1)) ;
+% for index = 1:1000 
+%     concat=['RMSvals_' num2str(index)];
+%     matrixtenth(index, :) = all_points(1).(concat); 
+% end 
+% matrix = matrixtenth ;    
+% % matrix = movmean(matrixtenth,10,2) ; 
+
+%% normalize the data using the baseline RMS
 matrix=matrix/rms_baseline;
+
+% matrix = matrix(1:100, :); % for ultrasmooth
+% for storing waterfall matrices from each trial: 
+imagesc_concat=['Trial_' num2str(z) 'matrix'];
+imagesc_data.(imagesc_concat)= matrix ;
 
 figure
 %imagesc plot
@@ -247,18 +299,25 @@ title(names(z)) % z = 1:4 trials in loopy
 
 % setting waterfall axes 
 ylim=[0 0.3];
-ylabel('Stimulus event #'); 
+ylabel('Stimulus Event Number'); 
 ticks = 0:5:60 ; 
 yticks(ticks) ; 
-xlabel('Time after stimulus (s)') 
+xlabel('Time After Light Stimulus (s)') 
 
 % for 3 second analysis 
 if time_series == 3
     set(gca,'XTick',[1 2 3 4 5 6] ); %This is going to be the only values affected. 
     set(gca,'XTickLabel',[0.5 1 1.5 2 2.5 3] ); %This is what it's going to appear in those places.
 else
-    ticks = 0:1:10;
-    xticks(ticks)
+% %     ticks = 0:1:10;
+% %     xticks(ticks)
+% set(gca,'XTick',[4 8 12 16 20 24 28 32 36 40] ); %This is going to be the only values affected. 
+%     set(gca,'XTickLabel',[1 2 3 4 5 6 7 8 9 10] ); %This is what it's going to appear in those places.
+% end  
+xlol = 10:10:100;
+xlol2 = 0.1:0.1:1;
+set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places.
 end  
     
 colorbar
