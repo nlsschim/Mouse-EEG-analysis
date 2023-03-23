@@ -308,13 +308,13 @@ if time_series == 10
 % plot 1 
     imagesc(imagesc_data.Trial_1matrix')
     colorbar
-    title('1st Light Only') 
+    title('1st Light Only', 'Fontsize', 14) 
     % setting waterfall axes 
     ylim=[0 0.3];
-    ylabel('Stimulus Event Number'); 
+    ylabel('Stimulus Event Number', 'Fontsize', 16); 
     ticks = 0:5:60 ; 
     yticks(ticks) ; 
-    xlabel('Time After Light Stimulus (s)') 
+%     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
     xlol = 4:4:40;
     xlol2 = 1:1:10;
     set(gca,'XTick',xlol ); %This is going to be the only values affected. 
@@ -325,14 +325,14 @@ if time_series == 10
     imagesc(imagesc_data.Trial_3matrix')
 %     ylim=[0 0.5];
     colorbar
-    title('Light + US') 
+    title('Light + US', 'Fontsize', 14) 
 
     % setting waterfall axes 
     ylim=[0 0.3];
-    ylabel('Stimulus Event Number'); 
+%     ylabel('Stimulus Event Number', 'Fontsize', 16); 
     ticks = 0:5:60 ; 
     yticks(ticks) ; 
-    xlabel('Time After Light Stimulus (s)') 
+    xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
     xlol = 4:4:40;
     xlol2 = 1:1:10;
     set(gca,'XTick',xlol ); %This is going to be the only values affected. 
@@ -343,14 +343,14 @@ subplot(1,3,3);
     imagesc(imagesc_data.Trial_4matrix')
 %     ylim=[0 0.5];
     colorbar
-    title('2nd Light Only') 
+    title('2nd Light Only', 'Fontsize', 14) 
 
     % setting waterfall axes 
 %     ylim=[0 0.3];
-    ylabel('Stimulus Event Number'); 
+%     ylabel('Stimulus Event Number', 'Fontsize', 14); 
     ticks = 0:5:60 ; 
     yticks(ticks) ; 
-    xlabel('Time After Light Stimulus (s)') 
+%     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
     xlol = 4:4:40;
     xlol2 = 1:1:10;
     set(gca,'XTick',xlol ); %This is going to be the only values affected. 

@@ -71,32 +71,50 @@ end
 %% medians/variance box and whisker plots 
 % they like each box's data to be a column
 if medians_or_variance == 1
-    subplot(1,3,1)
+    
+%     x1 = subplot(1,3,1)
+    tiledlayout(1,3)
+    
+    ax1 = nexttile;
     boxplot([firstLOpen',firstLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
-    hold on 
-    scatter(ones(length(firstLOpen)),firstLOpen,4,'r','filled')
-    hold on 
-    scatter(2.*ones(length(firstLOsham)),firstLOpen,4,'r','filled')
-    title('First Light Only - Normalized RMS Brain Activity by Cohort') 
-    ylabel('Normalized RMS Brain Activity') 
+%     hold on 
+%     scatter(ones(length(firstLOpen)),firstLOpen,4,'r','filled')
+%     hold on 
+%     scatter(2.*ones(length(firstLOsham)),firstLOpen,4,'r','filled')
+    title('First Light Only','Fontsize', 12) 
+    ylabel('Normalized RMS Brain Activity','FontWeight','bold', 'Fontsize', 14) 
     
-    subplot(1,3,2)
+%     x2 = subplot(1,3,2)
+    ax2 = nexttile;
     boxplot([LUSpen',LUSsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'})
-    hold on 
-    scatter(ones(length(LUSpen)),LUSpen,3,'r','filled')
-    hold on 
-    scatter(2.*ones(length(LUSsham)),LUSpen,3,'r','filled')
-    title('Light + Ultrasound - Normalized RMS Brain Activity by Cohort') 
-    ylabel('Normalized RMS Brain Activity') 
+    set(gca,'YTickLabel',[]);
+%     hold on 
+%     scatter(ones(length(LUSpen)),LUSpen,3,'r','filled')
+%     hold on 
+%     scatter(2.*ones(length(LUSsham)),LUSpen,3,'r','filled')
+    title('Light + Ultrasound','FontWeight','bold','Fontsize', 12) 
+%     ylabel('Normalized RMS Brain Activity') 
     
-    subplot(1,3,3)
+%     x3 = subplot(1,3,3)
+    ax3 = nexttile;
     boxplot([secondLOpen',secondLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
-    hold on 
-    scatter(ones(length(secondLOpen)),secondLOpen,3,'r','filled')
-    hold on
-    scatter(2.*ones(length(secondLOsham)),secondLOsham,3,'r','filled')
-    title('Second Light Only - Normalized RMS Brain Activity by Cohort') 
-    ylabel('Normalized RMS Brain Activity') 
+    set(gca,'YTickLabel',[]);
+%     hold on 
+%     scatter(ones(length(secondLOpen)),secondLOpen,3,'r','filled')
+%     hold on
+%     scatter(2.*ones(length(secondLOsham)),secondLOsham,3,'r','filled')
+    title('Second Light Only','Fontsize', 12) % Normalized RMS Brain Activity by Cohort
+%     ylabel('Normalized RMS Brain Activity') 
+    
+    linkaxes([ax1 ax2 ax3],'xy')
+    ax1.YLim = [0.5 3.7];
+%     ax1.YLim = [0.5 2.6];
+    
+    %     for sharey x axis : 
+%     p1 = get(x1, 'Position');
+%     p2 = get(x2, 'Position');
+%     p1(2) = p2(2)+p2(4);
+%     set(x1, 'pos', p1);
 end 
 % % 1LO 
 %     figure(1)
@@ -219,10 +237,12 @@ else
     hold on 
     medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:), 'o-b') ;  
     legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'})
-    title('Median of Pooled Light Event Medians by Cohort vs. Trial Type')
-    ylabel('Normalized RMS Brain Activity') 
+    title('Cohort Median RMS Responses vs. Trials','Fontsize', 14)
+    ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
     trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
     xticklabels(trialtype) ;
+    a = get(gca,'XTickLabel');
+    set(gca,'XTickLabel',a,'fontsize',14)
 end 
 
 %% intracohort median/variance MWs 
