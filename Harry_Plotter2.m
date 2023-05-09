@@ -68,6 +68,38 @@ else
     var_MW2LO = ranksum(secondLOpen,secondLOsham) ;
 end 
 
+%% kruskal-wallis test
+% 6 data sets, sham and pen for each of 3 trial types
+% 
+max_length = max([length(firstLOpen), length( LUSpen),length(secondLOpen),length(firstLOsham),length(LUSsham),length(secondLOsham)]);
+
+varNames = {'firstLOpen', 'LUSpen', 'secondLOpen', 'firstLOsham', 'LUSsham', 'secondLOsham'};
+targetLength = max_length;
+
+for i = 1:numel(varNames)
+    var = eval(varNames{i}); % get variable value by name
+    len = length(var);
+    diff = targetLength - len;
+    
+    if diff > 0 % variable is shorter than target length
+        var = [var, nan(1, diff)]; % add NaNs to reach target length
+        assignin('base', varNames{i}, var); % save updated variable to workspace
+    end
+end
+
+% cohorttrialdata.(concat) 
+% datastings = {'firstLOpen' 'LUSpen' 'secondLOpen' 'firstLOsham' 'LUSsham' 'secondLOsham'} ;
+% for i = 1:6
+%     concat =
+%     vec_length = length(datastrings{i});
+%     diff = max_length - vec_length ;
+%     filler = NaN(1,diff) ;
+%     LUSpen = [LUSpen filler] ;
+% end 
+
+dataset = [firstLOpen; LUSpen; secondLOpen; firstLOsham; LUSsham; secondLOsham]';
+KWp = kruskalwallis(dataset);
+
 %% medians/variance box and whisker plots 
 % they like each box's data to be a column
 if medians_or_variance == 1
@@ -81,7 +113,7 @@ if medians_or_variance == 1
 %     scatter(ones(length(firstLOpen)),firstLOpen,4,'r','filled')
 %     hold on 
 %     scatter(2.*ones(length(firstLOsham)),firstLOpen,4,'r','filled')
-    title('First Light Only','Fontsize', 12) 
+    title('1st LO','Fontsize', 13) 
     ylabel('Normalized RMS Brain Activity','FontWeight','bold', 'Fontsize', 14) 
     
 %     x2 = subplot(1,3,2)
@@ -92,7 +124,7 @@ if medians_or_variance == 1
 %     scatter(ones(length(LUSpen)),LUSpen,3,'r','filled')
 %     hold on 
 %     scatter(2.*ones(length(LUSsham)),LUSpen,3,'r','filled')
-    title('Light + Ultrasound','FontWeight','bold','Fontsize', 12) 
+    title('L+US','FontWeight','bold','Fontsize', 13) 
 %     ylabel('Normalized RMS Brain Activity') 
     
 %     x3 = subplot(1,3,3)
@@ -103,12 +135,17 @@ if medians_or_variance == 1
 %     scatter(ones(length(secondLOpen)),secondLOpen,3,'r','filled')
 %     hold on
 %     scatter(2.*ones(length(secondLOsham)),secondLOsham,3,'r','filled')
-    title('Second Light Only','Fontsize', 12) % Normalized RMS Brain Activity by Cohort
+    title('2nd LO', 'Fontsize',13) % Normalized RMS Brain Activity by Cohort
 %     ylabel('Normalized RMS Brain Activity') 
     
     linkaxes([ax1 ax2 ax3],'xy')
+    
+
+if normalize_by_1LOvar == 1 
+    ax1.YLim = [0.2 2.6];
+else 
     ax1.YLim = [0.5 3.7];
-%     ax1.YLim = [0.5 2.6];
+end 
     
     %     for sharey x axis : 
 %     p1 = get(x1, 'Position');
@@ -219,7 +256,7 @@ if medians_or_variance ~= 1
     trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
     xticklabels(trialtype) ;
 else 
-    % median of event median standard error for errorbars 
+    %% median of event median standard error for errorbars 
     median_stderror = zeros(2,3) ;
     median_stderror(1,1) = std(firstLOpen)/sqrt(length(firstLOpen)) ;
     median_stderror(1,2) = std(LUSpen)/sqrt(length(LUSpen)) ;
@@ -228,6 +265,15 @@ else
     median_stderror(2,1) = std(firstLOsham)/sqrt(length(firstLOsham)) ;
     median_stderror(2,2) = std(LUSsham)/sqrt(length(LUSsham)) ;
     median_stderror(2,3) = std(secondLOsham)/sqrt(length(secondLOsham)) ;
+% % standard dev
+%     median_stderror(1,1) = std(firstLOpen) ;
+%     median_stderror(1,2) = std(LUSpen);
+%     median_stderror(1,3) = std(secondLOpen) ;
+%     
+%     median_stderror(2,1) = std(firstLOsham);
+%     median_stderror(2,2) = std(LUSsham) ;
+%     median_stderror(2,3) = std(secondLOsham);
+
     
     % plotting 
     figure(7) 

@@ -1,4 +1,4 @@
-%% Authors: Kat Floerchinger, Hannah Mach, Henry Tan
+-%% Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 % this code is meant to set the index_stim equal to 60 so that we can
 % standardize the length to calculate reliable p values 
 % designed to calculate the median rms value for each event of light, or
@@ -212,9 +212,9 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
     
 if shrink_matrix == 1 %x second after stim only analysis 
     if former_mat == 1 
-        matrix = matrix(1:secs,:); 
+        matrix = matrix(1:secs,:); %%% IS THIS AN ERROR? should be 1:secs*4 yeah? 
     else 
-        matrix = matrix((secs*4)+1:40,:); % coded for correctly running rms matrix only 
+        matrix = matrix((secs*4)+1:40,:); % coded for correctly running rms matrix only - 5-8-23 DOESNT THIS SKIP STUFF? 
     end 
 end 
 
