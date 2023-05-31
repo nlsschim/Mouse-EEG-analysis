@@ -12,6 +12,11 @@ alldata.S1Ldata=data(datastart(S1L):dataend(S1L));
 alldata.S1Rdata=data(datastart(S1R):dataend(S1R));
 alldata.V1Rdata=data(datastart(V1R):dataend(V1R));
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+% alldata.lightstimdata=data(datastart(5):dataend(5)); % for 5/29 Hypothesis:
+% this works if not all channels are imported; channel 7 = channel 5 vs.
+% channel 1... 5, 6, 7 => channel 1-4, channel 7 
+% what changes in experiments is whether channels 5-6 are included in
+% export
 
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
@@ -43,8 +48,7 @@ end
 tb=1; %time before stim to start STA
 ta=9; %time after stim to end STA
 
-for i=1:4 
-    
+for i=1:4  
     % prevents errors based on discrepency between V1Ldata and
     % lightstimdata length
     %inner_loop_size = 0;
@@ -55,8 +59,11 @@ for i=1:4
 %     end
 %     
 %     for j=2:inner_loop_size %(length(index_stim)-1) %cycle through stimuli
-    for j=2:(length(index_stim)-1)    
-        
+%       for j=2:(length(index_stim)-1)
+%     for j=2:(length(index_stim)-2) % to compensate for data chopping so data vectors are long enough (supposed to be 60 entries) 
+%     for j=2:(length(index_stim)-3) % for 6/25/20 mouse experiment 1
+     for j=2:(length(index_stim)-5) % 6/24/20 experiment 3 
+%     for j=2:(length(index_stim)-3) % 6/24/20 experiment 1  
         stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
 
     end
@@ -79,8 +86,9 @@ maxidxarray=zeros(length(foranalysis),1);
 RMSvalbarray=zeros(length(foranalysis),1);
 RMSvalaarray=zeros(length(foranalysis),1);
 
-for i=1:length(foranalysis)
-    %figure(i+1)
+%%
+% for i=1:length(foranalysis)
+%     figure(i+1)
 %     ylabels={'V1L (Hz)';'S1L (Hz)';'S1R (Hz)'; 'V1R (Hz)'};
 %     subplot(4,1,i);
 %     a=mean(stas.(char(names(i))));
@@ -101,21 +109,21 @@ for i=1:length(foranalysis)
 %     %minidxarray(i)=minidx;
 %     maxvalarray(i)=maxval;
 %     maxidxarray(i)=maxidx; %maxtime array 
-    
-    % Plot STA's. IMPORTANT TO KEEP
-    %figure;
+%     
+% %     Plot STA's. IMPORTANT TO KEEP
+%     figure;
 %     plot(x2,a,'linewidth',1);hold on 
 %    plot(x2(maxidx+fs*(tb)),a(maxidx+fs*(tb)),'o');hold on
 %     xlim([-0.5 1.5]);% seconds that will be shown in the plot, stim is on at time 0    
 %     ylim([-0.05 0.05]);%mV range on the plot, edit to get the entire signal to show
 %    ylabel(ylabels(i));
-    
-    
-    
-    
-    %arrays of RMS values, one for each second of a 10 sec segment
-    %may want overlap in timeframes eventually
-    %This is gross and needs to be edited to reduce redundancy
+%     
+%     
+% %     
+% %     
+% %     arrays of RMS values, one for each second of a 10 sec segment
+% %     may want overlap in timeframes eventually
+% %     This is gross and needs to be edited to reduce redundancy
 %     all_points(i).RMSvalsb=rms(d(:,fs*(tb-0.25):fs*(tb))');
 %     all_points(i).RMSvals_1=rms(d(:,fs*(tb):fs*(tb+1.00))');
 %     all_points(i).RMSvals_2=rms(d(:,fs*(tb+1.00):fs*(tb+2.00))');
@@ -127,9 +135,9 @@ for i=1:length(foranalysis)
 %     all_points(i).RMSvals_8=rms(d(:,fs*(tb+7.00):fs*(tb+8.00))');
 %     all_points(i).RMSvals_9=rms(d(:,fs*(tb+8.00):fs*(tb+9.00))');
 %     all_points(i).RMSvals_10=rms(d(:,fs*(tb+9.00):fs*(ta))'); % I think this is redundant
-    
-   
-
+% %     
+% %    
+% % 
 %     disp('name:')
 %     disp(names(i))
 %     disp('Individual BEFORE rms values')
@@ -146,25 +154,26 @@ for i=1:length(foranalysis)
 %     mean(all_points(i).RMSvals_1')
 %     disp('stddev')
 %     std(all_points(i).RMSvals_1')
+% 
+% 
+%    disp('Paired t-test');
+%     [H,P,CI,STATS] = ttest(all_points(i).RMSvalsb',all_points(i).RMSvalsa');
+%     disp('Individual Percentage Changes');
+%    temp=(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
+%    disp('mean');
+%    mean(temp);
+%    disp('stddev');
+%    std(temp);
+%    disp('Individual Percentage Changes (absolute value)');
+%    temp=abs(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
+%    disp('mean');
+%    mean(temp);
+%    disp('stddev');
+%    std(temp);
+%   
+% end
 
-
-   % disp('Paired t-test');
-    %[H,P,CI,STATS] = ttest(all_points(i).RMSvalsb',all_points(i).RMSvalsa');
-    %disp('Individual Percentage Changes');
-   % temp=(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
-   % disp('mean');
-  %  mean(temp);
-   % disp('stddev');
-   % std(temp);
-   % disp('Individual Percentage Changes (absolute value)');
-   % temp=abs(all_points(i).RMSvalsa' - all_points(i).RMSvalsb')./all_points(i).RMSvalsb'.*100;
-   % disp('mean');
-   % mean(temp);
-   % disp('stddev');
-   % std(temp);
-  
-end
-
+%%
 %collect all of the individual points of data
 all_points(1).name=names(1);
 d=stas.(char(names(1)));
@@ -173,7 +182,8 @@ d=stas.(char(names(1)));
 d=filtfilt(bb,aa,d')';
 
 % max_rms=0;
-   for k=1:9
+%    for k=1:9
+for k=1:9
        concat=['RMSvals_' num2str(k)];
        all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
 %        maxrms=max(all_points(1).(concat));
@@ -199,10 +209,18 @@ figure
 %imagesc plot
 %subplot(2,3,z);
 imagesc(matrix')
+
+% naming waterfall plots based on 'z'
+names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+title(names(z))
+
+% setting waterfall axes 
 ylim=[0 0.3];
+ylabel('Stimulus event #'); 
+ticks = 0:5:60 ; 
+yticks(ticks) ; 
+xlabel('Time after stimulus (s)') 
 colorbar
-
-
 
 
 %% calculate z-scores
@@ -265,29 +283,27 @@ for_stats_analysis.(conc)=for_stats;
 
 %% plot CWTs of STAs
 
-if plot_cwt==1 
-%     figure
-%     caxis_track=[];
-%     ylabels={'S1 (hz)';'A1 (hz)';'V1R (hz)'; 'V1L (hz)'};
-%      xlabel('time after stimulus onset (s)');
-    for i=1:length(foranalysis)
-        figure
-        caxis_track=[];
-        ylabels={'S1L (Hz)';'A1L (Hz)';'V1R (Hz)'; 'V1L (Hz)';'A1R (Hz)';'S1R (Hz)'};
-        xlabel('time after stimulus onset (s)');
-        a=mean(stas.(char(names(i))));
-        cwt(a,[],fs);
-        ylim([0.0005 0.032]);
-        ylabel(ylabels(i));
-        colormap(jet);
-        %caxis_track=[caxis_track;caxis]
-yticks([0.0005,0.001,0.002,0.008,0.032,0.1]);
-yticklabels({0.5,1,2,8,32,100});
-xticks([0,1,2,3,4,5,6,7,8,9]);
- title(file_list(z).name,'interpreter','none');
-
-    end
-     
-end
-
-
+% if plot_cwt==1 
+% %     figure
+% %     caxis_track=[];
+% %     ylabels={'S1 (hz)';'A1 (hz)';'V1R (hz)'; 'V1L (hz)'};
+% %      xlabel('time after stimulus onset (s)');
+%     for i=1:length(foranalysis)
+%         figure
+%         caxis_track=[];
+%         ylabels={'S1L (Hz)';'A1L (Hz)';'V1R (Hz)'; 'V1L (Hz)';'A1R (Hz)';'S1R (Hz)'};
+%         xlabel('time after stimulus onset (s)');
+%         a=mean(stas.(char(names(i))));
+%         cwt(a,[],fs);
+%         ylim([0.0005 0.032]);
+%         ylabel(ylabels(i));
+%         colormap(jet);
+%         %caxis_track=[caxis_track;caxis]
+% yticks([0.0005,0.001,0.002,0.008,0.032,0.1]);
+% yticklabels({0.5,1,2,8,32,100});
+% xticks([0,1,2,3,4,5,6,7,8,9]);
+%  title(file_list(z).name,'interpreter','none');
+% 
+%     end
+%      
+% end
