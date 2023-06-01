@@ -49,30 +49,31 @@ for i = 1
 
     % 1st plot - 1LO 
     nexttile
-    plot(1:10,y1LO_former, 'b-o')
+    scatter(1:10,y1LO_former, 'filled')
     hold on 
     plot(0:10, signif_line, 'r')
     set(gca,'XTickLabel',[]);
-    title('A - 1st LO', 'Fontsize', 13)
+%     title('A - 1st LO', 'Fontsize', 13)
 %     ylabel("MW p-value") 
     xlim([1 10])
 %     xlabel('Total Seconds Analyzed After Light Stimulus') 
+grid on
 
     % 2nd plot - L+US
     nexttile
-    plot(1:10,yLUS_former, '-o')
+    scatter(1:10,yLUS_former, 'filled')
     set(gca,'XTickLabel',[]);
-    title('B - L+US', 'Fontsize', 13)
+%     title('B - L+US', 'Fontsize', 13)
     ylabel("MW p-value", 'Fontsize', 15) 
 %     xlabel('Total Seconds Analyzed After Light Stimulus') 
-
+grid on 
     % 3rd plot - 2LO
     nexttile
-    plot(1:10,y2LO_former, '-o')
-    title('C - 2nd LO', 'Fontsize', 13)
+    scatter(1:10,y2LO_former, 'filled')
+%     title('C - 2nd LO', 'Fontsize', 13)
 %     ylabel("MW p-value") 
     xlabel('Time Analyzed After Light Events (seconds)', 'Fontsize', 14) 
-
+grid on
     %% latter x seconds of matrix MW plot
 
     % 1LO 
@@ -210,7 +211,7 @@ tiledlayout(3,1)
 
 % 1st plot - 1LO 
 nexttile
-plot(1:10,y1LO_former, 'b-o')
+scatter(1:10,y1LO_former, 'filled')
 set(gca,'XTickLabel',[]);
 hold on 
 plot(0:10, signif_line, 'r')
@@ -218,21 +219,24 @@ title('A - 1st LO', 'Fontsize', 13)
 % ylabel("MW p-value") 
 xlim([1 10])
 % xlabel('Total Seconds Analyzed After Light Stimulus') 
+grid on
 
 % 2nd plot - L+US
 nexttile
-plot(1:10,yLUS_former, '-o')
+scatter(1:10,yLUS_former, 'filled')
 set(gca,'XTickLabel',[]);
 title('B - L+US', 'Fontsize', 13)
 ylabel("MW p-value",'Fontsize', 15) 
-% xlabel('Total Seconds Analyzed After Light Stimulus') 
+% xlabel('Total Seconds Analyzed After Light Stimulus')
+grid on
 
 % 3rd plot - 2LO
 nexttile
-plot(1:10,y2LO_former, '-o')
+scatter(1:10,y2LO_former, 'filled')
 title('C - 2nd LO', 'Fontsize', 13)
 % ylabel("MW p-value") 
 xlabel('Time Analyzed After Light Events (seconds)', 'Fontsize', 14) 
+grid on 
 
 %% plotting 
 % latter data notes 

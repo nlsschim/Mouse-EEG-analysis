@@ -52,8 +52,8 @@ end
 %% creating PEN Matrix to store medians or variance 
 
 % PEN_MATRIX = zeros(7,4);
-figure 
-hold on
+% figure 
+% hold on
 baseline_medians_matrix = [];
 medians_1LO = [] ;
 medians_LUS = [] ;

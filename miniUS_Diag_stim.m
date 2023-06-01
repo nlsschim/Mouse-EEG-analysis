@@ -1,4 +1,4 @@
--%% Authors: Kat Floerchinger, Hannah Mach, Henry Tan
+%% Authors: Kat Floerchinger, Hannah Mach, Henry Tan
 % this code is meant to set the index_stim equal to 60 so that we can
 % standardize the length to calculate reliable p values 
 % designed to calculate the median rms value for each event of light, or

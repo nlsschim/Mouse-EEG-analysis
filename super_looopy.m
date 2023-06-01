@@ -16,7 +16,7 @@ clear all
 folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\'; 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ; % maybe 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 PEN\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\03-02-22 PEN\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\' ; 
@@ -302,14 +302,53 @@ MWp3 = ranksum(for_stats_analysis.Trial_2,for_stats_analysis.Trial_3); % pairing
 %% subplotting imagesc plots for each trial (only works for 10 sec analysis) 
 % use imagesc_subplot function for tighter margins. Code below works 
 % with very thick margins 
-if time_series == 10 && runningrms == 2
-    figure(7)
-    %imagesc plot
-    subplot(1,3,1);
-% plot 1 
+% if time_series == 10 && runningrms == 2
+if time_series == 10 
+figure(7);
+   
+% 2LO 
+    subaxis(1, 3, 3, 'Spacing', 0.03);
+    imagesc(imagesc_data.Trial_4matrix')
+    colorbar
+    title('2nd LO', 'Fontsize', 14) 
+    % setting waterfall axes 
+    %     ylim=[0 0.3];
+    %     ylabel('Stimulus Event Number', 'Fontsize', 14); 
+    ticks = 0:5:60 ; 
+    yticks(ticks) ; 
+    %     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
+    xlol = 4:4:40;
+    xlol2 = 1:1:10;
+    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+%         caxis(v)
+    v = caxis ;  
+
+    % L+US 
+    subaxis(1, 3, 2, 'Spacing', 0.03);
+    imagesc(imagesc_data.Trial_3matrix')
+    colorbar
+    title('L+US', 'Fontsize', 14) 
+    % setting waterfall axes 
+    ylim=[0 0.3];
+    %     ylabel('Stimulus Event Number', 'Fontsize', 16); 
+    ticks = 0:5:60 ; 
+    yticks(ticks) ; 
+    xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
+    xlol = 4:4:40;
+    xlol2 = 1:1:10;
+    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places 
+    caxis(v) 
+%     v = caxis ;
+    
+
+    
+    % 1LO 
+    subaxis(1, 3, 1, 'Spacing', 0.03);
     imagesc(imagesc_data.Trial_1matrix')
     colorbar
-    title('1st Light Only', 'Fontsize', 14) 
+    title('1st LO', 'Fontsize', 14) 
     % setting waterfall axes 
     ylim=[0 0.3];
     ylabel('Stimulus Event Number', 'Fontsize', 14); 
@@ -320,100 +359,73 @@ if time_series == 10 && runningrms == 2
     xlol2 = 1:1:10;
     set(gca,'XTick',xlol ); %This is going to be the only values affected. 
     set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
-    
-    subplot(1,3,2);
-% plot 2 
-    imagesc(imagesc_data.Trial_3matrix')
-%     ylim=[0 0.5];
-    colorbar
-    title('Light + US', 'Fontsize', 14) 
+%     caxis manual 
+    caxis(v)
+%     v = caxis ;
 
-    % setting waterfall axes 
-    ylim=[0 0.3];
-%     ylabel('Stimulus Event Number', 'Fontsize', 16); 
-    ticks = 0:5:60 ; 
-    yticks(ticks) ; 
-    xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
-    xlol = 4:4:40;
-    xlol2 = 1:1:10;
-    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
-    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places 
-    
-subplot(1,3,3);
-% plot 3 
-    imagesc(imagesc_data.Trial_4matrix')
-%     ylim=[0 0.5];
-    colorbar
-    title('2nd Light Only', 'Fontsize', 14) 
 
-    % setting waterfall axes 
-%     ylim=[0 0.3];
-%     ylabel('Stimulus Event Number', 'Fontsize', 14); 
-    ticks = 0:5:60 ; 
-    yticks(ticks) ; 
-%     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
-    xlol = 4:4:40;
-    xlol2 = 1:1:10;
-    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
-    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+% Adjust the horizontal spacing between subplots
+hSpacing = 0.005; % Modify this value to adjust the spacing
+subaxis('SpacingHoriz', hSpacing);
 end 
 
-% figure 3 plotting code
-figure(9)
-matrix1 = imagesc_data.Trial_3matrix;
-imagesc(matrix1(:,1)')
-set(gca,'YTickLabel',[]);
-if runningrms ==3 
-    xlol = 10:10:100;
-    xlol2 = 1:1:10;
-    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
-    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
-%     xlabel('Time After Light Stimulus (s)', 'Fontsize', 10)
-end 
-% 127537 - index of first event 
-% 227535 - index of second event 
-% sampling rate = 20k/s 
-% 10 sec after event = 200000
-figure(10)
-% plot(stas.V1Ldata(1,127537:127537+200000))
-% plot(alldata.V1Ldata(127537:127537+100000))
-% xlim([0 10*10^4]) ;
-plot(alldata.V1Ldata(index_stim(57):index_stim(57)+fs*10))
-set(gca,'XLim',[0 10*10^4])
 
-% for median 1LO array
-matrix2 = imagesc_data.Trial_1matrix;
-s=size(matrix2); % 10 by 60 matrix 
-tmatrix = matrix2'; % get matrix x to be seconds, y to be event number 
-trialmedians = [];
-for i = 1:s(2) % 1 to ~60, to get a vector of median values (each from a single event) 
-    eventmedian = median(tmatrix(i,:)) ; 
-    trialmedians = [trialmedians eventmedian] ;
-end 
+% % figure 3 plotting code
+% figure(9)
+% matrix1 = imagesc_data.Trial_3matrix;
+% imagesc(matrix1(:,1)')
+% set(gca,'YTickLabel',[]);
+% if runningrms ==3 
+%     xlol = 10:10:100;
+%     xlol2 = 1:1:10;
+%     set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+%     set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+% %     xlabel('Time After Light Stimulus (s)', 'Fontsize', 10)
+% end 
+% % 127537 - index of first event 
+% % 227535 - index of second event 
+% % sampling rate = 20k/s 
+% % 10 sec after event = 200000
+% figure(10)
+% % plot(stas.V1Ldata(1,127537:127537+200000))
+% % plot(alldata.V1Ldata(127537:127537+100000))
+% % xlim([0 10*10^4]) ;
+% plot(alldata.V1Ldata(index_stim(57):index_stim(57)+fs*10))
+% set(gca,'XLim',[0 10*10^4])
+% 
+% % for median 1LO array
+% matrix2 = imagesc_data.Trial_1matrix;
+% s=size(matrix2); % 10 by 60 matrix 
+% tmatrix = matrix2'; % get matrix x to be seconds, y to be event number 
+% trialmedians = [];
+% for i = 1:s(2) % 1 to ~60, to get a vector of median values (each from a single event) 
+%     eventmedian = median(tmatrix(i,:)) ; 
+%     trialmedians = [trialmedians eventmedian] ;
+% end 
+% % median_of_medians = median(trialmedians); % median of 1LO medians 
+% % matrix = matrix/median_of_medians ; % normalize 1LO matrix by 1LO median median 
+% figure(11)
+% clims = [0 3];
+% imagesc(trialmedians', clims)
+% % imagesc(trialmedians')
+% set(gca,'XTickLabel', []);
+% % ylabel('Event') 
+% % set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+% % set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+% 
+% figure(12)
+% % clims = [0 3];
+% imagesc(mean(trialmedians),clims)
+% % imagesc(0.7754,clims)1.4586
+% set(gca,'YTickLabel',[], 'XTickLabel', []);
+% 
+% % 1LO normalized L+US 
 % median_of_medians = median(trialmedians); % median of 1LO medians 
-% matrix = matrix/median_of_medians ; % normalize 1LO matrix by 1LO median median 
-figure(11)
-clims = [0 3];
-imagesc(trialmedians', clims)
-% imagesc(trialmedians')
-set(gca,'XTickLabel', []);
-% ylabel('Event') 
+% matrix1 = matrix1./median_of_medians ; % normalize L+US matrix by 1LO median median 
+% figure(13)
+% imagesc(matrix1')
 % set(gca,'XTick',xlol ); %This is going to be the only values affected. 
 % set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
-
-figure(12)
-% clims = [0 3];
-imagesc(mean(trialmedians),clims)
-% imagesc(0.7754,clims)1.4586
-set(gca,'YTickLabel',[], 'XTickLabel', []);
-
-% 1LO normalized L+US 
-median_of_medians = median(trialmedians); % median of 1LO medians 
-matrix1 = matrix1./median_of_medians ; % normalize L+US matrix by 1LO median median 
-figure(13)
-imagesc(matrix1')
-set(gca,'XTick',xlol ); %This is going to be the only values affected. 
-set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
-ylabel('Event Number','Fontsize', 14) 
-xlabel('Time After Light Stimulus (s)', 'Fontsize', 14)
-title('1LO normalized L+US', 'Fontsize', 14)
+% ylabel('Event Number','Fontsize', 14) 
+% xlabel('Time After Light Stimulus (s)', 'Fontsize', 14)
+% title('1LO normalized L+US', 'Fontsize', 14)

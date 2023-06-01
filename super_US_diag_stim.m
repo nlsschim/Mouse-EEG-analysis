@@ -308,7 +308,7 @@ if runningrms == 3
 end 
 %% normalize the data using the baseline RMS
 matrix=matrix/rms_baseline;
-matrix = matrix(1:8,:); 
+% matrix = matrix(1:8,:); 
 % matrix = matrix(1:100, :); % for ultrasmooth
 % for storing waterfall matrices from each trial: 
 imagesc_concat=['Trial_' num2str(z) 'matrix'];

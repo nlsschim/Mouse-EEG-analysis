@@ -104,11 +104,29 @@ KWp = kruskalwallis(dataset);
 % they like each box's data to be a column
 if medians_or_variance == 1
     
+    % for whiskers 
+    q3=norminv(.75);
+    q95=norminv(0.95);
+    w95=(q95-q3)/(2*q3);
+
 %     x1 = subplot(1,3,1)
     tiledlayout(1,3)
     
     ax1 = nexttile;
-    boxplot([firstLOpen',firstLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+    
+%         % finding whisker length for boxplot 
+%             % Calculate the percentiles
+%         lower_percentile = prctile(firstLOsham, 2.5);
+%         upper_percentile = prctile(firstLOsham, 97.5);
+% 
+%             % Find the whisker values
+%         lower_whisker = min(firstLOsham(firstLOsham >= lower_percentile));
+%         upper_whisker = max(firstLOsham(firstLOsham <= upper_percentile));
+        
+%       boxplot([firstLOpen',firstLOsham'],'Whisker',w95,'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     boxplot([firstLOpen',firstLOsham'],'whiskers', [lower_whisker, upper_whisker],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     boxplot([firstLOpen',firstLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+boxplot([firstLOpen',firstLOsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'}) 
 %     hold on 
 %     scatter(ones(length(firstLOpen)),firstLOpen,4,'r','filled')
 %     hold on 
@@ -118,7 +136,19 @@ if medians_or_variance == 1
     
 %     x2 = subplot(1,3,2)
     ax2 = nexttile;
-    boxplot([LUSpen',LUSsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'})
+    
+%     % finding whisker length for boxplot 
+%             % Calculate the percentiles
+%         lower_percentile = prctile(LUSsham, 2.5);
+%         upper_percentile = prctile(LUSsham, 97.5);
+% 
+%             % Find the whisker values
+%         lower_whisker = min(LUSsham(LUSsham >= lower_percentile));
+%         upper_whisker = max(LUSsham(LUSsham <= upper_percentile));
+%         boxplot([LUSpen',LUSsham'],'Whisker',w95,'Notch','on','Labels', {'PEN US', 'SHAM US'})
+%     boxplot([LUSpen',LUSsham'],'whiskers', [lower_whisker, upper_whisker],'Notch','on','Labels', {'PEN US', 'SHAM US'})
+%     boxplot([LUSpen',LUSsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'})
+ boxplot([LUSpen',LUSsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'})
     set(gca,'YTickLabel',[]);
 %     hold on 
 %     scatter(ones(length(LUSpen)),LUSpen,3,'r','filled')
@@ -129,7 +159,20 @@ if medians_or_variance == 1
     
 %     x3 = subplot(1,3,3)
     ax3 = nexttile;
-    boxplot([secondLOpen',secondLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+    
+%     % finding whisker length for boxplot 
+%             % Calculate the percentiles
+%         lower_percentile = prctile(secondLOsham, 2.5);
+%         upper_percentile = prctile(secondLOsham, 97.5);
+% 
+%             % Find the whisker values
+%         lower_whisker = min(LUSsham(LUSsham >= lower_percentile));
+%         upper_whisker = max(LUSsham(LUSsham <= upper_percentile));
+        
+%     boxplot([secondLOpen',secondLOsham'],'Whisker',w95,'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     boxplot([secondLOpen',secondLOsham'],'whiskers', [lower_whisker, upper_whisker],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+%     boxplot([secondLOpen',secondLOsham'],'Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+boxplot([secondLOpen',secondLOsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'})
     set(gca,'YTickLabel',[]);
 %     hold on 
 %     scatter(ones(length(secondLOpen)),secondLOpen,3,'r','filled')
@@ -250,11 +293,15 @@ if medians_or_variance ~= 1
     var_1 = errorbar(1:3, var_y_pen, var_stderror(1,:), 'o-r') ; 
     hold on 
     var_2 = errorbar(1:3, var_y_sham, var_stderror(2,:), 'o-b') ;  
+%     xlim([-0.5, 2.5]);
     legend([var_1 var_2], {'PEN data', 'SHAM data'})
     title('Median Variance by cohort vs. Trial Type')
     ylabel('Variance') 
     trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
+    
     xticklabels(trialtype) ;
+    
+    
 else 
     %% median of event median standard error for errorbars 
     median_stderror = zeros(2,3) ;
@@ -279,16 +326,38 @@ else
     figure(7) 
     medmed_y_pen = [median(firstLOpen)  median(LUSpen) median(secondLOpen)] ;
     medmed_y_sham = [median(firstLOsham)  median(LUSsham) median(secondLOsham)] ;
-    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:), 'o-r') ; 
+%     medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:), 'o-r') ; 
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'r') ; 
     hold on 
-    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:), 'o-b') ;  
-    legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'})
-    title('Cohort Median RMS Responses vs. Trials','Fontsize', 14)
+    medmed_1line = scatter(1:3, medmed_y_pen, 70, 'r') ; 
+    hold on 
+%     medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:), 'o-b') ;  
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'b') ; 
+    hold on 
+    medmed_2line = scatter(1:3, medmed_y_sham, 70, 'b') ; 
+    legend([medmed_1line medmed_2line], {'PEN US', 'SHAM US'}, 'location', 'northwest')
+%     legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'})
+%     title('Cohort Median RMS Responses vs. Trials','Fontsize', 14)
     ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
-    trialtype = {'1LO' '' '' '' '' 'L+US' '' '' '' '' '2LO'};
-    xticklabels(trialtype) ;
+    
+%     ylim([1.3 2.0]);
+%     labels = {'1LO', '', '', '', '', 'L+US', '', '', '', '', '2LO'};
+    labels = {'1LO', 'L+US', '2LO'};
+
+    % Find the positions of the categorical labels
+    labelPositions = find(~cellfun(@isempty, labels));
+
+    % Set the x-tick positions and labels
+    xticks(labelPositions);
+    xticklabels(labels(labelPositions));
+
+    % Adjust the x-axis limits if needed
+    xlim([0, numel(labels)+1]);
+
     a = get(gca,'XTickLabel');
     set(gca,'XTickLabel',a,'fontsize',14)
+    xlim([0.95 3.05]);
+    
 end 
 
 %% intracohort median/variance MWs 
