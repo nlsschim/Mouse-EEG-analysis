@@ -5,9 +5,9 @@ close all
 clear all
 clc
 %% reading cohort files 
-file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\'};
+file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\', '5_18_22 m1','5_18_22 m2','5_18_22 m3','5_25_22 m1','5_25_22 m2','5_26_22 m1','5_26_22 m2','5_26_22 m2','5_26_22 m3'};
 str=string(file1);
-MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
+MainDirectory = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\';
 
 %% medians or variance 
 runningrms_or_10sec = input("Run 10 second waterfalls or 0.25 second running rms trial?: '1' = 10sec, '0' = runningrms: ") ;

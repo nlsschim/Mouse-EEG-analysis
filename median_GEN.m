@@ -6,7 +6,7 @@
 %% reading cohort files 
 file1={'12-23 Mouse Experiment\', '12-16 RECUT\', '12-13-19 recut RIGHT\', '12-24 Data\', '12-27-19 RECUT\','12-12-19 RECUT\', '11-27-19 MOUSE RECUT\'};
 str=string(file1);
-MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\GEN\';
+MainDirectory = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\GEN\';
 
 %% medians or variance 
 

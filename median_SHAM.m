@@ -9,7 +9,7 @@ close all
 
 file1={'2_15_22\','2_24_22\','2_25_22\','06_30_20 MOUSE 1 RECUT\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\','05-29-2020 Mouse Experiment\'};
 str=string(file1);
-MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
+MainDirectory = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\';
 
 %% medians or variance - should be decided from decisions in median_PEN
 

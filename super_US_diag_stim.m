@@ -20,7 +20,7 @@ alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
 alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
 % alldata.lightstimdata=filtfilt(bb,aa,data(datastart(lightstim):dataend(lightstim))')';
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-%  alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
+% alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
 % this works if not all channels are imported; channel 7 = channel 5 vs.
 % channel 1... 5, 6, 7 => channel 1-4, channel 7 
 % what changes in experiments is whether channels 5-6 are included in
@@ -30,55 +30,6 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
  
-%% notch filtering 
-% 
-% Design a filter with a Q-factor of Q=35 to remove a 0.2 Hz tone from 
-% system running at 300 Hz.
-% Wo = 0.5/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.5/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.5/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.5/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-
-% Wo = 0.2/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% y = filter(b,a,alldata.V1Ldata);
-% Wo = 0.2/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% y = filter(b,a,y);
-% 
-% Wo = 0.25/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% y2 = filter(b,a,y);
-% 
-% figure
-% pspectrum([alldata.V1Ldata,y],360)
-% hold on 
-% pspectrum([alldata.V1Ldata,alldata.V1Ldata],360)
-% hold on 
-% pspectrum([alldata.V1Ldata,y2],360)
-% xlim([0 4])
-% title('Power Spectrum of ECoG Signal and Notch-filtered Signal')
-% legend('ECoG Signal', 'Notch Filtered', 'double notch filtered')
-
-% pspectrum(alldata.V1Ldata,360)
-% xlim([0 4])
-% hold on 
-% pspectrum(y,360)
-% hold on 
-% pspectrum(y2,360)
-% title('Power Spectrum of ECoG Signal and Notch-filtered Signal')
-% legend('ECoG Signal', 'Notch Filtered', 'double notch filtered')
 Wo = 0.5/(10000/2);  BW = Wo/35;
 [b,a] = iirnotch(Wo,BW); 
 y = filter(b,a,alldata.V1Ldata);
@@ -94,6 +45,7 @@ y = filter(b,a,y);
 Wo = 1/(10000/2);  BW = Wo/100;
 [b,a] = iirnotch(Wo,BW); 
 y = filter(b,a,y);
+
 %% additional filtering 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering
@@ -102,13 +54,7 @@ y = filter(b,a,y);
 deviation=std(alldata.V1Ldata);
 trialmean = mean(alldata.V1Ldata);
 index = abs(alldata.V1Ldata)>trialmean+4*deviation;
-% alldata.V1Ldata(index) = NaN; % doesnt work to ommit values or act as placeholder
-% trying to remove 4std electrical noise from alldata, then fill gaps with
-% median mV values of alldata (median calulated after 4*std noise removed):
 
-% tempV1Ldata = alldata.V1Ldata(abs(alldata.V1Ldata)>trialmean+4*deviation) ;
-% % replacing  indices with a value of '0' with the median of alldata 
-% alldata.V1Ldata(index) = median(tempV1Ldata) ; 
 
 % THIS SEEMS TO MAINTAIN POSITION of events in waterfall! 
 % making all abs(values) >4*std = 0 
@@ -143,7 +89,7 @@ end
 
 if  time_series ==3 
     tb=1; %time before stim to start STA
-    ta = 3; % first 3 seconds
+    ta=3; % first 3 seconds
 else 
     tb=1;
     ta=10; %time after stim to end STA
@@ -154,8 +100,9 @@ end
 % lightstimdata length
 
 for i=1:4
-   for j =2:(length(index_stim)-2) 
+   for j=2:(length(index_stim)-4) 
        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
+  
    end
 end 
 
@@ -165,7 +112,7 @@ responseWindowEnd=0.4;
 
 %figure
 x2=1:length(stas.(char(names(1))));
-x2=x2/fs-1;%time axis
+x2=x2/fs-1; %time axis
 %ylabels={'S1 (mV)';'A1 (mV)';'V1R (mV)'; 'V1L (mV)';'A1R (Hz)';'S1R (Hz)'};
 
 minvalarray=zeros(length(foranalysis),1);
@@ -214,22 +161,6 @@ else
 end 
 
 
-%% uncomment from here 11 
-
-%    for k=1:40
-%        concat=['RMSvals_' num2str(k)];
-% %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
-%        all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.25)-1):fs*(tb+k*(0.25)))');
-%    end 
-%  
-      
- % disp(max_rms);
-
-% Create matrix of V1L RMS vals for plotting
-% matrix=[all_points(1).RMSvals_9; all_points(1).RMSvals_8; all_points(1).RMSvals_7; all_points(1).RMSvals_6; all_points(1).RMSvals_5;
-%     all_points(1).RMSvals_4; all_points(1).RMSvals_3; all_points(1).RMSvals_2; all_points(1).RMSvals_1];
-% matrix = movmean(matrix,4,2) ;
-
 if runningrms == 2 
 % first 3 sec
     if time_series == 3 
@@ -276,20 +207,6 @@ end
     
 %% ultrasmooth - for looking at running rms that is ultrasmoothened 
 if runningrms == 3    
-%     % ultra smooth 
-%        for k=1:1000
-%            concat=['RMSvals_' num2str(k)];
-%            all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.01)-1):fs*(tb+k*(0.01)))');
-%        end 
-% 
-%     matrixtenth = zeros(1000,length(all_points(1).RMSvals_1)) ;
-%     for index = 1:1000 
-%         concat=['RMSvals_' num2str(index)];
-%         matrixtenth(index, :) = all_points(1).(concat); 
-%     end 
-%     matrix = matrixtenth ;  
-%     matrix = movmean(matrixtenth,10,2) ; % uncomment this if non
-%     % runningrms and just 1/10 second blocks 
     % ultra smooth 
     for k=1:100
            concat=['RMSvals_' num2str(k)];
@@ -308,7 +225,7 @@ if runningrms == 3
 end 
 %% normalize the data using the baseline RMS
 matrix=matrix/rms_baseline;
-matrix = matrix(1:8,:); 
+% matrix = matrix(1:8,:); 
 % matrix = matrix(1:100, :); % for ultrasmooth
 % for storing waterfall matrices from each trial: 
 imagesc_concat=['Trial_' num2str(z) 'matrix'];
@@ -321,7 +238,7 @@ imagesc(matrix')
 ylim=[0 0.5];
 % ylim=[0 0.3];
 colorbar
-caxis manual
+% caxis manual
 
 % naming waterfall plots based on 'z'
 names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;

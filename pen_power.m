@@ -17,7 +17,7 @@ clc
 %% reading cohort files 
 file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\'};
 str=string(file1);
-MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
+MainDirectory = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\';
 
 %% medians or variance 
 

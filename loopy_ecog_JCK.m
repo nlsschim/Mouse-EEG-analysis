@@ -9,40 +9,38 @@ clear all
 
 % note: data formatted as = 'Trial X' and baseline = 'Baseline X' 
 
-%work 
+%% PEN US - 2020-2021
+%% SHAM LIGHT, PEN US
+folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m1\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m2\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m3\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m1\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m2\';
+%%
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m1\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m2\'; 
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_12_21 m1\' ; 
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\2-28_22 PEN\' ;
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\03-02-22 PEN\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\3_03_22 PEN\' ; 
 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-30-2020 Mouse Experiment 1\'; 
-folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-23 Mouse Experiment\'; 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 2\'; 
+%% SHAM US mice - 2020 
+% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\05-29-2020 Mouse Experiment\'; 
+% alldata.lightstimdata=data(datastart(5):dataend(5));
+% folder= 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\06-23-2020 Mouse Experiment 2\';
+% folder ='C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\06-24-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\06_30_20 MOUSE 1 RECUT\' ;
+% folder= 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_15_22\'; 
+% folder= 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_24_22\';
+% folder= 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_25_22\'; 
 
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-25-2020 Mouse Experiment 1\'; 
-% works with US DIAG STIM line changed to  for j=2:(length(index_stim)-3) for datastart(lightstim):dataend(lightstim)
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 3\'; 
-% for j=2:(length(index_stim)-5) % 6/24 experiment 3 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-24-2020 Mouse Experiment 1\';
-% works w/ j=2:(length(index_stim)-3) % 6/24 experiment 1 in US Diag Stim 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 Mouse Experiment\'; 
-% light stim on channel 9 still doesnt work -- index error exceeds 7
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\12-16 RECUT\'; 
-%   error in loopy line 99: disp(file_list(z).name)now runs to and breaks
-%   on trial 4
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\5-29-20 Mouse Experiment\'; 
-% eerror in US diag stim alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-% works with datastart(5):dataend(5)
-
-% dont work 
-
-% folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\06-23-2020 Mouse Experiment 1\'; 
+% folder= 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\06-23-2020 Mouse Experiment 1\'; 
 % corrupt trial trial 1.mat file? 
 
 %Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'Baseline.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'nb.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 set_channels=[1 2 3 4 7]; % updated so you do not have to change last number (we added code for searching for light). Change ddepending on channel in surgery notes (9?)
 % set_channels=[1 2 3 4 9]; % for 12/16 data? 
