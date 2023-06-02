@@ -100,7 +100,7 @@ end
 % lightstimdata length
 
 for i=1:4
-   for j=2:(length(index_stim)-4) 
+   for j=2:(length(index_stim)-2) 
        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
   
    end

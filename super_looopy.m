@@ -21,6 +21,7 @@ folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m1\';
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m2\';
 %%
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
+
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m1\';
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m2\'; 
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_12_21 m1\' ; 
@@ -74,95 +75,97 @@ runningrms = 1;
 %% channel configuration 
 
 % pen channel assignments 
+
+%% Not Working right now so Hardcoded in
 for i = 1:15 %to hide assignments 
     if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-23-21 RECUT 2.0 session 1\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-24-21 RECUT session 2 m2\" 
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-24-21 RECUT session 2 m2\" 
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m1\" 
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m1\" 
     V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end 
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m2\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_10_21 m2\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end 
+     
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_12_21 m1\" 
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_12_21 m1\" 
     V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_12_21 m2\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_12_21 m2\"
     V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_13_21\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\8_13_21\"
     V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
-    end 
+     
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\2-28_22 PEN\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\2-28_22 PEN\"
         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end 
+    
 
-    if folder =="C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\03-02-22 PEN\" 
+    elseif folder =="C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\03-02-22 PEN\" 
         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end     
+        
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\3_03_22 PEN\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\3_03_22 PEN\"
         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end 
+     
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m1\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m1\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m2\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m2\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m3\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m3\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m1\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m1\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m2\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m2\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m1\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m1\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m2\"
+    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m2\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    end
+    
 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m3\"
+    else folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m3\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
     end
 end 
 
 % sham channel assignments 
-for k = 1:10 
-    if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\5-29 recut 2.0\"
-        V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5); 
-    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_24_22\"
-        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_25_22\" 
-        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    else
-        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end   
-end 
+% for k = 1:10 
+%     if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\5-29 recut 2.0\"
+%         V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5); 
+%     elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_24_22\"
+%         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+%     elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\2_25_22\" 
+%         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+%     else
+%         V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+%     end   
+% end 
 
 %% HARD CODED CHANNEL ASSIGNMENT CHANGE THIS LATER
- V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5); 
+V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5); 
 
 %% create data arrays
 
