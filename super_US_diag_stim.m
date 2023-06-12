@@ -18,8 +18,11 @@ alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
 alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
 alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
 alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
-% alldata.lightstimdata=filtfilt(bb,aa,data(datastart(lightstim):dataend(lightstim))')';
-alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+
+alldata.lightstimdata=filtfilt(bb,aa,data(datastart(lightstim):dataend(lightstim))')';
+
+% alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim)); % USE THIS
+
 % alldata.lightstimdata=filtfilt(bb,aa,data(datastart(5):dataend(5))')'; % for 5/29 Hypothesis:
 % this works if not all channels are imported; channel 7 = channel 5 vs.
 % channel 1... 5, 6, 7 => channel 1-4, channel 7 
@@ -73,12 +76,18 @@ X=X-min(X);
 X=X/max(X);
 Y=X>0.5;
 Z=diff(Y);
-index_allstim=find(Z>0.5);index_allstim=index_allstim+1;
+index_allstim=find(Z>0.5);
+index_allstim=index_allstim+1;
 
 %find first pulse of each train, if stimulation contains trains
 index_trains=diff(index_allstim)>2*fs; 
 index_allstim(1)=[];
 index_stim=index_allstim(index_trains);
+
+%% PLOTTING V1Ldata
+%     figure
+%     plot(alldata.V1Ldata(index_stim(57):index_stim(57)+fs*10))
+%     set(gca,'XLim',[0 10*10^4])
 
 
 %% Create STAs
@@ -100,7 +109,7 @@ end
 % lightstimdata length
 
 for i=1:4
-   for j=2:(length(index_stim)-2) 
+   for j=2:(length(index_stim)-4) 
        stas.(char(names(i)))=[stas.(char(names(i))); alldata.(char(names(i)))((index_stim(j)-fs*tb):(index_stim(j)+fs*ta))];
   
    end
@@ -146,19 +155,15 @@ if runningrms == 2
            concat=['RMSvals_' num2str(k)];
     %        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
            all_points(1).(concat)=rms(d(:,fs*(tb+k-1):fs*(tb+k))');
-    %        plot(d(:,fs*(tb+k-1):fs*(tb+k)))
-    %        maxrms=max(all_points(1).(concat));
-    %        if maxrms > max_rms
-    %            max_rms=maxrms;
            end
        end 
 else
    for k=1:40
        concat=['RMSvals_' num2str(k)];
-%        all_points(1).(concat)=rms(alldata.(char(names))(:,fs*(tb+k-1):fs*(tb+k))');
        all_points(1).(concat)=rms(d(:,fs*(tb+k*(0.25)-1):fs*(tb+k*(0.25)))');
    end     
 end 
+
 
 
 if runningrms == 2 
@@ -185,26 +190,7 @@ else
     matrix = movmean(matrix,4,2) ; 
 end 
 
-%% to here     
-    % attempt to hardcode 
-    %     matrix=[(all_points(1).RMSvals_1 + all_points(1).RMSvals_2 + all_points(1).RMSvals_3 + all_points(1).RMSvals_4)/4; 
-%     (all_points(1).RMSvals_2 + all_points(1).RMSvals_3 + all_points(1).RMSvals_4 + all_points(1).RMSvals_5)/4;
-%     (all_points(1).RMSvals_3 + all_points(1).RMSvals_4 + all_points(1).RMSvals_5 + all_points(1).RMSvals_6)/4; 
-%     (all_points(1).RMSvals_4 + all_points(1).RMSvals_5 + all_points(1).RMSvals_6 + all_points(1).RMSvals_7)/4;
-%     (all_points(1).RMSvals_5 + all_points(1).RMSvals_6 + all_points(1).RMSvals_7 + all_points(1).RMSvals_8)/4;
-%     (all_points(1).RMSvals_6 + all_points(1).RMSvals_7 + all_points(1).RMSvals_8 + all_points(1).RMSvals_9)/4;
-%     (all_points(1).RMSvals_7 + all_points(1).RMSvals_8 + all_points(1).RMSvals_9 + all_points(1).RMSvals_10)/4 ;
-%     (all_points(1).RMSvals_8 + all_points(1).RMSvals_9 + all_points(1).RMSvals_10 + all_points(1).RMSvals_11)/4 ; 
-%     (all_points(1).RMSvals_9 + all_points(1).RMSvals_10 + all_points(1).RMSvals_11 + all_points(1).RMSvals_12)/4 ; 
-%     (all_points(1).RMSvals_10 + all_points(1).RMSvals_11 + all_points(1).RMSvals_12 + all_points(1).RMSvals_13)/4 ; 
-%     (all_points(1).RMSvals_11 + all_points(1).RMSvals_12 + all_points(1).RMSvals_13 + all_points(1).RMSvals_14)/4 ; 
-%     (all_points(1).RMSvals_12 + all_points(1).RMSvals_13 + all_points(1).RMSvals_14 + all_points(1).RMSvals_15)/4 ;
-%     (all_points(1).RMSvals_13 + all_points(1).RMSvals_14 + all_points(1).RMSvals_15 + all_points(1).RMSvals_16)/4 ;
-%     (all_points(1).RMSvals_14 + all_points(1).RMSvals_15 + all_points(1).RMSvals_16 + all_points(1).RMSvals_17)/4 ;
-%     (all_points(1).RMSvals_15 + all_points(1).RMSvals_16 + all_points(1).RMSvals_17 + all_points(1).RMSvals_18)/4 ;
-%     
-%     all_points(1).RMSvals_36; all_points(1).RMSvals_37; all_points(1).RMSvals_38; all_points(1).RMSvals_39; all_points(1).RMSvals_40];
-    
+
 %% ultrasmooth - for looking at running rms that is ultrasmoothened 
 if runningrms == 3    
     % ultra smooth 
@@ -231,10 +217,22 @@ matrix=matrix/rms_baseline;
 imagesc_concat=['Trial_' num2str(z) 'matrix'];
 imagesc_data.(imagesc_concat)= matrix ;
 
-figure
+figure(1)
 %imagesc plot
-% subplot(2,3,z);
+if z == 1
+    S = 1;
+end
+
+if z == 3
+    S = 2;
+end
+
+if z == 4
+    S = 3;
+end
+subplot(1,3,S);
 imagesc(matrix')
+axis square
 ylim=[0 0.5];
 % ylim=[0 0.3];
 colorbar
@@ -247,7 +245,9 @@ title(names(z)) % z = 1:4 trials in loopy
 % setting waterfall axes 
 ylim=[0 0.3];
 ylabel('Stimulus Event Number'); 
+xlol2 = 1:1:10;
 ticks = 0:5:60 ; 
+set(gca,'XTickLabel',xlol2 );
 yticks(ticks) ; 
 xlabel('Time After Light Stimulus (s)') 
 
@@ -267,10 +267,7 @@ elseif runningrms == 2
         ticks = 0:1:10;
         xticks(ticks)
     end  
-%     xlol = 10:10:100;
-%     xlol2 = 0.1:0.1:1;
-%     set(gca,'XTick',xlol ); %This is going to be the only values affected. 
-%         set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places.
+        set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places.
 end  
 % this is for 40 tile RMS: 
 %     set(gca,'XTick',[4 8 12 16 20 24 28 32 36 40] ); %This is going to be the only values affected. 

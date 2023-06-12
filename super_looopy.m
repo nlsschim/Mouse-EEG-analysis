@@ -14,11 +14,14 @@ clear all
 
 %% PEN US - 2020-2021
 %% SHAM LIGHT, PEN US
-folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m1\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m1\';
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m2\';
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_18_23 m3\';
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m1\';
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_25_23 m2\';
+folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m1\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m2\';
+% folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m3\';
 %%
 % folder = 'C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
 
@@ -51,7 +54,7 @@ if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\06-23-2020 Mous
 elseif folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\SHAM\06-24-2020 Mouse Experiment 1\" 
     set_channels=[1 2 3 4 7]; 
 else 
-    set_channels=[1 2 3 4 5]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
+    set_channels=[1 2 3 4 6]; % 6/24/21 data, 6/23/21 , 7/1/21, 12/13/19
 end
 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
@@ -69,15 +72,15 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 %% NORMAL RUNNING PLOTS
 time_series = 10;
 outliersyn = 2;
-runningrms = 1; 
+runningrms = 3; 
 
 % this names the channels based on where they were placed, make sure they match lab chart
 %% channel configuration 
 
 % pen channel assignments 
-
-%% Not Working right now so Hardcoded in
-for i = 1:15 %to hide assignments 
+% Not Working right now so Hardcoded in
+%to hide assignments 
+   
     if folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\06-23-21 RECUT 2.0 session 1\"
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
     
@@ -146,10 +149,10 @@ for i = 1:15 %to hide assignments
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
     
 
-    else folder == "C:\Matlab Stuff\Mourad Lab\Vis Stim Code\Data\PEN\5_26_23 m3\"
+    else
     V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
     end
-end 
+
 
 % sham channel assignments 
 % for k = 1:10 
@@ -165,7 +168,7 @@ end
 % end 
 
 %% HARD CODED CHANNEL ASSIGNMENT CHANGE THIS LATER
-V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5); 
+ V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5); 
 
 %% create data arrays
 
@@ -186,6 +189,8 @@ for z=1:4
     disp(z) % displays the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name); % displays the name of the file in the terminal
     load([folder file_list(z).name]); % brings the file data into matlab so that the code can run 
+    figure(1)
+    sgtitle('Waterfall plots')
     super_US_diag_stim ;
 end
 
@@ -283,12 +288,50 @@ end
 first_vs_second_vs_third=[str1 str2 str3];
 
 %Kruskal-wallis and Anova1 tests between trials 1&2, 1&3, 2&3
+
 run_stats_tests(first_second_third_vector, first_vs_second_vs_third); %ANOVA BETWEEN ALL
+
+
 
 % Mann-Whitney U test / Wilcoxon rank sum test significant if Kruskal-Wallis p < 0.05 
 MWp1 = ranksum(for_stats_analysis.Trial_1,for_stats_analysis.Trial_2); % pairing 1 1st LO vs. L+US 
 MWp2 = ranksum(for_stats_analysis.Trial_1,for_stats_analysis.Trial_3); % pairing 2 1st. LO vs. 2nd LO 
 MWp3 = ranksum(for_stats_analysis.Trial_2,for_stats_analysis.Trial_3); % pairing 3 L+US vs. 2nd LO 
+
+
+if MWp1 < 0.05
+    
+yt = get(gca, 'YTick');
+set(gca, 'Xtick', 1:3);
+axis([xlim    0  ceil(max(yt)*1.1)])
+xt = get(gca, 'XTick');
+hold on
+plot(xt([1 2]), [1 1]*max(yt)*1.1, '-k',  mean(xt([1 2])), max(yt)*1.15, '*k')
+hold off
+end 
+
+if MWp2 < 0.05
+    
+yt = get(gca, 'YTick');
+set(gca, 'Xtick', 1:3);
+axis([xlim    0  ceil(max(yt)*1.1)])
+xt = get(gca, 'XTick');
+hold on
+plot(xt([1 3]), [1 1]*max(yt)*1.1, '-k',  mean(xt([1 3])), max(yt)*1.15, '*k')
+hold off
+end 
+
+if MWp3 < 0.05
+    
+yt = get(gca, 'YTick');
+set(gca, 'Xtick', 1:3);
+axis([xlim    0  ceil(max(yt)*1.1)])
+xt = get(gca, 'XTick');
+hold on
+plot(xt([2 3]), [1 1]*max(yt)*1.1, '-k',  mean(xt([2 3])), max(yt)*1.15, '*k')
+hold off
+end 
+
 
 %% subplotting imagesc plots for each trial (only works for 10 sec analysis) 
 % use imagesc_subplot function for tighter margins. Code below works 
@@ -341,10 +384,10 @@ subplot(1,3,3);
 end 
 
 % Figure 3 plotting code
-figure(9)
+% figure(9)
 matrix1 = imagesc_data.Trial_3matrix;
-imagesc(matrix1(:,1)')
-set(gca,'YTickLabel',[]);
+% imagesc(matrix1(:,1)')
+% set(gca,'YTickLabel',[]);
 if runningrms ==3 
     xlol = 10:10:100;
     xlol2 = 1:1:10;
@@ -353,9 +396,9 @@ if runningrms ==3
 %     xlabel('Time After Light Stimulus (s)', 'Fontsize', 10)
 end 
 
-figure(10)
-plot(alldata.V1Ldata(index_stim(57):index_stim(57)+fs*10))
-set(gca,'XLim',[0 10*10^4])
+% figure(10)
+% plot(alldata.V1Ldata(index_stim(57):index_stim(57)+fs*10))
+% set(gca,'XLim',[0 10*10^4])
 
 % for median 1LO array
 matrix2 = imagesc_data.Trial_1matrix;
@@ -367,22 +410,34 @@ for i = 1:s(2) % 1 to ~60, to get a vector of median values (each from a single 
     trialmedians = [trialmedians eventmedian] ;
 end 
 
-figure(11)
-clims = [0 3];
-imagesc(trialmedians', clims)
-set(gca,'XTickLabel', []);
+% figure(11)
+% clims = [0 3];
+% imagesc(trialmedians', clims)
+% set(gca,'XTickLabel', []);
 
-figure(12)
-imagesc(mean(trialmedians),clims)
-set(gca,'YTickLabel',[], 'XTickLabel', []);
+% figure(12)
+% imagesc(mean(trialmedians),clims)
+% set(gca,'YTickLabel',[], 'XTickLabel', []);
 
 % 1LO normalized L+US 
 median_of_medians = median(trialmedians); % median of 1LO medians 
 matrix1 = matrix1./median_of_medians ; % normalize L+US matrix by 1LO median median 
-figure(13)
-imagesc(matrix1')
+% figure(13)
+% imagesc(matrix1')
 set(gca,'XTick',xlol ); %This is going to be the only values affected. 
 set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
 ylabel('Event Number','Fontsize', 14) 
 xlabel('Time After Light Stimulus (s)', 'Fontsize', 14)
 title('1LO normalized L+US', 'Fontsize', 14)
+
+% % Create a new figure with subplots
+% figure(1);
+% subplot(2, 3, 4);
+% copyobj(findobj(2,'Type','axes'),gca);
+% 
+% subplot(2, 3, 5);
+% copyobj(findobj(3,'Type','axes'),gca);
+
+
+
+

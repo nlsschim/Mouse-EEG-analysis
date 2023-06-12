@@ -14,7 +14,7 @@ hold on
 plot(xMed, yMed, 'ro-') %this one has a circle to mark median
 % plot(xMed, yMed, 'r+-') %this one has a plus sign to mark median
 
-
+p_kw;
 % ANOVA TEST
 % p_anova = anova1(data,groups);
 % title('ANOVA1') 
