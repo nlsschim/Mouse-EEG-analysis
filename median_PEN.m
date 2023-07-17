@@ -1,4 +1,4 @@
-%%  Authors: Kat Floerchinger, Hannah Mach, Henry Tan
+%%  Authors: Kat Floerchinger, Henry Tan
 %This code is for the PEN cohort to run through the data and get the
 % median values ; it calls median_SHAM at the end 
 close all
@@ -168,7 +168,10 @@ end
 %         penvariances.(concat2) = variances.(concat2) ; 
 
 penran = 1 ;
-clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix PEN_MATRIX PEN_MATRIX_1LOnormalized simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX 
-median_SHAM
+% clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX PEN_MATRIX PEN_MATRIX_1LOnormalized 
+% median_SHAM
+%for running sham light 
+clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized
+median_SHAM_light
 
 

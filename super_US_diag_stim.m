@@ -324,23 +324,31 @@ colorbar
 caxis manual
 
 % naming waterfall plots based on 'z'
-names = {'1st Light Only', 'This shouldnt be plotted', 'Light + US', '2nd Light Only'} ;
+names = {'1st LO', 'This shouldnt be plotted', 'L+tDUS', '2nd LO'} ;
 title(names(z)) % z = 1:4 trials in loopy
 
 % setting waterfall axes 
 ylim=[0 0.3];
-ylabel('Stimulus Event Number'); 
-ticks = 0:5:60 ; 
-yticks(ticks) ; 
-xlabel('Time After Light Stimulus (s)') 
+% ylabel('Stimulus Event Number'); 
+% ticks = 0:5:60 ; 
+% yticks(ticks) ; 
+% xlabel('Time After Light Stimulus (s)') 
 
 if runningrms == 1 
-    ylabel('Stimulus Event Number', 'Fontsize', 14); 
+    ylabel('Event Number', 'Fontsize', 14); 
     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
     xlol = 4:4:40;
     xlol2 = 1:1:10;
     set(gca,'XTick',xlol ); %This is going to be the only values affected. 
     set(gca,'XTickLabel',xlol2 );
+    
+    yticks = 0:10:60 ; 
+    set(gca,'YTick',yticks); %This is going to be the only values affected. 
+
+    ax = gca;
+    ax.FontSize = 16; 
+    xlabel('','FontSize',10)
+    
 elseif runningrms == 2 
     % for 3 second analysis 
     if time_series == 3

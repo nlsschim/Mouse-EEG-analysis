@@ -127,10 +127,14 @@ end
     end 
 end
 
-clearvars -except former_mat runningrms_or_10sec secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
+% clearvars -except former_mat runningrms_or_10sec secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
+% clearvars -except shamLight_matrix_1LOnormalized SHAMLY_1LOnormalized shamLightmedians shamLightvariances ACUTAL_SHAML_MATRIX former_mat runningrms_or_10sec secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
+clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized shammedians shamvariances SHAM_MATRIX SHAM_MATRIX_1LOnormalized 
 
 if simple_median_analysis == 1 
     Harry_Plotter
 else 
-    Harry_Plotter2
+    % Harry_Plotter2
+% for median_SHAM_light
+    Harry_Plotter3
 end 
