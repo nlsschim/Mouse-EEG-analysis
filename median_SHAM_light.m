@@ -4,7 +4,9 @@
 close all
 
 %% reading cohort files 
-file1={'5_18_23 m1\', '5_18_23 m2\', '5_18_23 m3\', '5_25_23 m1\', '5_25_23 m2\', '5_26_23 m2\', '5_26_23 m3\'};
+% file1={'5_18_23 m1\', '5_18_23 m2\', '5_18_23 m3\', '5_25_23 m1\', '5_25_23 m2\', '5_26_23 m2\', '5_26_23 m3\'};
+file1={'5_18_23 M1 RECUT\', '5_18_23 M2 RECUT\', '5_18_23 M3 RECUT\', '5_25_23 M1 RECUT\', '5_25_23 M2 RECUT\', '5_26_23 M2 RECUT\', '5_26_23 M3 RECUT\'};
+% file1={'5_18_23 M1 RECUT\', '5_25_23 M1 RECUT\', '5_26_23 M3 RECUT\','5_26_23 m1 Gabe\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\';
 
@@ -20,13 +22,14 @@ shamLight_matrix_1LOnormalized = zeros(7,4);
 %% Reading experiment dates 
 
 for f=1:length(str)
+% for f = 1
     
     folder = fullfile(MainDirectory,str{f});
     % dir ('folder');
-
+    disp(file1(f))
     %Change what is in the string depending on which file\files you want to run
     file_list = dir([folder 'TRIAL*.mat']);
-    baseline = dir([folder 'nb.mat']); % or baseline 1 or baseline 2 deSHAMding on trials 
+    baseline = dir([folder 'last min baseline 2.mat']); % or baseline 1 or baseline 2 deSHAMding on trials 
     disp(length(baseline)) 
 
     set_channels=[1 2 3 4 6];
@@ -42,7 +45,8 @@ for f=1:length(str)
     baseline_rms=[];
     disp(baseline.name);
     load([folder baseline.name])
-    calc_baseline60sec;
+    % calc_baseline60sec;
+    calc_baseline2
 
     % create matrix to hold data for statistical testing
     for_stats_new = [];
@@ -92,9 +96,11 @@ end
 end
 
 penran = 1 ;
-% clearvars -except former_mat runningrms_or_10sec secs shrink_matrix shamLight_matrix_1LOnormalized SHAMLY_1LOnormalized shamLightmedians shamLightvariances ACUTAL_SHAML_MATRIX PEN_MATRIX_1LOnormalized PEN_MATRIX simple_median_analysis penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX runnext normalize_by_1LOvar penran
-% for median_SAHM_light 
-clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized 
-median_SHAM
-
+if sham_light == 1 
+    % for median_SAHM_light 
+    clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized sham_light
+    median_SHAM
+else 
+    clearvars -except former_mat runningrms_or_10sec secs shrink_matrix shamLight_matrix_1LOnormalized SHAMLY_1LOnormalized shamLightmedians shamLightvariances ACUTAL_SHAML_MATRIX PEN_MATRIX_1LOnormalized PEN_MATRIX simple_median_analysis penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX runnext normalize_by_1LOvar penran sham_light
+end 
 

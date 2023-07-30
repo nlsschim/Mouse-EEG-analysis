@@ -5,9 +5,15 @@ close all
 clear all
 clc
 %% reading cohort files 
+% old data 
 file1={'8_10_21 m1\', '8_10_21 m2\','8_12_21 m1\', '06-23-21 RECUT 2.0 session 1\', '2-28_22 PEN\', '03-02-22 PEN\', '3_03_22 PEN\'};
 str=string(file1);
-MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
+MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\';
+
+% new recut data 
+% file1={'8_10_21 m1 pen\', '8_10_21 m2 pen\','8_12_21 m1 pen\', '6_23_21 m1 pen\', '2_28_22 pen\', '3_2_22 pen\', '3_3_22 pen\'};
+% str=string(file1);
+% MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 %% medians or variance 
 runningrms_or_10sec = input("Run 10 second waterfalls or 0.25 second running rms trial?: '1' = 10sec, '0' = runningrms: ") ;
@@ -46,6 +52,8 @@ if simple_median_analysis == 0
         end
     end
 end 
+
+sham_light = input("Run sham light (1) or just pen and sham US? (0): ") ;
 % button3 = input("include rms baseline? '1' = yes, '2' = no: ") ; 
 % normal = input("Normalize data by median of 1st LO or rms_baseline? '1'=median of 1LO, '2' =rms_baseline: "); 
 
@@ -63,13 +71,15 @@ PEN_MATRIX_1LOnormalized = zeros(7,4);
 
 %% Reading experiment dates 
 for f=1:length(str) 
-% for f=4
+% for f = 4
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 
 %Change what is in the string depending on which file\files you want to run
 file_list = dir([folder 'TRIAL*.mat']);
+% baseline = dir([folder 'nb.mat']); 
 baseline = dir([folder 'nb.mat']); 
+disp(file1(f)) 
 
 set_channels=[1 2 3 4 5]; 
 ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; 
@@ -77,27 +87,51 @@ trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
 
 %% channel configuration 
 for i = 1 % to hide 
-if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\"
-    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-24-21 RECUT session 2 m2\" 
-    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\" 
-    V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\"
-    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\" 
-    V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m2\"
-    V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21\"
-    V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 PEN\"
-    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-elseif folder =="C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\03-02-22 PEN\" 
-    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_03_22 PEN\"
-    V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-end  
+    if MainDirectory == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\"
+        if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\06-23-21 RECUT 2.0 session 1\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\06-24-21 RECUT session 2 m2\" 
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\8_10_21 m1\" 
+            V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\8_10_21 m2\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\8_12_21 m1\" 
+            V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\8_12_21 m2\"
+            V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\8_13_21\"
+            V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\2-28_22 PEN\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder =="C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\03-02-22 PEN\" 
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\3_03_22 PEN\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        end  
+    else 
+        if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\6_23_21 m1 pen\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\6_24_21 RECUT session 2 m2\" 
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1 pen\" 
+            V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\8_10_21 m2 pen\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1 pen\" 
+            V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m2 pen\"
+            V1L=set_channels(3);S1L=set_channels(1);S1R=set_channels(2);V1R=set_channels(4);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_13_21 pen\"
+            V1L=set_channels(1);S1L=set_channels(4);S1R=set_channels(3);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\2-28_22 pen\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder =="C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3-2-22 pen\" 
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\3_3_22 pen\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        end  
+    end 
 end
 
 %% calculate pre-stim RMS for normalization
@@ -105,7 +139,8 @@ end
 baseline_rms=[];
 disp(baseline.name);
 load([folder baseline.name])
-calc_baseline60sec;
+% calc_baseline60sec;
+calc_baseline2
 
 % create matrix to hold data for statistical testing
 for_stats_new = [];
@@ -113,7 +148,7 @@ for_stats_analysis =[];
 
 for z=1:4
     if isequal(file_list(z).name,"Trial 2.mat"), continue, end 
-    if isequal(file_list(z).name,"Trial 6.mat"), continue, end 
+    % if isequal(file_list(z).name,"Trial 6.mat"), continue, end 
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run
@@ -168,10 +203,14 @@ end
 %         penvariances.(concat2) = variances.(concat2) ; 
 
 penran = 1 ;
-% clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX PEN_MATRIX PEN_MATRIX_1LOnormalized 
-% median_SHAM
+if sham_light == 1 
 %for running sham light 
-clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized
-median_SHAM_light
+    clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized sham_light 
+    median_SHAM_light
+else
+    clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances ACTUAL_PEN_MATRIX PEN_MATRIX PEN_MATRIX_1LOnormalized sham_light 
+    median_SHAM
+end 
+
 
 

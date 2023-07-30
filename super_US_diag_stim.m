@@ -26,6 +26,27 @@ alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
 % what changes in experiments is whether channels 5-6 are included in
 % export
 
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m1 RECUT\" || folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\"
+    % Define the total duration in seconds
+%     totalDuration = 612;
+    totalDuration = 383;
+    % Define the number of samples per second
+    sampleRate = tickrate(1); % Assuming 20000 samples/second
+    % Calculate the total number of samples needed
+    totalSamples = totalDuration * sampleRate;
+    % Create a vector filled with zeros
+    lightstimdata = zeros(totalSamples, 1);
+    % Define the interval in seconds between '1's
+    interval = 10;
+    % Calculate the number of samples in each interval
+    samplesPerInterval = interval * sampleRate;
+    % Add '1's at the specified intervals
+    for i = 1:samplesPerInterval:totalSamples
+        lightstimdata(i) = 1;
+    end
+    alldata.lightstimdata = lightstimdata' ; 
+end 
+
 %create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 

@@ -184,12 +184,12 @@ boxplot([secondLOpen',secondLOsham'],'Symbol', '','Notch','on','Labels', {'PEN U
     linkaxes([ax1 ax2 ax3],'xy')
     
 
-if normalize_by_1LOvar == 1 
-    ax1.YLim = [0.2 2.5];
-else 
-    ax1.YLim = [0.5 3.7];
-end 
-    
+% if normalize_by_1LOvar == 1 
+%     ax1.YLim = [0.2 2.5];
+% else 
+%     ax1.YLim = [0.5 3.7];
+% end 
+
     %     for sharey x axis : 
 %     p1 = get(x1, 'Position');
 %     p2 = get(x2, 'Position');

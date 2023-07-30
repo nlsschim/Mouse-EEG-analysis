@@ -7,9 +7,15 @@ close all
 
 %% reading cohort files 
 
+% old data 
 file1={'2_15_22\','2_24_22\','2_25_22\','06_30_20 MOUSE 1 RECUT\', '06-23-2020 Mouse Experiment 2\', '06-24-2020 Mouse Experiment 1\','05-29-2020 Mouse Experiment\'};
 str=string(file1);
-MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\';
+MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\';
+
+% new recut data 
+% file1={'2_15_22 sham\','2_24_22 sham\','2_25_22 sham\','6_30_20 m1 sham\', '6_23_20 m2 sham\', '6_24_20 m1 sham\','5_29_20 sham\'};
+% str=string(file1);
+% MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\';
 
 %% medians or variance - should be decided from decisions in median_PEN
 
@@ -40,37 +46,69 @@ for f=1:length(str)
     %% 
     %Change what is in the string deSHAMding on which file\files you want to run
     file_list = dir([folder 'TRIAL*.mat']);
-    baseline = dir([folder 'nb.mat']); % or baseline 1 or baseline 2 deSHAMding on trials 
+%     baseline = dir([folder 'nb.mat']); % or baseline 1 or baseline 2 deSHAMding on trials 
+baseline = dir([folder 'nb.mat']); 
     disp(length(baseline)) 
-
-for i = 1 % channel configuration for each mouse
-    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\05-29-2020 Mouse Experiment\" 
-        set_channels=[1 2 3 4 5]; 
-    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_15_22\" 
-        set_channels=[1 2 3 4 5]; 
-    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_24_22\" 
-        set_channels=[1 2 3 4 5]; 
-    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_25_22\"
-        set_channels=[1 2 3 4 5]; 
-    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06_30_20 MOUSE 1 RECUT\" 
-        set_channels=[1 2 3 4 5];
-    else 
-        set_channels=[1 2 3 4 7];
-    end
-    ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
-    trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
+    disp(file1(f))
     
-%% Channel configuration 
-
-    if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\5-29 recut 2.0\"
-        V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5); 
-    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_24_22\"
-        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_25_22\" 
-        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
-    else
-        V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
-    end
+for i = 1 % channel configuration for each mouse
+    if MainDirectory == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\" 
+        if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\05-29-2020 Mouse Experiment\" 
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\2_15_22\" 
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\2_24_22\" 
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\2_25_22\"
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\06_30_20 MOUSE 1 RECUT\" 
+            set_channels=[1 2 3 4 5];
+        else 
+            set_channels=[1 2 3 4 7];
+        end
+        ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
+        trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
+        
+    %% Channel configuration 
+    
+        if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\05-29-2020 Mouse Experiment\"
+            V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5); 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\2_24_22\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\SHAM\2_25_22\" 
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        else
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        end
+    elseif MainDirectory == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\" 
+        if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\5_29_20 sham\" 
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\2_15_22 sham\" 
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\2_24_22 sham\" 
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\2_25_22 sham\"
+            set_channels=[1 2 3 4 5]; 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\6_30_20 m1 sham\" 
+            set_channels=[1 2 3 4 5];
+        else 
+            set_channels=[1 2 3 4 5];
+        end
+        ch_names={'V1L','S1L','S1R', 'V1R', 'lightstim'}; %setting up the names that will be assigned in the matrix and the order
+        trial_names={' FIRST LIGHT ONLY' 'LIGHT + US' ' SECOND LIGHT ONLY'};
+        
+    %% Channel configuration 
+    
+        if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\5_29_20 sham\"
+            V1L=set_channels(4);S1L=set_channels(3);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5); 
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\2_24_22 sham\"
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        elseif folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_US\2_25_22 sham\" 
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(1);V1R=set_channels(2);lightstim=set_channels(5);
+        else
+            V1L=set_channels(3);S1L=set_channels(4);S1R=set_channels(2);V1R=set_channels(1);lightstim=set_channels(5);
+        end
+    end 
 end
 
 %% calculate pre-stim RMS for normalization
@@ -78,7 +116,8 @@ end
     baseline_rms=[];
     disp(baseline.name);
     load([folder baseline.name])
-    calc_baseline60sec;
+    % calc_baseline60sec;
+    calc_baseline2
 
     % create matrix to hold data for statistical testing
     for_stats_new = [];
@@ -129,12 +168,15 @@ end
 
 % clearvars -except former_mat runningrms_or_10sec secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
 % clearvars -except shamLight_matrix_1LOnormalized SHAMLY_1LOnormalized shamLightmedians shamLightvariances ACUTAL_SHAML_MATRIX former_mat runningrms_or_10sec secs shrink_matrix SHAM_MATRIX_1LOnormalized SHAMY_1LOnormalized PEN_MATRIX_1LOnormalized except PEN_MATRIX simple_median_analysis SHAM_MATRIX penmedians penvariances medians_or_variance normalize_by_1LOmed ACTUAL_PEN_MATRIX shammedians shamvariances ACUTAL_SHAM_MATRIX runnext normalize_by_1LOvar penran
-clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized shammedians shamvariances SHAM_MATRIX SHAM_MATRIX_1LOnormalized 
+clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized shammedians shamvariances SHAM_MATRIX SHAM_MATRIX_1LOnormalized sham_light
 
 if simple_median_analysis == 1 
     Harry_Plotter
 else 
-    % Harry_Plotter2
-% for median_SHAM_light
-    Harry_Plotter3
+    if sham_light == 1
+        % for median_SHAM_light
+        Harry_Plotter3
+    else 
+        Harry_Plotter2
+    end 
 end 

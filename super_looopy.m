@@ -13,8 +13,8 @@ clear all
 % trials > 1:4 have been placed in separate folders 
 
 %% PEN US - 2020-2021
-cohort_type = 'pen' ; 
-folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
+% cohort_type = 'pen' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0 session 1\'; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m1\';
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_10_21 m2\'; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\8_12_21 m1\' ; % maybe 
@@ -34,22 +34,25 @@ folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\06-23-21 RECUT 2.0
 % folder= 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\2_25_22\'; 
 
 %% SHAM light mice - 2023 
-% cohort_type = 'sham_light' ; 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m1\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m2\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m3\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_25_23 m1\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_25_23 m2\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1\' ; % ambiguous issues--cut weird? 
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m2\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m3\' ;
+cohort_type = 'sham_light' ; 
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m1 RECUT\' ;
+folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m2 RECUT\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m3 RECUT\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_25_23 m1 RECUT\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_25_23 m2 RECUT \' ;
+
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 RECUT\' ; % ambiguous issues--cut weird? 
+
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m2 RECUT\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m3 RECUT\' ;
 
 baseline_medians_matrix = [];
 % for subplotting waterfalls 
 
 %% Change what is in the string depending on which file/files you want to run
 file_list=dir([folder 'TRIAL*.mat']);
-baseline=dir([folder 'nb.mat']); % or baseline 1 or baseline 2 depending on trials 
+baseline=dir([folder 'last min baseline 2.mat']); % or baseline 1 or baseline 2 depending on trials 
 
 if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM\06-23-2020 Mouse Experiment 2\"       
     set_channels=[1 2 3 4 7]; 
@@ -145,7 +148,7 @@ end
 baseline_rms=[];
 disp(baseline.name);
 load([folder baseline.name])
-calc_baseline60sec;
+calc_baseline2;
 
 % create matrix to hold data for statistical testing
 for_stats_new = [];
@@ -328,6 +331,31 @@ MWp3 = ranksum(for_stats_analysis.Trial_2,for_stats_analysis.Trial_3); % pairing
 if time_series == 10 
 figure(7);
 
+% 1LO 
+    subaxis(1, 3, 1, 'Spacing', 0.03);
+    imagesc(imagesc_data.Trial_1matrix')
+    colorbar
+    title('1st LO', 'Fontsize', 14) 
+    % setting waterfall axes 
+    ylim=[0 0.3];
+    ylabel('Event Number', 'Fontsize', 14); 
+%     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
+    xlol = 4:4:40;
+    xlol2 = 1:1:10;
+    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
+    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
+    
+    yticks = 0:10:60 ; 
+    set(gca,'YTick',yticks); %This is going to be the only values affected. 
+%     set(gca,'YTick','');
+    ax = gca;
+    ax.FontSize = 16; 
+    xlabel('','FontSize',10)
+    
+%     caxis manual 
+    v = caxis ;
+%     caxis(v)
+
 % 2LO 
     subaxis(1, 3, 3, 'Spacing', 0.03);
     imagesc(imagesc_data.Trial_4matrix')
@@ -352,34 +380,8 @@ figure(7);
     ax.FontSize = 16; 
     xlabel('','FontSize',10)
     
-    v = caxis ;  
-%         caxis(v)
-    
-
-% 1LO 
-    subaxis(1, 3, 1, 'Spacing', 0.03);
-    imagesc(imagesc_data.Trial_1matrix')
-    colorbar
-    title('1st LO', 'Fontsize', 14) 
-    % setting waterfall axes 
-    ylim=[0 0.3];
-    ylabel('Event Number', 'Fontsize', 14); 
-%     xlabel('Time After Light Stimulus (s)', 'Fontsize', 14) 
-    xlol = 4:4:40;
-    xlol2 = 1:1:10;
-    set(gca,'XTick',xlol ); %This is going to be the only values affected. 
-    set(gca,'XTickLabel',xlol2 ); %This is what it's going to appear in those places
-    
-    yticks = 0:10:60 ; 
-    set(gca,'YTick',yticks); %This is going to be the only values affected. 
-%     set(gca,'YTick','');
-    ax = gca;
-    ax.FontSize = 16; 
-    xlabel('','FontSize',10)
-    
-%     caxis manual 
-%     v = caxis ;
-    caxis(v)
+%     v = caxis ;  
+        caxis(v)
     
    
 % L+US 

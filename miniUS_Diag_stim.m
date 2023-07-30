@@ -33,31 +33,49 @@ alldata.S1Ldata=filtfilt(bb,aa,data(datastart(S1L):dataend(S1L))')';
 alldata.S1Rdata=filtfilt(bb,aa,data(datastart(S1R):dataend(S1R))')';
 alldata.V1Rdata=filtfilt(bb,aa,data(datastart(V1R):dataend(V1R))')';
 alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
-alldata.lightstimdata=data(datastart(lightstim):dataend(lightstim));
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 M1 RECUT\" 
+    % Define the total duration in seconds
+    totalDuration = 600;
+    % Define the number of samples per second
+    sampleRate = tickrate(1); % Assuming 20000 samples/second
+    % Calculate the total number of samples needed
+    totalSamples = totalDuration * sampleRate;
+    % Create a vector filled with zeros
+    lightstimdata = zeros(totalSamples, 1);
+    % Define the interval in seconds between '1's
+    interval = 10;
+    % Calculate the number of samples in each interval
+    samplesPerInterval = interval * sampleRate;
+    % Add '1's at the specified intervals
+    for i = 1:samplesPerInterval:totalSamples
+        lightstimdata(i) = 1;
+    end
+    alldata.lightstimdata = lightstimdata' ; 
+end 
+
+if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\" 
+    % Define the total duration in seconds
+    totalDuration = 382;
+    % Define the number of samples per second
+    sampleRate = tickrate(1); % Assuming 20000 samples/second
+    % Calculate the total number of samples needed
+    totalSamples = totalDuration * sampleRate;
+    % Create a vector filled with zeros
+    lightstimdata = zeros(totalSamples, 1);
+    % Define the interval in seconds between '1's
+    interval = 10;
+    % Calculate the number of samples in each interval
+    samplesPerInterval = interval * sampleRate;
+    % Add '1's at the specified intervals
+    for i = 1:samplesPerInterval:totalSamples
+        lightstimdata(i) = 1;
+    end
+    alldata.lightstimdata = lightstimdata' ; 
+end 
 
 % create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
-
-%% notch filtering 
-
-% % Design a filter with a Q-factor of Q=35 to remove a 0.2 Hz tone from 
-% % system running at 10000 Hz.
-% Wo = 0.2/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.2/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.25/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.25/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
 
 %% additional filtering 
 %Filter out noise

@@ -50,10 +50,13 @@ if medians_or_variance == 1
     filler = NaN(1,2) ;
     firstLOsham = [firstLOsham filler] ;
     
-    firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 ];
+%     firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 ];
+    firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 ];
     % 1x394
     % making firstLO vector  same length as others 
-    nans4 = NaN(1,4) ;
+%     nans4 = NaN(1,4) ;
+%     firstLOshamLight = [firstLOshamLight nans4];
+    nans4 = NaN(1,211) ;
     firstLOshamLight = [firstLOshamLight nans4];
     
     
@@ -61,21 +64,28 @@ if medians_or_variance == 1
     % 1x389
     LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
     % 1x398
-    LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 ];
-    % 1x398 
+%     LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 ];
+    LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3];
+% 1x398 
     filler = NaN(1,9) ;
     LUSpen = [LUSpen filler] ;
+    
+    filler = NaN(1,226) ;
+    LUSshamLight = [LUSshamLight filler] ;
     
     
     secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
     % 1x396
     secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
     % 1x395
-    secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 ];
-    % 1x398 
+%     secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 ];
+    secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4];
+% 1x398 
     
     secondLOsham = [secondLOsham NaN NaN NaN] ;
     secondLOpen = [secondLOpen NaN NaN] ;   
+    filler = NaN(1,225) ;
+    secondLOshamLight = [secondLOshamLight filler]
     
 else 
     firstLOpen = [penvariances.Mouse1Trial1 penvariances.Mouse2Trial1 penvariances.Mouse3Trial1 penvariances.Mouse4Trial1 penvariances.Mouse5Trial1 penvariances.Mouse6Trial1 penvariances.Mouse7Trial1 ]; 
@@ -237,13 +247,13 @@ boxplot([secondLOpen',secondLOsham',secondLOshamLight'],'Symbol', '','Notch','on
     
     linkaxes([ax1 ax2 ax3],'xy')
     
-
-if normalize_by_1LOvar == 1 
-%     ax1.YLim = [0.2 2.6];
-    ax1.YLim = [0.3 2.0];
-else 
-    ax1.YLim = [0.5 3.7];
-end 
+% 
+% if normalize_by_1LOvar == 1 
+% %     ax1.YLim = [0.2 2.6];
+%     ax1.YLim = [0.3 2.0];
+% else 
+%     ax1.YLim = [0.5 3.7];
+% end 
     
     %     for sharey x axis : 
 %     p1 = get(x1, 'Position');
