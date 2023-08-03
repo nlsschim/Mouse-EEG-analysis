@@ -50,8 +50,8 @@ if medians_or_variance == 1
     filler = NaN(1,2) ;
     firstLOsham = [firstLOsham filler] ;
     
-%     firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 ];
-    firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 ];
+    firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 ];
+%     firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 ];
     % 1x394
     % making firstLO vector  same length as others 
 %     nans4 = NaN(1,4) ;
@@ -64,8 +64,8 @@ if medians_or_variance == 1
     % 1x389
     LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
     % 1x398
-%     LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 ];
-    LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3];
+    LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 ];
+    % LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3];
 % 1x398 
     filler = NaN(1,9) ;
     LUSpen = [LUSpen filler] ;
@@ -79,7 +79,7 @@ if medians_or_variance == 1
     secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
     % 1x395
 %     secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 ];
-    secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4];
+%     secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4];
 % 1x398 
     
     secondLOsham = [secondLOsham NaN NaN NaN] ;

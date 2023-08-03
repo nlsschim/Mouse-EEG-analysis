@@ -55,7 +55,7 @@ end
 
 if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\" 
     % Define the total duration in seconds
-    totalDuration = 382;
+    totalDuration = 418;
     % Define the number of samples per second
     sampleRate = tickrate(1); % Assuming 20000 samples/second
     % Calculate the total number of samples needed
