@@ -8,7 +8,7 @@ close all
 % file1={'5_18_23 M1 RECUT\', '5_18_23 M2 RECUT\', '5_18_23 M3 RECUT\', '5_25_23 M1 RECUT\', '5_25_23 M2 RECUT\', '5_26_23 M2 RECUT\', '5_26_23 M3 RECUT\'};
 % file1={'5_18_23 M1 RECUT\', '5_25_23 M1 RECUT\', '5_26_23 M3 RECUT\','5_26_23 m1 Gabe\'};
 file1={'5_18_23 M1 RECUT\', '5_18_23 M2 RECUT\', '5_18_23 M3 RECUT\', '5_25_23 M1 RECUT\', '5_25_23 M2 RECUT\', '5_26_23 M2 RECUT\', '5_26_23 M3 RECUT\', '5_26_23 m1 Gabe\'};
-
+% file1={'5_18_23 M1 RECUT\', '5_18_23 M2 RECUT\', '5_18_23 M3 RECUT\', '5_25_23 M1 RECUT\', '5_26_23 M3 RECUT\', '5_26_23 m1 Gabe\'};
 str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\';
 

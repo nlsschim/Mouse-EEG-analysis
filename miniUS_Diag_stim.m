@@ -56,6 +56,7 @@ end
 if folder == "C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\" 
     % Define the total duration in seconds
     totalDuration = 418;
+    % totalDuration = 400;
     % Define the number of samples per second
     sampleRate = tickrate(1); % Assuming 20000 samples/second
     % Calculate the total number of samples needed
@@ -76,6 +77,35 @@ end
 % create names to access fields of 'alldata' for plotting loops
 names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'}; 
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
+
+%% notch filtering 
+
+% Frequency range of the breathing artifact (1-3 Hz)
+f1 = 1;
+f2 = 4;
+
+% Compute the notch filter parameters
+wo = sqrt(f1*f2)/(fs/2);   % Normalized cutoff frequency
+% bw = wo/35;                % Bandwidth (adjust to refine)
+bw = wo/29;
+% bw = wo/50;
+% bw = wo/100;
+[b, a] = iirnotch(wo, bw); % Design the notch filter
+
+% Assuming 'ieeg_data' contains your iEEG data with channels in columns
+% Apply the notch filter to each channel
+% num_channels = size(ieeg_data, 2);
+% filtered_ieeg_data = zeros(size(ieeg_data));
+channel = {'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
+% for i = 1:num_channels
+iterations = 2 ;
+
+for ii = 1:iterations
+    for i = 1:4
+        concat = [string(channel(i))] ;
+        alldata.(concat) = filtfilt(b, a, alldata.(concat));
+    end
+end 
 
 %% additional filtering 
 %Filter out noise

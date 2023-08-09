@@ -192,3 +192,50 @@ std_shamlight = std(shamlight_all)/sqrt(7);
 
 
 % clearvars -except PENmedianRMS std_pen median_pen SHAMUSmedianRMS std_shamus median_shamus shamlightmedianRMS std_shamlight median_shamlight
+
+%% MW for last quarter of L+tDUS trial 
+
+% last quarter of tDUS 
+lq_pentDUS = pentDUS(:,4) ; lq_pentDUS = lq_pentDUS(lq_pentDUS ~= 0);
+lq_shamustDUS = shamustDUS(:,4) ; lq_shamustDUS = lq_shamustDUS(lq_shamustDUS ~= 0);
+lq_shamlighttDUS = shamlighttDUS(:,4) ; lq_shamlighttDUS = lq_shamlighttDUS(lq_shamlighttDUS ~= 0);
+
+lq1LO_pentDUS = lq_pentDUS/penmedian1LO ;
+lq1LO_shamustDUS = lq_shamustDUS/shamusmedian1LO ;
+lq1LO_shamlighttDUS = lq_pentDUS/shamlightmedian1LO ;
+
+MW_lq_psl = ranksum(lq_pentDUS, lq_shamlighttDUS);
+MW_lq_ps = ranksum(lq_pentDUS, lq_shamustDUS);
+MW_lq_ssl = ranksum(lq_shamustDUS, lq_shamlighttDUS);
+
+MW1LO_lq_psl = ranksum(lq1LO_pentDUS, lq1LO_shamlighttDUS);
+MW1LO_lq_ps = ranksum(lq1LO_pentDUS, lq1LO_shamustDUS);
+MW1LO_lq_ssl = ranksum(lq1LO_shamustDUS, lq1LO_shamlighttDUS);
+
+
+% first quarter of 2LO  
+fq_pen2LO = pen2LO(:,4) ; fq_pen2LO = fq_pen2LO(fq_pen2LO ~= 0);
+fq_shamus2LO = shamus2LO(:,4) ; fq_shamus2LO = fq_shamus2LO(fq_shamus2LO ~= 0);
+fq_shamlight2LO = shamlight2LO(:,4) ; fq_shamlight2LO = fq_shamlight2LO(fq_shamlight2LO ~= 0);
+
+fq1LO_pen2LO = fq_pen2LO/penmedian1LO ;
+fq1LO_shamus2LO = fq_shamus2LO/shamusmedian1LO ;
+fq1LO_shamlight2LO = fq_pen2LO/shamlightmedian1LO ;
+
+MW_fq_psl = ranksum(fq_pen2LO, fq_shamlight2LO);
+MW_fq_ps = ranksum(fq_pen2LO, fq_shamus2LO);
+MW_fq_ssl = ranksum(fq_shamus2LO, fq_shamlight2LO);
+
+MW1LO_fq_psl = ranksum(fq1LO_pen2LO, fq1LO_shamlight2LO);
+MW1LO_fq_ps = ranksum(fq1LO_pen2LO, fq1LO_shamus2LO);
+MW1LO_fq_ssl = ranksum(fq1LO_shamus2LO, fq1LO_shamlight2LO);
+
+% lq L+tDUS vs. fq 2nd LO 
+
+MW_fqlq_pen = ranksum(fq_pen2LO, lq_pentDUS);
+MW_fqlq_shamus = ranksum(fq_shamus2LO, lq_shamustDUS);
+MW_fqlq_shamlight = ranksum(fq_shamlight2LO, lq_shamlighttDUS);
+
+MW1LO_fqlq_pen = ranksum(fq1LO_pen2LO, lq1LO_pentDUS);
+MW1LO_fqlq_shamus = ranksum(fq1LO_shamus2LO, lq1LO_shamustDUS);
+MW1LO_fqlq_shamlight = ranksum(fq1LO_shamlight2LO, lq1LO_shamlighttDUS);

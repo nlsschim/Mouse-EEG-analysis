@@ -53,69 +53,35 @@ names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'};
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'}; 
  
 %% notch filtering 
-% 
-% Design a filter with a Q-factor of Q=35 to remove a 0.2 Hz tone from 
-% system running at 300 Hz.
-% Wo = 0.5/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.5/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.5/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
-% 
-% Wo = 0.5/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% alldata.V1Ldata = filter(b,a,alldata.V1Ldata);
 
-% Wo = 0.2/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% y = filter(b,a,alldata.V1Ldata);
-% Wo = 0.2/(10000/2);  BW = Wo/100;
-% [b,a] = iirnotch(Wo,BW); 
-% y = filter(b,a,y);
-% 
-% Wo = 0.25/(10000/2);  BW = Wo/35;
-% [b,a] = iirnotch(Wo,BW); 
-% y2 = filter(b,a,y);
-% 
-% figure
-% pspectrum([alldata.V1Ldata,y],360)
-% hold on 
-% pspectrum([alldata.V1Ldata,alldata.V1Ldata],360)
-% hold on 
-% pspectrum([alldata.V1Ldata,y2],360)
-% xlim([0 4])
-% title('Power Spectrum of ECoG Signal and Notch-filtered Signal')
-% legend('ECoG Signal', 'Notch Filtered', 'double notch filtered')
+% Frequency range of the breathing artifact (1-3 Hz)
+f1 = 1;
+f2 = 4;
 
-% pspectrum(alldata.V1Ldata,360)
-% xlim([0 4])
-% hold on 
-% pspectrum(y,360)
-% hold on 
-% pspectrum(y2,360)
-% title('Power Spectrum of ECoG Signal and Notch-filtered Signal')
-% legend('ECoG Signal', 'Notch Filtered', 'double notch filtered')
-Wo = 0.5/(10000/2);  BW = Wo/35;
-[b,a] = iirnotch(Wo,BW); 
-y = filter(b,a,alldata.V1Ldata);
+% Compute the notch filter parameters
+wo = sqrt(f1*f2)/(fs/2);   % Normalized cutoff frequency
+% bw = wo/35;                % Bandwidth (adjust to refine)
+bw = wo/15;
+% bw = wo/50;
+% bw = wo/100;
+[b, a] = iirnotch(wo, bw); % Design the notch filter
 
-Wo = 0.5/(10000/2);  BW = Wo/100;
-[b,a] = iirnotch(Wo,BW); 
-y = filter(b,a,y);
+% Assuming 'ieeg_data' contains your iEEG data with channels in columns
+% Apply the notch filter to each channel
+% num_channels = size(ieeg_data, 2);
+% filtered_ieeg_data = zeros(size(ieeg_data));
+channel = {'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
+% for i = 1:num_channels
+iterations = 10 ;
 
-Wo = 1/(10000/2);  BW = Wo/35;
-[b,a] = iirnotch(Wo,BW); 
-y = filter(b,a,y);
+for ii = 1:iterations
+    for i = 1:4
+        concat = [string(channel(i))] ;
+        alldata.(concat) = filtfilt(b, a, alldata.(concat));
+    end
+end 
 
-Wo = 1/(10000/2);  BW = Wo/100;
-[b,a] = iirnotch(Wo,BW); 
-y = filter(b,a,y);
+
 %% additional filtering 
 %Filter out noise
 % alldata.V1Ldata=alldata.V1Ldata(abs(alldata.V1Ldata)<0.02); %hardcoded filtering

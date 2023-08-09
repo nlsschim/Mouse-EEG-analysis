@@ -78,8 +78,9 @@ if medians_or_variance == 1
     % 1x396
     secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
     % 1x395
-%     secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 ];
+    % secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 ];
 %     secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4];
+    secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4];
 % 1x398 
     
     secondLOsham = [secondLOsham NaN NaN NaN] ;

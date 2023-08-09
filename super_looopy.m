@@ -36,9 +36,9 @@ clear all
 %% SHAM light mice - 2023 
 cohort_type = 'sham_light' ; 
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m1 RECUT\' ;
-folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\' ;
+% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_26_23 m1 Gabe\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m2 RECUT\' ;
-% folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m3 RECUT\' ;
+folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_18_23 m3 RECUT\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_25_23 m1 RECUT\' ;
 % folder = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\SHAM_light\5_25_23 m2 RECUT \' ;
 
