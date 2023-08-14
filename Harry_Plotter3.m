@@ -413,7 +413,7 @@ else
     hold on 
     medmed_3line = scatter(1:3, medmed_y_shamLight, 500, 'k.') ;
 
-    % for creating legend without errorbars 
+%     % for creating legend without errorbars 
 % medmed_1 = plot(1:3, medmed_y_pen, 'k-', 'LineWidth', 1.5);
 % medmed_2 = plot(1:3, medmed_y_sham, 'k--', 'LineWidth', 1.5);
 % medmed_3 = plot(1:3, medmed_y_shamLight, 'k-.', 'LineWidth', 2.1);

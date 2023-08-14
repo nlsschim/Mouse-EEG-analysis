@@ -80,32 +80,32 @@ foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
 
 %% notch filtering 
 
-% Frequency range of the breathing artifact (1-3 Hz)
-f1 = 1;
-f2 = 4;
-
-% Compute the notch filter parameters
-wo = sqrt(f1*f2)/(fs/2);   % Normalized cutoff frequency
-% bw = wo/35;                % Bandwidth (adjust to refine)
-bw = wo/29;
-% bw = wo/50;
-% bw = wo/100;
-[b, a] = iirnotch(wo, bw); % Design the notch filter
-
-% Assuming 'ieeg_data' contains your iEEG data with channels in columns
-% Apply the notch filter to each channel
-% num_channels = size(ieeg_data, 2);
-% filtered_ieeg_data = zeros(size(ieeg_data));
-channel = {'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
-% for i = 1:num_channels
-iterations = 2 ;
-
-for ii = 1:iterations
-    for i = 1:4
-        concat = [string(channel(i))] ;
-        alldata.(concat) = filtfilt(b, a, alldata.(concat));
-    end
-end 
+% % Frequency range of the breathing artifact (1-3 Hz)
+% f1 = 1;
+% f2 = 4;
+% 
+% % Compute the notch filter parameters
+% wo = sqrt(f1*f2)/(fs/2);   % Normalized cutoff frequency
+% % bw = wo/35;                % Bandwidth (adjust to refine)
+% bw = wo/29;
+% % bw = wo/50;
+% % bw = wo/100;
+% [b, a] = iirnotch(wo, bw); % Design the notch filter
+% 
+% % Assuming 'ieeg_data' contains your iEEG data with channels in columns
+% % Apply the notch filter to each channel
+% % num_channels = size(ieeg_data, 2);
+% % filtered_ieeg_data = zeros(size(ieeg_data));
+% channel = {'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
+% % for i = 1:num_channels
+% iterations = 2 ;
+% 
+% for ii = 1:iterations
+%     for i = 1:4
+%         concat = [string(channel(i))] ;
+%         alldata.(concat) = filtfilt(b, a, alldata.(concat));
+%     end
+% end 
 
 %% additional filtering 
 %Filter out noise
@@ -260,7 +260,8 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
     
 if shrink_matrix == 1 %x second after stim only analysis 
     if former_mat == 1 
-        matrix = matrix(1:secs,:); %%% IS THIS AN ERROR? should be 1:secs*4 yeah? 
+%         matrix = matrix(1:secs,:); %%% IS THIS AN ERROR? should be 1:secs*4 yeah? 
+        matrix = matrix(1:secs*4,:); % for running RMS 
     else 
         matrix = matrix((secs*4)+1:40,:); % coded for correctly running rms matrix only - 5-8-23 DOESNT THIS SKIP STUFF? 
     end 

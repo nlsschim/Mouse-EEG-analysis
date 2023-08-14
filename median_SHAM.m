@@ -175,7 +175,8 @@ if simple_median_analysis == 1
 else 
     if sham_light == 1
         % for median_SHAM_light
-        Harry_Plotter3
+%         Harry_Plotter3
+        Harry_Plotter4
     else 
         Harry_Plotter2
     end 

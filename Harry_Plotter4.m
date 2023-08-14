@@ -122,7 +122,12 @@ for i = 1:numel(varNames)
     end
 end
 
-dataset = [firstLOpen; LUSpen; secondLOpen; firstLOsham; LUSsham; secondLOsham; firstLOshamLight; LUSshamLight; secondLOshamLight]';
+% KW with all three cohorts 
+% dataset = [firstLOpen; LUSpen; secondLOpen; firstLOsham; LUSsham; secondLOsham; firstLOshamLight; LUSshamLight; secondLOshamLight]';
+% KWp = kruskalwallis(dataset);
+
+% KW with pen and sham 
+dataset = [firstLOpen; LUSpen; secondLOpen; firstLOsham; LUSsham; secondLOsham]';
 KWp = kruskalwallis(dataset);
 
 %% Mann Whitney Tests
@@ -191,7 +196,71 @@ KWp = kruskalwallis(dataset);
 % %     ylabel('Normalized RMS Brain Activity') 
 % 
 %     linkaxes([ax1 ax2 ax3],'xy')
+%% medians/variance box and whisker plots 
+% they like each box's data to be a column
+    
+    % for whiskers 
+    q3=norminv(.75);
+    q95=norminv(0.95);
+    w95=(q95-q3)/(2*q3);
 
+%     tiledlayout(1,3)
+%     
+%     ax1 = nexttile;
+%     boxplot([firstLOpen',firstLOsham',firstLOshamLight'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US', 'SHAM Light'}) 
+%     title('1st LO','Fontsize', 13) 
+%     ylabel('Normalized RMS Brain Activity','FontWeight','bold', 'Fontsize', 14) 
+%     
+%     ax2 = nexttile;
+%     boxplot([LUSpen',LUSsham',LUSshamLight'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US', 'SHAM Light'})
+%     set(gca,'YTickLabel',[]);
+%     title('L+tDUS','FontWeight','bold','Fontsize', 13) 
+% 
+%     ax3 = nexttile;
+%     boxplot([secondLOpen',secondLOsham',secondLOshamLight'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US', 'SHAM Light'})
+%     set(gca,'YTickLabel',[]);
+%     title('2nd LO', 'Fontsize',13) % Normalized RMS Brain Activity by Cohort
+% 
+%     linkaxes([ax1 ax2 ax3],'xy')
+
+% just pen and sham 
+    tiledlayout(1,3)
+    
+    ax1 = nexttile;
+    boxplot([firstLOpen',firstLOsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'}) 
+    title('1st LO','Fontsize', 13) 
+    ylabel('Normalized RMS Brain Activity','FontWeight','bold', 'Fontsize', 14) 
+    
+    ax2 = nexttile;
+    boxplot([LUSpen',LUSsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'})
+    set(gca,'YTickLabel',[]);
+    title('L+tDUS','FontWeight','bold','Fontsize', 13) 
+
+    ax3 = nexttile;
+    boxplot([secondLOpen',secondLOsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'})
+    set(gca,'YTickLabel',[]);
+    title('2nd LO', 'Fontsize',13) % Normalized RMS Brain Activity by Cohort
+
+    linkaxes([ax1 ax2],'xy')
+%     ax1.YLim = [0.1 1.7];
+%     ax2.YLim = [0.1 1.7];
+%     ax3.YLim = [0.1 1.7];
+    ax1.YLim = [0.35 1.95];
+    ax2.YLim = [0.35 1.95];
+    ax3.YLim = [0.35 1.95];
+
+% if normalize_by_1LOvar == 1 
+% %     ax1.YLim = [0.2 2.6];
+%     ax1.YLim = [0.3 2.0];
+% else 
+%     ax1.YLim = [0.5 3.7];
+% end 
+    
+    %     for sharey x axis : 
+%     p1 = get(x1, 'Position');
+%     p2 = get(x2, 'Position');
+%     p1(2) = p2(2)+p2(4);
+%     set(x1, 'pos', p1);
 %% removing NaN entries 
 firstLOpen = firstLOpen(~isnan(firstLOpen));
 firstLOsham = firstLOsham(~isnan(firstLOsham));
@@ -228,7 +297,7 @@ secondLOshamLight = secondLOshamLight(~isnan(secondLOshamLight));
     % median_stderror(3,2) = std(LUSshamLight) ;
     % median_stderror(3,3) = std(secondLOshamLight) ;
     % 
-%% plotting 
+%% line plotting 
 
     
     % plotting 
@@ -245,23 +314,26 @@ secondLOshamLight = secondLOshamLight(~isnan(secondLOshamLight));
     hold on 
     medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
     hold on 
-    medmed_3 = errorbar(1:3, medmed_y_shamLight, median_stderror(3,:),'k:','LineWidth', 3) ; 
+    medmed_3 = errorbar(1:3, medmed_y_shamLight, median_stderror(3,:),'k:','LineWidth', 2) ; 
     hold on 
     medmed_3line = scatter(1:3, medmed_y_shamLight, 500, 'k.') ;
     hold on 
-    projectedValue = (medmed_y_shamLight(1,1)+medmed_y_shamLight(1,3))/2;
-    projectedPoint = scatter(2, projectedValue, 200, "pentagram") ;
     % estimating projected value if US did not activate brain 
+    projectedValue = (medmed_y_shamLight(1,1)+medmed_y_shamLight(1,3))/2;
+%     projectedPoint = scatter(2, projectedValue, 200, "pentagram") ;
+    projectedPoint = scatter(2, projectedValue, 150, "pentagram",'k') ;
+    projectedLine = [median(firstLOshamLight)  projectedValue median(secondLOshamLight)] ;
     
     % for creating legend without errorbars 
-% medmed_1 = plot(1:3, medmed_y_pen, 'k-', 'LineWidth', 1.5);
-% medmed_2 = plot(1:3, medmed_y_sham, 'k--', 'LineWidth', 1.5);
-% medmed_3 = plot(1:3, medmed_y_shamLight, 'k-.', 'LineWidth', 2.1);
-% set(get(get(medmed_1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-% set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-% set(get(get(medmed_3,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+medmed_1 = plot(1:3, medmed_y_pen, 'k-', 'LineWidth', 1.5);
+medmed_2 = plot(1:3, medmed_y_sham, 'k--', 'LineWidth', 1.5);
+medmed_3 = plot(1:3, medmed_y_shamLight, 'k:', 'LineWidth', 2);
+medmed_4 = plot(1:3, projectedLine, 'k-.', 'LineWidth', 1.3);
+set(get(get(medmed_1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(medmed_3,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
 
-    legend([medmed_1 medmed_2 medmed_3 projectedPoint], {'PEN US and light', 'Light', 'PEN US','PEN US projection'}, 'location', 'northwest')
+    legend([medmed_1 medmed_2 medmed_3 medmed_4], {'PEN US & light', 'Light Only', 'PEN US Only','PEN US projection'}, 'location', 'northwest')
     ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
     
     labels = {'1st LO', 'L+tDUS', '2nd LO'};
@@ -280,7 +352,48 @@ secondLOshamLight = secondLOshamLight(~isnan(secondLOshamLight));
     set(gca,'XTickLabel',a,'fontsize',14)
     xlim([0.95 3.05]);
     
-    %% MW between projected point and actual point for sham light at L+tDUS 
+%% second line plot 
+
+figure(8) 
+    medmed_y_pen = [median(firstLOpen)  median(LUSpen) median(secondLOpen)] ;
+    medmed_y_sham = [median(firstLOsham)  median(LUSsham) median(secondLOsham)] ;
+ 
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
+    medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
+    hold on 
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ; 
+    hold on 
+    medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;    
+    hold on 
+    
+    % for creating legend without errorbars 
+medmed_1 = plot(1:3, medmed_y_pen, 'k-', 'LineWidth', 1.5);
+medmed_2 = plot(1:3, medmed_y_sham, 'k--', 'LineWidth', 1.5);
+
+set(get(get(medmed_1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+
+    legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'}, 'location', 'northwest')
+    ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
+    
+    labels = {'1st LO', 'L+tDUS', '2nd LO'};
+
+    % Find the positions of the categorical labels
+    labelPositions = find(~cellfun(@isempty, labels));
+
+    % Set the x-tick positions and labels
+    xticks(labelPositions);
+    xticklabels(labels(labelPositions));
+
+    % Adjust the x-axis limits if needed
+    xlim([0, numel(labels)+1]);
+
+    a = get(gca,'XTickLabel');
+    set(gca,'XTickLabel',a,'fontsize',14)
+    xlim([0.95 3.05]);
+    
+%% MW between projected point and actual point for sham light at L+tDUS 
     
     LUS_SL_length = length(LUSshamLight) ;
     projectedValue_matrix = zeros(1,LUS_SL_length) ;
@@ -289,3 +402,26 @@ secondLOshamLight = secondLOshamLight(~isnan(secondLOshamLight));
     end 
         
     MW_shamlight_vs_projection = ranksum(LUSshamLight, projectedValue_matrix) ;
+    
+    % new method
+    diff = abs(median(LUSshamLight) - projectedValue);
+    LUSshamLight_projected = LUSshamLight - diff; 
+    disp(['LUSshamLight_projected median: ' num2str(median(LUSshamLight_projected)) ' projected value: ' string(projectedValue)])
+    MW_shamlight_vs_projection2 = ranksum(LUSshamLight, LUSshamLight_projected) ;
+    
+    %% Wilcoxon signed-rank test
+    
+    % Example data (replace these with your actual data)
+    observed_data = [LUSshamLight]; % Replace with your data
+    projected_data = [projectedValue]; % Replace with your data
+
+    % Perform the Wilcoxon signed-rank test
+    [p_value, h, stats] = signrank(observed_data, projected_data);
+
+    % Display the p-value and the test result
+    fprintf('p-value: %f\n', p_value);
+    if h == 1
+        fprintf('Reject the null hypothesis. There is a significant difference.\n');
+    else
+        fprintf('Fail to reject the null hypothesis. No significant difference.\n');
+    end
