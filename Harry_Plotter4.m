@@ -5,63 +5,8 @@ clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance
 
 %% making medians 
 
-% regular 
-% firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
-% firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
-% firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 ];
-% 
-% LUSpen = [penmedians.Mouse1Trial3 penmedians.Mouse2Trial3 penmedians.Mouse3Trial3 penmedians.Mouse4Trial3 penmedians.Mouse5Trial3 penmedians.Mouse6Trial3 penmedians.Mouse7Trial3 ]; 
-% LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
-% LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 ];
-% 
-% secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
-% secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
-% secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 ];
-    
-% reg + gabe sham light mouse
-% firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
-% firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
-% firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 shamLightmedians.Mouse8Trial1];
-% 
-% LUSpen = [penmedians.Mouse1Trial3 penmedians.Mouse2Trial3 penmedians.Mouse3Trial3 penmedians.Mouse4Trial3 penmedians.Mouse5Trial3 penmedians.Mouse6Trial3 penmedians.Mouse7Trial3 ]; 
-% LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
-% LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 shamLightmedians.Mouse8Trial3];
-% 
-% secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
-% secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
-% secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
- 
-% unnnoisy mice for sham light file1={'5_18_23 M1 RECUT\', '5_18_23 M2
-% RECUT\', '5_18_23 M3 RECUT\', '5_25_23 M1 RECUT\', '5_25_23 M2 RECUT\','5_26_23 M2 RECUT\', '5_26_23 M3 RECUT\', '5_26_23 m1 Gabe\'}; 1 4 7 8 
-% firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
-% firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
-% firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse7Trial1 shamLightmedians.Mouse8Trial1];
-% 
-% LUSpen = [penmedians.Mouse1Trial3 penmedians.Mouse2Trial3 penmedians.Mouse3Trial3 penmedians.Mouse4Trial3 penmedians.Mouse5Trial3 penmedians.Mouse6Trial3 penmedians.Mouse7Trial3 ]; 
-% LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
-% LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse7Trial3 shamLightmedians.Mouse8Trial3];
-% 
-% secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
-% secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
-% secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
+% % 5+6 most moisy removed + gabes 
 
-% unnoisy plus 3 
-% 
-% firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
-% firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
-% firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse7Trial1 shamLightmedians.Mouse8Trial1];
-% 
-% LUSpen = [penmedians.Mouse1Trial3 penmedians.Mouse2Trial3 penmedians.Mouse3Trial3 penmedians.Mouse4Trial3 penmedians.Mouse5Trial3 penmedians.Mouse6Trial3 penmedians.Mouse7Trial3 ]; 
-% LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
-% LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse7Trial3 shamLightmedians.Mouse8Trial3];
-% 
-% secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
-% secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
-% secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
-% 
-
-% % 5+6 most moisy removed 
-% 
 firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
 firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
 firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse7Trial1 shamLightmedians.Mouse8Trial1];
@@ -73,39 +18,11 @@ LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 sham
 secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
 secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
 secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
-% 
 
-% 6 removed 
-% 
-% firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
-% firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
-% firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse5Trial1 shamLightmedians.Mouse7Trial1 shamLightmedians.Mouse8Trial1];
-% 
-% LUSpen = [penmedians.Mouse1Trial3 penmedians.Mouse2Trial3 penmedians.Mouse3Trial3 penmedians.Mouse4Trial3 penmedians.Mouse5Trial3 penmedians.Mouse6Trial3 penmedians.Mouse7Trial3 ]; 
-% LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
-% LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse5Trial3 shamLightmedians.Mouse7Trial3 shamLightmedians.Mouse8Trial3];
-% 
-% secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
-% secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
-% secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse5Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
 
-% 5 removed 
-% 6 removed 
-
-% firstLOpen = [penmedians.Mouse1Trial1 penmedians.Mouse2Trial1 penmedians.Mouse3Trial1 penmedians.Mouse4Trial1 penmedians.Mouse5Trial1 penmedians.Mouse6Trial1 penmedians.Mouse7Trial1 ]; 
-% firstLOsham = [shammedians.Mouse1Trial1 shammedians.Mouse2Trial1 shammedians.Mouse3Trial1 shammedians.Mouse4Trial1 shammedians.Mouse5Trial1 shammedians.Mouse6Trial1 shammedians.Mouse7Trial1 ];   
-% firstLOshamLight = [shamLightmedians.Mouse1Trial1 shamLightmedians.Mouse2Trial1 shamLightmedians.Mouse3Trial1 shamLightmedians.Mouse4Trial1 shamLightmedians.Mouse6Trial1 shamLightmedians.Mouse7Trial1 shamLightmedians.Mouse8Trial1];
-% 
-% LUSpen = [penmedians.Mouse1Trial3 penmedians.Mouse2Trial3 penmedians.Mouse3Trial3 penmedians.Mouse4Trial3 penmedians.Mouse5Trial3 penmedians.Mouse6Trial3 penmedians.Mouse7Trial3 ]; 
-% LUSsham = [shammedians.Mouse1Trial3 shammedians.Mouse2Trial3 shammedians.Mouse3Trial3 shammedians.Mouse4Trial3 shammedians.Mouse5Trial3 shammedians.Mouse6Trial3 shammedians.Mouse7Trial3 ];
-% LUSshamLight = [shamLightmedians.Mouse1Trial3 shamLightmedians.Mouse2Trial3 shamLightmedians.Mouse3Trial3 shamLightmedians.Mouse4Trial3 shamLightmedians.Mouse6Trial3 shamLightmedians.Mouse7Trial3 shamLightmedians.Mouse8Trial3];
-% 
-% secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3Trial4 penmedians.Mouse4Trial4 penmedians.Mouse5Trial4 penmedians.Mouse6Trial4 penmedians.Mouse7Trial4 ]; 
-% secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
-% secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse6Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
 %% kruskal-wallis test
 % 6 data sets, sham and pen for each of 3 trial types
-% 
+
 max_length = max([length(firstLOpen), length(LUSpen),length(secondLOpen),length(firstLOsham),length(LUSsham),length(secondLOsham),length(firstLOshamLight),length(LUSshamLight),length(secondLOshamLight)]);
 
 varNames = {'firstLOpen', 'LUSpen', 'secondLOpen', 'firstLOsham', 'LUSsham', 'secondLOsham','firstLOshamLight', 'LUSshamLight', 'secondLOshamLight'};

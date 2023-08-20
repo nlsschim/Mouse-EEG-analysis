@@ -129,7 +129,6 @@ end
 for z=1:4
    
     if isequal(file_list(z).name,"Trial 2.mat"), continue, end %for 12-23
-    if isequal(file_list(z).name,"Trial 6.mat"), continue, end 
     disp(z)%display the number that the code is on in the terminal, do not put a ';' after it 
     disp(file_list(z).name);%displays the name of the file in the terminal
     load([folder file_list(z).name]);%bringing the file data into matlab so that the code can run

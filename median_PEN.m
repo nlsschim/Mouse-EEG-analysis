@@ -2,7 +2,7 @@
 %This code is for the PEN cohort to run through the data and get the
 % median values ; it calls median_SHAM at the end 
 close all
-clear all
+clear 
 clc
 %% reading cohort files 
 % old data 
@@ -11,9 +11,9 @@ str=string(file1);
 MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\old data\PEN\';
 
 % new recut data 
-% file1={'8_10_21 m1 pen\', '8_10_21 m2 pen\','8_12_21 m1 pen\', '6_23_21 m1 pen\', '2_28_22 pen\', '3_2_22 pen\', '3_3_22 pen\'};
-% str=string(file1);
-% MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
+% % file1={'8_10_21 m1 pen\', '8_10_21 m2 pen\','8_12_21 m1 pen\', '6_23_21 m1 pen\', '2_28_22 pen\', '3_2_22 pen\', '3_3_22 pen\'};
+% % str=string(file1);
+% % MainDirectory = 'C:\Users\Henry\MATLAB\Mourad Lab\Mouse_EEG\Data\PEN\';
 
 %% medians or variance 
 runningrms_or_10sec = input("Run 10 second waterfalls or 0.25 second running rms trial?: '1' = 10sec, '0' = runningrms: ") ;
@@ -29,8 +29,8 @@ if simple_median_analysis == 1 % default other median calculations
         end 
     end 
     simple_medians_or_variance = input("run median or variance analysis?: '1' = medians, '0' = variance: ") ;
-    medians_or_variance = 1 ;
-    normalize_by_1LOvar = 0 ; 
+    % medians_or_variance = 1 ;
+    % normalize_by_1LOvar = 0 ; 
 end 
 
 % more robust median analysis
@@ -71,7 +71,6 @@ PEN_MATRIX_1LOnormalized = zeros(7,4);
 
 %% Reading experiment dates 
 for f=1:length(str) 
-% for f = 4
 folder = fullfile(MainDirectory,str{f});
 % dir ('folder');
 

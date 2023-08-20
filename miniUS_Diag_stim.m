@@ -11,21 +11,6 @@ time=time1/fs/60; % in minutes?
 %% change the bandpass for filtering pls
 
 [bb,aa]=butter(3,[5,55]/(fs/2)); %trying to get the us noise out, 5-55Hz 
-for i = 1 
-%     low gamma 
-%    [bb,aa]=butter(2,[30,59]/(fs/2)); 
-    % beta
-%   [bb,aa]=butter(2,[12,29]/(fs/2)); 
-    % theta
-%   [bb,aa]=butter(2,[4,7]/(fs/2));
-    % alpha 
-%     [bb,aa]=butter(2,[8,11]/(fs/2));
-
-% bandpasses = [3, 100; 30, 59; 12, 29; 4, 7; 8, 11] ; 
-%     [bb,aa]=butter(2,bandpasses(brain_wave,:)/(fs/2));
-
-%Organize data into structure array
-end % to hide code for other bandpasses 
 
 alldata=[]; %initialize structure array
 alldata.V1Ldata=filtfilt(bb,aa,data(datastart(V1L):dataend(V1L))')';
@@ -79,7 +64,7 @@ names={'V1Ldata','S1Ldata','S1Rdata','V1Rdata','lightstimdata'};
 foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
 
 %% notch filtering 
-
+% 
 % % Frequency range of the breathing artifact (1-3 Hz)
 % f1 = 1;
 % f2 = 4;
@@ -105,7 +90,7 @@ foranalysis={'V1Ldata','S1Ldata','S1Rdata','V1Rdata'};
 %         concat = [string(channel(i))] ;
 %         alldata.(concat) = filtfilt(b, a, alldata.(concat));
 %     end
-% end 
+% end
 
 %% additional filtering 
 %Filter out noise
@@ -260,7 +245,7 @@ fakefor_stats_analysis.(fakeconc)=fakefor_stats;
     
 if shrink_matrix == 1 %x second after stim only analysis 
     if former_mat == 1 
-%         matrix = matrix(1:secs,:); %%% IS THIS AN ERROR? should be 1:secs*4 yeah? 
+        % matrix = matrix(1:secs,:); %%% IS THIS AN ERROR? should be 1:secs*4 yeah? 
         matrix = matrix(1:secs*4,:); % for running RMS 
     else 
         matrix = matrix((secs*4)+1:40,:); % coded for correctly running rms matrix only - 5-8-23 DOESNT THIS SKIP STUFF? 

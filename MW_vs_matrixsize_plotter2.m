@@ -67,39 +67,40 @@ ax = gca;
 ax.FontSize = 12; 
 xlabel('','FontSize',10)
 
-% %% plotting 1LO normalized data 
-% f2= figure(4)
-% y1LO_former = [0.7256 0.5974 0.8709 0.9385 0.5281 0.9891 0.9947 0.7211 0.9807 0.7945];
-% yLUS_former = [1.2889e-76 1.0020e-75 6.6013e-76 3.5982e-78 3.5846e-73 1.9268e-75 2.3183e-75 2.0278e-73 3.2067e-56 9.8312e-62]; 
-% y2LO_former = [1.0048e-54 6.4579e-49 2.2744e-43 6.0473e-39 2.6903e-31 7.7682e-32 3.2296e-29 1.4230e-24 1.1708e-16 1.5671e-47]; 
-% signif_line = [0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05];
-% tiledlayout(3,1)
-% 
-% % 1st plot - 1LO 
-% nexttile
-% scatter(1:10,y1LO_former, 'filled')
-% set(gca,'XTickLabel',[]);
-% hold on 
-% plot(0:10, signif_line, 'r')
-% title('A - 1st LO', 'Fontsize', 13)
-% % ylabel("MW p-value") 
-% xlim([1 10])
-% % xlabel('Total Seconds Analyzed After Light Stimulus') 
-% grid on
-% 
-% % 2nd plot - L+US
-% nexttile
-% scatter(1:10,yLUS_former, 'filled')
-% set(gca,'XTickLabel',[]);
-% title('B - L+US', 'Fontsize', 13)
-% ylabel("MW p-value",'Fontsize', 15) 
-% % xlabel('Total Seconds Analyzed After Light Stimulus')
-% grid on
-% 
-% % 3rd plot - 2LO
-% nexttile
-% scatter(1:10,y2LO_former, 'filled')
-% title('C - 2nd LO', 'Fontsize', 13)
-% % ylabel("MW p-value") 
-% xlabel('Time Analyzed After Light Events (seconds)', 'Fontsize', 14) 
-% grid on 
+
+%% sham light change over time 
+
+%data  
+    shamLight_y = [9.02E-06 3.60E-04 2.26E-03 9.01E-01 3.20E-03 1.18E-02 2.45E-01 2.89E-02 2.53E-01 1.21E-03]; 
+    f2 = figure(2)
+
+    % nonsignif points 
+    x_nonsig = [4 7 9];
+    nonsig = scatter(x_nonsig,shamLight_y(x_nonsig), 40, 'o', 'k');
+    hold on 
+
+    % sig points 
+    sigs = [1 2 3 5 6 8 10];
+    sig = scatter(sigs,shamLight_y(sigs), 65, 'k','diamond');
+    hold on 
+
+    % % yline(0.05, 'r')
+    % xregion(1,4)
+    % hold on 
+    % xregion(5,7)
+    % hold on 
+    % xregion(8,9)
+    % set(gca,'XTickLabel',[]);
+    ylabel("MW p-value", 'Fontsize', 14) 
+    
+
+    grid on
+    lgd = legend([nonsig sig], {'non-significant', 'significant'}, 'location', 'northeast');
+    fontsize(lgd,12,'points')
+    ax = gca;
+    ax.FontSize = 12; 
+    % xlabel('','FontSize',10)
+
+    ylabel("MW p-value", 'Fontsize', 14) 
+    xlabel('Time Analyzed After Light Events (seconds)', 'Fontsize', 14) 
+    xlim([1 10])
