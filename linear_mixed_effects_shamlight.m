@@ -132,3 +132,28 @@ disp(lmeModel);
 % comp = compare(lmeModel);
 % disp('Post-hoc Comparisons:');
 % disp(comp);
+
+%% plotting 
+
+figure(3) 
+counter = 0 ;
+for i = 1:num_animals 
+    plot(1:4, response(counter+i:i+3+counter))
+    counter = counter +4;
+    hold on 
+end 
+    ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
+    labels = {'Baseline', '1st LO', 'L+tDUS', '2nd LO'};
+
+    % Find the positions of the categorical labels
+    labelPositions = find(~cellfun(@isempty, labels));
+
+    % Set the x-tick positions and labels
+    xticks(labelPositions);
+    xticklabels(labels(labelPositions));
+
+    % Adjust the x-axis limits if needed
+    xlim([0, numel(labels)+1]);
+
+    a = get(gca,'XTickLabel');
+    set(gca,'XTickLabel',a,'fontsize',14)

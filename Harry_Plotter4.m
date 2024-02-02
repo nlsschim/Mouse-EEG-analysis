@@ -2,6 +2,7 @@ close all
 % clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized sham_light
 clearvars -except former_mat runningrms_or_10sec secs simple_medians_or_variance shrink_matrix simple_median_analysis simple_median_analysis_normalize penran medians_or_variance normalize_by_1LOvar normalize_by_1LOmed penmedians penvariances PEN_MATRIX PEN_MATRIX_1LOnormalized shamLightmedians shamLightvariances shamLight_matrix shamLight_matrix_1LOnormalized shammedians shamvariances SHAM_MATRIX SHAM_MATRIX_1LOnormalized sham_light
 
+shamLightfigs = input("Run boxplots including sham light (US only) cohort?: '1' = yes, '0' = no: ") ; 
 
 %% making medians 
 
@@ -19,7 +20,23 @@ secondLOpen = [penmedians.Mouse1Trial4 penmedians.Mouse2Trial4 penmedians.Mouse3
 secondLOsham = [shammedians.Mouse1Trial4 shammedians.Mouse2Trial4 shammedians.Mouse3Trial4 shammedians.Mouse4Trial4 shammedians.Mouse5Trial4 shammedians.Mouse6Trial4 shammedians.Mouse7Trial4 ];
 secondLOshamLight = [shamLightmedians.Mouse1Trial4 shamLightmedians.Mouse2Trial4 shamLightmedians.Mouse3Trial4 shamLightmedians.Mouse4Trial4 shamLightmedians.Mouse7Trial4 shamLightmedians.Mouse8Trial4];
 
+%% Mann Whitney Tests
 
+% pen vs sham US 
+    median_psMW1LO = ranksum(firstLOpen,firstLOsham) ;
+    median_psMWLUS = ranksum(LUSpen,LUSsham) ;
+    median_psMW2LO = ranksum(secondLOpen,secondLOsham) ; 
+
+% pen vs sham light 
+    median_pslMW1LO = ranksum(firstLOpen,firstLOshamLight) ;
+    median_pslMWLUS = ranksum(LUSpen,LUSshamLight) ;
+    median_pslMW2LO = ranksum(secondLOpen,secondLOshamLight) ; 
+
+% Sham US vs sham light 
+    median_sslMW1LO = ranksum(firstLOsham,firstLOshamLight) ;
+    median_sslMWLUS = ranksum(LUSsham,LUSshamLight) ;
+    median_sslMW2LO = ranksum(secondLOsham,secondLOshamLight) ; 
+    
 %% kruskal-wallis test
 % 6 data sets, sham and pen for each of 3 trial types
 
@@ -47,22 +64,7 @@ end
 dataset = [firstLOpen; LUSpen; secondLOpen; firstLOsham; LUSsham; secondLOsham]';
 KWp = kruskalwallis(dataset);
 
-%% Mann Whitney Tests
 
-% pen vs sham US 
-    median_psMW1LO = ranksum(firstLOpen,firstLOsham) ;
-    median_psMWLUS = ranksum(LUSpen,LUSsham) ;
-    median_psMW2LO = ranksum(secondLOpen,secondLOsham) ; 
-
-% pen vs sham light 
-    median_pslMW1LO = ranksum(firstLOpen,firstLOshamLight) ;
-    median_pslMWLUS = ranksum(LUSpen,LUSshamLight) ;
-    median_pslMW2LO = ranksum(secondLOpen,secondLOshamLight) ; 
-
-% Sham US vs sham light 
-    median_sslMW1LO = ranksum(firstLOsham,firstLOshamLight) ;
-    median_sslMWLUS = ranksum(LUSsham,LUSshamLight) ;
-    median_sslMW2LO = ranksum(secondLOsham,secondLOshamLight) ; 
 % %% medians/variance box and whisker plots 
 % % they like each box's data to be a column
 % 
@@ -140,8 +142,36 @@ KWp = kruskalwallis(dataset);
 % 
 %     linkaxes([ax1 ax2 ax3],'xy')
 
+tiledlayout(1,3)
+if shamLightfigs == 1 
+    ax1 = nexttile;
+    boxplot([firstLOpen',firstLOsham',firstLOshamLight'],'Symbol', '','Notch','on','Labels', {'Dual L+US', 'Light Only','US Only'}) 
+    title('1st LO','Fontsize', 13) 
+    ylabel('Normalized RMS Brain Activity','FontWeight','bold', 'Fontsize', 14) 
+    grid on 
+    
+    ax2 = nexttile;
+    boxplot([LUSpen',LUSsham',LUSshamLight'],'Symbol', '','Notch','on','Labels', {'Dual L+US', 'Light Only','US Only'})
+    set(gca,'YTickLabel',[]);
+    title('L+tDUS','FontWeight','bold','Fontsize', 13) 
+    grid on 
+
+    ax3 = nexttile;
+    boxplot([secondLOpen',secondLOsham',secondLOshamLight'],'Symbol', '','Notch','on','Labels', {'Dual L+US', 'Light Only','US Only'})
+    set(gca,'YTickLabel',[]);
+    title('2nd LO', 'Fontsize',13) % Normalized RMS Brain Activity by Cohort
+    grid on 
+    
+    linkaxes([ax1 ax2],'xy')
+    ax1.YLim = [0.35 2.2];
+    ax2.YLim = [0.35 2.2];
+    ax3.YLim = [0.35 2.2];
+%     ax1.YLim = [0.2 1.6];
+%     ax2.YLim = [0.2 1.6];
+%     ax3.YLim = [0.2 1.6];
+else 
 % just pen and sham 
-    tiledlayout(1,3)
+
     
     ax1 = nexttile;
     boxplot([firstLOpen',firstLOsham'],'Symbol', '','Notch','on','Labels', {'PEN US', 'SHAM US'}) 
@@ -178,6 +208,8 @@ KWp = kruskalwallis(dataset);
 %     p2 = get(x2, 'Position');
 %     p1(2) = p2(2)+p2(4);
 %     set(x1, 'pos', p1);
+
+end 
 %% removing NaN entries 
 firstLOpen = firstLOpen(~isnan(firstLOpen));
 firstLOsham = firstLOsham(~isnan(firstLOsham));
@@ -342,3 +374,100 @@ set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off'
     else
         fprintf('Fail to reject the null hypothesis. No significant difference.\n');
     end
+
+%% regression analysis
+    
+% plot 1 - pen, median of medians 
+figure(10)
+subplot(2,2,1)
+% regression model initializations 
+    length1 = length(firstLOpen) ; length2 = length(LUSpen) ; length3 = length(secondLOpen) ;
+    y_pen2 = [firstLOpen, LUSpen, secondLOpen];
+    x_pen2 = [ones(1,length1) 2*ones(1,length2) 3*ones(1,length3)] ; 
+    
+    medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
+    hold on 
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
+    mdl_pen2 = fitlm(x_pen2, y_pen2);
+    plot(mdl_pen2);
+    title('pen ~60x7 medians/trial')
+        
+subplot(2,2,2)
+% regression model initializations 
+    length4 = length(firstLOsham) ; length5 = length(LUSsham) ; length6 = length(secondLOsham) ; 
+    y_sham2 = [firstLOsham, LUSsham, secondLOsham];
+    x_sham2 = [ones(1,length4) 2*ones(1,length5) 3*ones(1,length6)] ; 
+    medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
+    hold on 
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ;
+    hold on 
+    mdl_sham2 = fitlm(x_sham2, y_sham2);
+    plot(mdl_sham2);
+    title('sham ~60x7 medians/trial')    
+    
+subplot(2,2,3)
+% regression model initializations 
+    length7 = length(firstLOshamLight) ; length8 = length(LUSshamLight) ; length9 = length(secondLOshamLight) ; 
+    y_shamLight = [firstLOshamLight, LUSshamLight, secondLOshamLight];
+    x_shamLight = [ones(1,length7) 2*ones(1,length8) 3*ones(1,length9)] ; 
+    
+    medmed_3 = errorbar(1:3, medmed_y_shamLight, median_stderror(3,:),'k:','LineWidth', 2) ; 
+    hold on 
+    medmed_3line = scatter(1:3, medmed_y_shamLight, 500, 'k.') ;
+    hold on 
+    mdl_shamLight = fitlm(x_shamLight, y_shamLight);
+    plot(mdl_shamLight);
+    title('shamLight ~60x7 medians/trial')  
+    
+% combined 
+figure(13) 
+medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
+    medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
+    hold on 
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ; 
+    hold on 
+    medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
+    hold on 
+    medmed_3 = errorbar(1:3, medmed_y_shamLight, median_stderror(3,:),'k:','LineWidth', 2) ; 
+    hold on 
+    medmed_3line = scatter(1:3, medmed_y_shamLight, 500, 'k.') ;
+    hold on 
+    plot(mdl_pen2, 'Color', 'red', 'Linewidth', 1.5) 
+    hold on 
+    plot(mdl_sham2, 'Color', 'blue', 'Linewidth', 1.5) 
+    hold on 
+    plot(mdl_shamLight, 'Color', 'green', 'Linewidth', 1.5) 
+    
+    % for creating legend without errorbars 
+medmed_1 = plot(1:3, medmed_y_pen, 'k-', 'LineWidth', 1.5);
+medmed_2 = plot(1:3, medmed_y_sham, 'k--', 'LineWidth', 1.5);
+medmed_3 = plot(1:3, medmed_y_shamLight, 'k:', 'LineWidth', 2);
+% medmed_4 = plot(1:3, projectedLine, 'k-.', 'LineWidth', 1.3);
+set(get(get(medmed_1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(medmed_3,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+
+    legend([medmed_1 medmed_2 medmed_3], {'PEN US & light', 'Light Only', 'PEN US Only'}, 'location', 'northwest')
+    ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
+    
+    labels = {'1st LO', 'L+tDUS', '2nd LO'};
+
+    % Find the positions of the categorical labels
+    labelPositions = find(~cellfun(@isempty, labels));
+
+    % Set the x-tick positions and labels
+    xticks(labelPositions);
+    xticklabels(labels(labelPositions));
+
+    % Adjust the x-axis limits if needed
+    xlim([0, numel(labels)+1]);
+
+    a = get(gca,'XTickLabel');
+    set(gca,'XTickLabel',a,'fontsize',14)
+    xlim([0.95 3.05]);
+    
+    %%
+    % uncomment to plot histograms 
+   % shamLight_stats 

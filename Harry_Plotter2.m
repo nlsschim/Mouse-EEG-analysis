@@ -71,7 +71,7 @@ end
 %% kruskal-wallis test
 % 6 data sets, sham and pen for each of 3 trial types
 % 
-max_length = max([length(firstLOpen), length( LUSpen),length(secondLOpen),length(firstLOsham),length(LUSsham),length(secondLOsham)]);
+max_length = max([length(firstLOpen), length(LUSpen),length(secondLOpen),length(firstLOsham),length(LUSsham),length(secondLOsham)]);
 
 varNames = {'firstLOpen', 'LUSpen', 'secondLOpen', 'firstLOsham', 'LUSsham', 'secondLOsham'};
 targetLength = max_length;
@@ -323,18 +323,18 @@ else
 
     
     % plotting 
-    figure(7) 
+    figure(7)
     medmed_y_pen = [median(firstLOpen)  median(LUSpen) median(secondLOpen)] ;
     medmed_y_sham = [median(firstLOsham)  median(LUSsham) median(secondLOsham)] ;
-%     medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:), 'o-r') ; 
+    
     medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
     hold on 
-    % medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
-    % hold on 
-%     medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:), 'o-b') ;  
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
     medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
     hold on 
-    % medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ;
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ;
+
 
 % Plot the lines without displaying them in the legend
 hold on
@@ -344,7 +344,6 @@ set(get(get(medmed_1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off'
 set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
 
     legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'}, 'location', 'northwest')
-%     title('Cohort Median RMS Responses vs. Trials','Fontsize', 14)
     ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
     
 %     ylim([1.3 2.0]);
@@ -435,5 +434,117 @@ end
 %     [F_decision_sham_1LO2LO,F_pvalue_sham_1LO2LO] = vartest2(firstLOsham,secondLOsham);
 % end 
 
-
+%% regression analysis 
  
+
+%     medmed_y_pen = [median(firstLOpen)  median(LUSpen) median(secondLOpen)] ;
+%     medmed_y_sham = [median(firstLOsham)  median(LUSsham) median(secondLOsham)] ;
+%     
+    firstLOpen_medians = [median(penmedians.Mouse1Trial1) median(penmedians.Mouse2Trial1) median(penmedians.Mouse3Trial1) ...
+        median(penmedians.Mouse4Trial1) median(penmedians.Mouse5Trial1) median(penmedians.Mouse6Trial1) median(penmedians.Mouse7Trial1)];
+    LUSpen_medians = [median(penmedians.Mouse1Trial3) median(penmedians.Mouse2Trial3) median(penmedians.Mouse3Trial3)...
+        median(penmedians.Mouse4Trial3) median(penmedians.Mouse5Trial3) median(penmedians.Mouse6Trial3) median(penmedians.Mouse7Trial3)];
+    secondLOpen_medians = [median(penmedians.Mouse1Trial4) median(penmedians.Mouse2Trial4) median(penmedians.Mouse3Trial4) median(penmedians.Mouse4Trial4) ...
+        median(penmedians.Mouse5Trial4) median(penmedians.Mouse6Trial4) median(penmedians.Mouse7Trial4)];
+    
+    firstLOsham_medians = [median(shammedians.Mouse1Trial1) median(shammedians.Mouse2Trial1) median(shammedians.Mouse3Trial1) ...
+        median(shammedians.Mouse4Trial1) median(shammedians.Mouse5Trial1) median(shammedians.Mouse6Trial1) median(shammedians.Mouse7Trial1)];
+    LUSsham_medians = [median(shammedians.Mouse1Trial3) median(shammedians.Mouse2Trial3) median(shammedians.Mouse3Trial3)...
+        median(shammedians.Mouse4Trial3) median(shammedians.Mouse5Trial3) median(shammedians.Mouse6Trial3) median(shammedians.Mouse7Trial3)];
+    secondLOsham_medians = [median(shammedians.Mouse1Trial4) median(shammedians.Mouse2Trial4) median(shammedians.Mouse3Trial4) median(shammedians.Mouse4Trial4) ...
+        median(shammedians.Mouse5Trial4) median(shammedians.Mouse6Trial4) median(shammedians.Mouse7Trial4)];    
+
+    
+% plot 1 - pen, median of medians 
+figure(10) 
+subplot(2,2,1) 
+    medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
+    hold on 
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
+    y_pen = [firstLOpen_medians, LUSpen_medians, secondLOpen_medians ]; 
+    x_pen = [ones(1,length(firstLOpen_medians)), 2*ones(1,length(LUSpen_medians)), 3*ones(1,length(secondLOpen_medians))] ;
+    mdl_pen = fitlm(x_pen, y_pen);
+    plot(mdl_pen);
+    title('pen 7 medians/trial') 
+subplot(2,2,2) 
+% regression model initializations 
+    length1 = length(firstLOpen) ; length2 = length(LUSpen) ; length3 = length(secondLOpen) ;
+    y_pen2 = [firstLOpen, LUSpen, secondLOpen];
+    x_pen2 = [ones(1,length1) 2*ones(1,length2) 3*ones(1,length3)] ; 
+    
+    medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
+    hold on 
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
+    mdl_pen2 = fitlm(x_pen2, y_pen2);
+    plot(mdl_pen2);
+    title('pen ~60x7 medians/trial')
+    
+subplot(2,2,3) 
+    medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
+    hold on 
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ;
+    hold on   
+    y_sham = [firstLOsham_medians, LUSsham_medians, secondLOsham_medians ]; 
+    x_sham = [ones(1,length(firstLOsham_medians)), 2*ones(1,length(LUSsham_medians)), 3*ones(1,length(secondLOsham_medians))] ; 
+    mdl_sham = fitlm(x_sham, y_sham);
+    plot(mdl_sham);
+    title('sham 7 medians/trial')   
+
+subplot(2,2,4) 
+% regression model initializations 
+    length4 = length(firstLOsham) ; length5 = length(LUSsham) ; length6 = length(secondLOsham) ; 
+    y_sham2 = [firstLOsham, LUSsham, secondLOsham];
+    x_sham2 = [ones(1,length4) 2*ones(1,length5) 3*ones(1,length6)] ; 
+    medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
+    hold on 
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ;
+    hold on 
+    mdl_sham2 = fitlm(x_sham2, y_sham2);
+    plot(mdl_sham2);
+    title('sham ~60x7 medians/trial')    
+    
+% combined 
+figure(11) 
+
+medmed_1line = scatter(1:3, medmed_y_pen, 500, 'k.') ; 
+    hold on 
+    medmed_1 = errorbar(1:3, medmed_y_pen, median_stderror(1,:),'k-','LineWidth', 1.5) ; 
+    hold on 
+    medmed_2line = scatter(1:3, medmed_y_sham, 500, 'k.') ;
+    hold on 
+    medmed_2 = errorbar(1:3, medmed_y_sham, median_stderror(2,:),'k--','LineWidth', 1.5) ;
+    hold on 
+    plot(mdl_pen2, 'Color', 'red', 'Linewidth', 1.5) 
+    hold on 
+    plot(mdl_sham2, 'Color', 'blue', 'Linewidth', 1.5) 
+    
+% Plot the lines without displaying them in the legend
+hold on
+medmed_1 = plot(1:3, medmed_y_pen, 'k-', 'LineWidth', 1.5);
+medmed_2 = plot(1:3, medmed_y_sham, 'k--', 'LineWidth', 1.5);
+set(get(get(medmed_1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(medmed_2,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+
+    legend([medmed_1 medmed_2], {'PEN US', 'SHAM US'}, 'location', 'northwest')
+    ylabel('Normalized RMS Brain Activity','Fontsize', 14) 
+    
+%     ylim([1.3 2.0]);
+%     labels = {'1LO', '', '', '', '', 'L+US', '', '', '', '', '2LO'};
+    labels = {'1st LO', 'L+tDUS', '2nd LO'};
+
+    % Find the positions of the categorical labels
+    labelPositions = find(~cellfun(@isempty, labels));
+
+    % Set the x-tick positions and labels
+    xticks(labelPositions);
+    xticklabels(labels(labelPositions));
+
+    % Adjust the x-axis limits if needed
+    xlim([0, numel(labels)+1]);
+
+    a = get(gca,'XTickLabel');
+    set(gca,'XTickLabel',a,'fontsize',14)
+    xlim([0.95 3.05]);
+hold off 
